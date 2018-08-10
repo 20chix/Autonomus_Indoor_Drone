@@ -1,0 +1,18 @@
+<package>
+	<name>ardrone_tutorials</name>
+	<version>1.0.0</version>
+	<description>
+		Controllers developed for the "Up and flying with the AR.Drone and ROS" tutorial series
+	</description>
+	<maintainer email="mail@mail.com">Mike Hamer</maintainer>
+	
+	<buildtool_depend>catkin</buildtool_depend>
+	
+	<run_depend>ardrone_autonomy</run_depend>
+	<run_depend>joy</run_depend>
+	
+	<license>BSD</license>
+	<url>http://github.com/mikehamer/ardrone_tutorials</url>
+</package>
+
+
