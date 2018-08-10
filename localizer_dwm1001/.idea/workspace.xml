@@ -2,41 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d2fcdf8-e71f-4523-86e5-6e4412be23de" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/CMakeCache.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/CMakeFiles/CMakeRuleHashes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/CMakeFiles/CMakeRuleHashes.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/CMakeFiles/Makefile.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/CMakeFiles/Makefile2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/CMakeFiles/TargetDirectories.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/CMakeFiles/TargetDirectories.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/gtest/CMakeFiles/gmock.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/gtest/CMakeFiles/gmock.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/gtest/CMakeFiles/gmock_main.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/gtest/CMakeFiles/gmock_main.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/gtest/gtest/CMakeFiles/gtest.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/gtest/gtest/CMakeFiles/gtest.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/gtest/gtest/CMakeFiles/gtest_main.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/gtest/gtest/CMakeFiles/gtest_main.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/joy/CMakeFiles/joy_node.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/joy/CMakeFiles/joy_node.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/localizer_dwm1001/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/localizer_dwm1001/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/installspace/localizer_dwm1001.pc" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/installspace/localizer_dwm1001.pc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/installspace/localizer_dwm1001Config.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/installspace/localizer_dwm1001Config.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/package.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/package.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/pkg.develspace.context.pc.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/pkg.develspace.context.pc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/pkg.installspace.context.pc.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/pkg.installspace.context.pc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/stamps/localizer_dwm1001/package.xml.stamp" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/localizer_dwm1001/catkin_generated/stamps/localizer_dwm1001/package.xml.stamp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/localizer_dwm1001/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/localizer_dwm1001/cmake_install.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_gazebo/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_gazebo/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_gazebo_plugins/CMakeFiles/hector_gazebo_quadrotor_simple_controller.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_gazebo_plugins/CMakeFiles/hector_gazebo_quadrotor_simple_controller.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_gazebo_plugins/CMakeFiles/hector_gazebo_quadrotor_state_controller.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_gazebo_plugins/CMakeFiles/hector_gazebo_quadrotor_state_controller.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_gazebo_plugins/CMakeFiles/hector_gazebo_ros_baro.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_gazebo_plugins/CMakeFiles/hector_gazebo_ros_baro.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_msgs/CMakeFiles/cvg_sim_msgs_generate_messages_cpp.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_msgs/CMakeFiles/cvg_sim_msgs_generate_messages_cpp.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_msgs/CMakeFiles/cvg_sim_msgs_generate_messages_eus.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_msgs/CMakeFiles/cvg_sim_msgs_generate_messages_eus.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_msgs/CMakeFiles/cvg_sim_msgs_generate_messages_lisp.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_msgs/CMakeFiles/cvg_sim_msgs_generate_messages_lisp.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_msgs/CMakeFiles/cvg_sim_msgs_generate_messages_nodejs.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_msgs/CMakeFiles/cvg_sim_msgs_generate_messages_nodejs.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_msgs/CMakeFiles/cvg_sim_msgs_generate_messages_py.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/tum_simulator/cvg_sim_msgs/CMakeFiles/cvg_sim_msgs_generate_messages_py.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../devel/lib/pkgconfig/localizer_dwm1001.pc" beforeDir="false" afterPath="$PROJECT_DIR$/../../devel/lib/pkgconfig/localizer_dwm1001.pc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../devel/share/localizer_dwm1001/cmake/localizer_dwm1001Config.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../../devel/share/localizer_dwm1001/cmake/localizer_dwm1001Config.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../beginner_tutorials/.idea/beginner_tutorials.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../beginner_tutorials/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../beginner_tutorials/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../beginner_tutorials/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../beginner_tutorials/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../beginner_tutorials/cfg/GUI.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/localizer_dwm1001.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/localizer_dwm1001.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.xml" beforeDir="false" afterPath="$PROJECT_DIR$/package.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/dwm1001_distance.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/dwm1001_distance.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -63,43 +38,43 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.open.time.25" value="1" />
-          <entry key="project.open.time.26" value="1" />
+          <entry key="project.open.time.26" value="2" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.30" value="2" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="6" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="cfg" value="1" />
-          <entry key="py" value="4" />
-          <entry key="txt" value="1" />
+          <entry key="cfg" value="3" />
+          <entry key="py" value="5" />
+          <entry key="txt" value="2" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Ini" value="1" />
-          <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="4" />
+          <entry key="Ini" value="3" />
+          <entry key="PLAIN_TEXT" value="2" />
+          <entry key="Python" value="5" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="cfg" value="82" />
+          <entry key="cfg" value="103" />
           <entry key="dummy" value="3" />
-          <entry key="py" value="2627" />
-          <entry key="txt" value="49" />
+          <entry key="py" value="2743" />
+          <entry key="txt" value="60" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Ini" value="82" />
-          <entry key="PLAIN_TEXT" value="52" />
-          <entry key="Python" value="2627" />
+          <entry key="Ini" value="103" />
+          <entry key="PLAIN_TEXT" value="63" />
+          <entry key="Python" value="2743" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
@@ -109,13 +84,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/scripts/dwm1001_distance.py">
+        <entry file="file://$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="608">
-              <caret line="212" column="4" selection-start-line="212" selection-start-column="4" selection-end-line="212" selection-end-column="4" />
+            <state relative-caret-position="420">
+              <caret line="28" column="29" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="29" />
               <folding>
-                <element signature="e#23#35#0" expanded="true" />
-                <marker date="1533677748572" expanded="true" signature="7176:7311" ph="..." />
+                <element signature="e#26#38#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -124,30 +98,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
+            <state relative-caret-position="150">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+        <entry file="file://$PROJECT_DIR$/../beginner_tutorials/cfg/GUI.cfg">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="91" column="21" selection-start-line="91" selection-start-column="21" selection-end-line="91" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../generate_map/src/basic_controls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4305">
-              <caret line="295" column="64" selection-start-line="295" selection-start-column="64" selection-end-line="295" selection-end-column="64" />
-              <folding>
-                <element signature="e#1558#1570#0" expanded="true" />
-                <marker date="1533583734080" expanded="true" signature="5744:5745" ph="..." />
-              </folding>
+            <state relative-caret-position="270">
+              <caret line="18" column="105" selection-start-line="18" selection-start-column="105" selection-end-line="18" selection-end-column="105" />
             </state>
           </provider>
         </entry>
@@ -181,7 +142,7 @@
     </findStrings>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -193,6 +154,9 @@
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg" />
         <option value="$PROJECT_DIR$/scripts/dwm1001_distance.py" />
+        <option value="$PROJECT_DIR$/../beginner_tutorials/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/../beginner_tutorials/cfg/GUI.cfg" />
+        <option value="$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py" />
       </list>
     </option>
   </component>
@@ -228,17 +192,17 @@
             </path>
             <path>
               <item name="localizer_dwm1001" type="b2602c69:ProjectViewProjectNode" />
-              <item name="localizer_dwm1001" type="462c0819:PsiDirectoryNode" />
+              <item name="beginner_tutorials" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="localizer_dwm1001" type="b2602c69:ProjectViewProjectNode" />
+              <item name="beginner_tutorials" type="462c0819:PsiDirectoryNode" />
+              <item name="cfg" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="localizer_dwm1001" type="b2602c69:ProjectViewProjectNode" />
+              <item name="beginner_tutorials" type="462c0819:PsiDirectoryNode" />
               <item name="scripts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="localizer_dwm1001" type="b2602c69:ProjectViewProjectNode" />
-              <item name="generate_map" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="localizer_dwm1001" type="b2602c69:ProjectViewProjectNode" />
-              <item name="generate_map" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -249,7 +213,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../generate_map" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../beginner_tutorials" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -280,7 +244,7 @@
     <frame x="64" y="-11" width="1217" height="1036" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2540633" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25834045" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -311,14 +275,10 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../generate_map/src/TagMarker.py" />
-    <entry file="file://$PROJECT_DIR$/../generate_map/src/basic_controls.py">
+    <entry file="file://$PROJECT_DIR$/package.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4305">
-          <caret line="295" column="64" selection-start-line="295" selection-start-column="64" selection-end-line="295" selection-end-column="64" />
-          <folding>
-            <element signature="e#1558#1570#0" expanded="true" />
-            <marker date="1533583734080" expanded="true" signature="5744:5745" ph="..." />
-          </folding>
+        <state relative-caret-position="638">
+          <caret line="60" column="2" selection-start-line="60" selection-start-column="2" selection-end-line="60" selection-end-column="2" />
         </state>
       </provider>
     </entry>
@@ -329,34 +289,62 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
-          <caret line="60" column="2" selection-start-line="60" selection-start-column="2" selection-end-line="60" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="91" column="21" selection-start-line="91" selection-start-column="21" selection-end-line="91" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
+        <state relative-caret-position="150">
+          <caret line="10" column="21" lean-forward="true" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/dwm1001_distance.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="608">
-          <caret line="212" column="4" selection-start-line="212" selection-start-column="4" selection-end-line="212" selection-end-column="4" />
+        <state relative-caret-position="233">
+          <caret line="35" column="4" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="49" />
           <folding>
             <element signature="e#23#35#0" expanded="true" />
-            <marker date="1533677748572" expanded="true" signature="7176:7311" ph="..." />
+            <marker date="1533921708051" expanded="true" signature="7176:7311" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../beginner_tutorials/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-480">
+          <caret line="31" column="70" lean-forward="true" selection-start-line="31" selection-start-column="70" selection-end-line="31" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../generate_map/src/basic_controls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="818">
+          <caret line="295" column="64" selection-start-line="295" selection-start-column="64" selection-end-line="295" selection-end-column="64" />
+          <folding>
+            <element signature="e#1558#1570#0" expanded="true" />
+            <marker date="1533921708047" expanded="true" signature="5744:5745" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../beginner_tutorials/cfg/GUI.cfg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="105" selection-start-line="18" selection-start-column="105" selection-end-line="18" selection-end-column="105" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" column="29" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="29" />
+          <folding>
+            <element signature="e#26#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
