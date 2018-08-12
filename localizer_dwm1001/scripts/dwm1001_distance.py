@@ -33,7 +33,7 @@ def main():
 
     
     rospy.init_node('Localizer_DWM1001', anonymous=False)
-    Server(DWM1001_Tune_SerialConfig, tuneSerial)
+    Server(DWM1001_Tune_SerialConfig, callbackDynamicConfig)
 
     # serial port
     # configure the serial connections (the parameters differs on the device you are connecting to)
@@ -204,7 +204,7 @@ def subscribeToJoy():
     rospy.Subscriber("joy", Joy, JoyCallback)
 
 
-def tuneSerial(config, leve):
+def callbackDynamicConfig(config, leve):
 
     default_colors = config["Low_v"]
 
