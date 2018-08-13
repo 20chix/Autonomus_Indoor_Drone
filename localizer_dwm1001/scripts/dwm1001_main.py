@@ -3,6 +3,8 @@
 import rospy
 import serial
 import time
+import os
+import sys
 from std_msgs.msg import String
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist     
@@ -17,62 +19,73 @@ from localizer_dwm1001.cfg import DWM1001_Tune_SerialConfig
 
 startButton = False
 
+dynamicConfigOpenPort   = {"open_port" : False}
+dynamicConfigClosePort  = {"close_port": False}
+dynamicConfigSerialPort = {"serial_port": ""}
 
-
-
-
+# initialize serial port connections
+serialPortDWM1001 = serial.Serial(
+    port     = SERIAL_PORT_DETAILS.name,
+    baudrate = SERIAL_PORT_DETAILS.baudRate,
+    parity   = SERIAL_PORT_DETAILS.parity,
+    stopbits = SERIAL_PORT_DETAILS.stopbits,
+    bytesize = SERIAL_PORT_DETAILS.bytesize
+)
 
 
 def main():
-    
-    pub_Network  = rospy.Publisher('DWM1001_Network', String, queue_size=10)
+    global dynamicConfigOpenPort
+    global dynamicConfigClosePort
+
+    # initialize our topics
+    pub_Network  = rospy.Publisher('DWM1001_Network',          String, queue_size=10)
     pub_Anchor_0 = rospy.Publisher('DWM1001_Network_Anchor_0', String, queue_size=10)
     pub_Anchor_1 = rospy.Publisher('DWM1001_Network_Anchor_1', String, queue_size=10)
     pub_Anchor_2 = rospy.Publisher('DWM1001_Network_Anchor_2', String, queue_size=10)
-    pub_Tag = rospy.Publisher('DWM1001_Network_Tag', String, queue_size=10)
+    pub_Tag      = rospy.Publisher('DWM1001_Network_Tag',      String, queue_size=10)
 
-    
+    # initialize the node
     rospy.init_node('Localizer_DWM1001', anonymous=False)
-    Server(DWM1001_Tune_SerialConfig, callbackDynamicConfig)
 
-    # serial port
-    # configure the serial connections (the parameters differs on the device you are connecting to)
-    serialPortDWM1001 = serial.Serial(
-        port=SERIAL_PORT_DETAILS.name,
-        baudrate=SERIAL_PORT_DETAILS.baudRate,
-        parity=SERIAL_PORT_DETAILS.parity,
-        stopbits=SERIAL_PORT_DETAILS.stopbits,
-        bytesize=SERIAL_PORT_DETAILS.bytesize
-    )
+    # intialize dynamic configuration
+    dynamicConfigServer = Server(DWM1001_Tune_SerialConfig, callbackDynamicConfig)
+    dynamicConfigClosePort.update({"close_port": True })
+    dynamicConfigOpenPort.update({"open_port" : False})
+    dynamicConfigServer.update_configuration(dynamicConfigOpenPort)
+    dynamicConfigServer.update_configuration(dynamicConfigClosePort)
 
+    # initialize ros rate, this will be used for sleep
     rate = rospy.Rate(100)  # 10hz
 
-
+    # close the serial port in case the previous run didn't closed it properly
     serialPortDWM1001.close()
+    time.sleep(10)
+    # open serial port
     serialPortDWM1001.open()
 
 
+    # check if the serial port is opened
     if(serialPortDWM1001.isOpen()):
-        rospy.loginfo("Port opened: "+ str(SERIAL_PORT_DETAILS.name) );
 
+        dynamicConfigClosePort.update({"close_port": False})
+        dynamicConfigOpenPort.update({"open_port": True})
+        dynamicConfigSerialPort = {"serial_port": str(SERIAL_PORT_DETAILS.name)}
+        dynamicConfigServer.update_configuration(dynamicConfigOpenPort)
+        dynamicConfigServer.update_configuration(dynamicConfigClosePort)
+        dynamicConfigServer.update_configuration(dynamicConfigSerialPort)
+
+        rospy.loginfo("Port opened: "+ str(SERIAL_PORT_DETAILS.name) );
         serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
         time.sleep(0.5)
         serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
 
-
-
-
-
-        #Give time to the pi to read from serial  
-        #time.sleep(3)
-        #Assign read line to variable 
-        #serialReadLine = serialPortDWM1001.readline()
-        #rospy.loginfo(str(serialReadLine));
-
+    # check if the serial port is not open
     else:
         rospy.loginfo("Can't open port: "+ str(SERIAL_PORT_DETAILS.name))
 
+    # give some time to DWM1001 to wake up
     time.sleep(5)
+    # send command lec, so we can get positions is CSV format
     serialPortDWM1001.write(DWM1001_API_COMMANDS.LecPlusEnter)
     rospy.loginfo("Reading DWM1001 coordinates")
 
@@ -130,14 +143,6 @@ def main():
 
             arr = []
 
-            #rospy.loginfo( str(startButton))
-            #if "Distance :" in serialReadLine:
-            #rospy.loginfo(serialReadLine)
-            #map(lambda s:s.strip(), serialReadLine.split(','))
-            #arr = [ x.strip() for x in serialReadLine.strip('[]').split(',') ]
-            #rospy.loginfo(arr)
-            #pub.publish(arr)
-
             # split serial port message by comma ','
             arr = [ x.strip() for x in serialReadLine.strip().split(',') ]
 
@@ -181,16 +186,8 @@ def main():
 
 
 # Receives joystick messages (subscribed to Joy topic)
-# then converts the joysick inputs into Twist commands
-# axis 1 aka left stick vertical controls linear speed
-# axis 0 aka left stick horizonal controls angular speed
 def JoyCallback(data):
     global startButton
-    #twist.linear.x = 4*data.axes[7]
-    #twist.angular.z = 4*data.axes[6]
-    #twist.buttons = data.buttons
-    #startButton = data.buttons[11]
-
 
     #That's the select button
     if(data.buttons[11] == 1):
@@ -198,19 +195,28 @@ def JoyCallback(data):
     else:
         startButton = False
 
-# Joy node
-def subscribeToJoy():
-    # subscribed to joystick inputs on topic "joy"
-    rospy.Subscriber("joy", Joy, JoyCallback)
-
-
 def callbackDynamicConfig(config, leve):
+    global serialPortDWM1001
+    rospy.loginfo("""Reconfigure Request: {dwm1001_network_info}, {open_port},\ 
+          {serial_port}, {close_port}""".format(**config))
 
-    default_colors = config["Low_v"]
+    if config["quit_dwm1001_api"]:
+        rospy.loginfo("Trying to quit from dynamic config!!")
+        serialPortDWM1001.write(DWM1001_API_COMMANDS.Quit)
+        config["quit_dwm1001_api"] = False
 
-    rospy.loginfo("Dynamic config working!! " + str(default_colors))
+    if config["close_port"]:
+        rospy.loginfo("Closing port!!")
+        serialPortDWM1001.close()
+        config["close_port"] = False
 
-    config["Low_v"] =20
+    if config["exit"]:
+        rospy.loginfo("System exit!!")
+        config["exit"] = False
+        sys.exit()
+
+
+    return config
 
 if __name__ == '__main__':
     try:

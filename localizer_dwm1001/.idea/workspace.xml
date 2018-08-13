@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d2fcdf8-e71f-4523-86e5-6e4412be23de" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../beginner_tutorials/cfg/GUI.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/../beginner_tutorials/cfg/GUI.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/dwm1001_distance.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/dwm1001_distance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/dwm1001_distance.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/dwm1001_main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -33,17 +32,17 @@
         <counts>
           <entry key="project.open.time.25" value="1" />
           <entry key="project.open.time.26" value="2" />
-          <entry key="project.open.time.27" value="1" />
+          <entry key="project.open.time.27" value="2" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.30" value="2" />
           <entry key="project.open.time.42" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="9" />
+          <entry key="project.opened" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="cfg" value="3" />
+          <entry key="cfg" value="5" />
           <entry key="py" value="6" />
           <entry key="txt" value="2" />
           <entry key="xml" value="1" />
@@ -51,7 +50,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Ini" value="3" />
+          <entry key="Ini" value="5" />
           <entry key="PLAIN_TEXT" value="2" />
           <entry key="Python" value="6" />
           <entry key="XML" value="1" />
@@ -59,18 +58,18 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="cfg" value="241" />
-          <entry key="dummy" value="3" />
-          <entry key="py" value="3029" />
+          <entry key="cfg" value="345" />
+          <entry key="dummy" value="7" />
+          <entry key="py" value="3875" />
           <entry key="txt" value="60" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Ini" value="241" />
-          <entry key="PLAIN_TEXT" value="63" />
-          <entry key="Python" value="3029" />
+          <entry key="Ini" value="345" />
+          <entry key="PLAIN_TEXT" value="67" />
+          <entry key="Python" value="3875" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
@@ -79,11 +78,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="33" column="19" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
+            <state relative-caret-position="533">
+              <caret line="49" column="37" lean-forward="true" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="37" />
               <folding>
                 <element signature="e#22#34#0" expanded="true" />
               </folding>
@@ -91,14 +90,24 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/dwm1001_distance.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/scripts/dwm1001_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="488">
-              <caret line="202" column="38" selection-start-line="202" selection-start-column="38" selection-end-line="202" selection-end-column="38" />
+            <state relative-caret-position="549">
+              <caret line="215" column="12" selection-start-line="215" selection-start-column="12" selection-end-line="215" selection-end-column="12" />
               <folding>
                 <element signature="e#23#35#0" expanded="true" />
+                <marker date="1534195547520" expanded="true" signature="7483:7517" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
         </entry>
@@ -130,6 +139,7 @@
       <find>tuneSerial</find>
       <find>add_dependencies</find>
       <find>expecting</find>
+      <find>subscribeToJoy</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -143,11 +153,12 @@
         <option value="$PROJECT_DIR$/scripts/dwm1001_apiCommands.py" />
         <option value="$PROJECT_DIR$/package.xml" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg" />
         <option value="$PROJECT_DIR$/../beginner_tutorials/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/../beginner_tutorials/cfg/GUI.cfg" />
         <option value="$PROJECT_DIR$/scripts/dwm1001_distance.py" />
         <option value="$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py" />
+        <option value="$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg" />
+        <option value="$PROJECT_DIR$/scripts/dwm1001_main.py" />
       </list>
     </option>
   </component>
@@ -240,7 +251,7 @@
     <frame x="64" y="-11" width="1217" height="1036" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2677502" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27288282" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -299,20 +310,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../beginner_tutorials/cfg/GUI.cfg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="18" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/dwm1001_apiCommands.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -320,22 +317,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/dwm1001_distance.py">
+    <entry file="file://$PROJECT_DIR$/../beginner_tutorials/cfg/GUI.cfg">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="202" column="38" selection-start-line="202" selection-start-column="38" selection-end-line="202" selection-end-column="38" />
-          <folding>
-            <element signature="e#23#35#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="105">
+          <caret line="7" selection-start-line="7" selection-end-line="12" selection-end-column="78" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="33" column="19" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
+        <state relative-caret-position="533">
+          <caret line="49" column="37" lean-forward="true" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="37" />
           <folding>
             <element signature="e#22#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/dwm1001_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="549">
+          <caret line="215" column="12" selection-start-line="215" selection-start-column="12" selection-end-line="215" selection-end-column="12" />
+          <folding>
+            <element signature="e#23#35#0" expanded="true" />
+            <marker date="1534195547520" expanded="true" signature="7483:7517" ph="..." />
           </folding>
         </state>
       </provider>
