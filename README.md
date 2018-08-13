@@ -12,6 +12,9 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
 ![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram.png?token=AO45C05pXrDjVLWjscxHtIeme5V2u6LIks5bdegywA%3D%3D)
 
 
+
+## Dynamic reconfigure DWM1001
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/dynamic_config.png?token=AO45C_U_21l0DxnwtksrGWyNPu9QgesEks5bezMowA%3D%3D)
 ### Roadmap
 - [x] Create RTLS network from Android App
 - [x] Access DWM1001 API via UART
