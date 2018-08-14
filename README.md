@@ -11,7 +11,7 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
 # Abstract 
 ![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram.png?token=AO45C05pXrDjVLWjscxHtIeme5V2u6LIks5bdegywA%3D%3D)
 
-## DWM1001 Network example
+## DWM1001 Network example with RVIZ
 ![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/DWM1001_Network.png?token=AO45CyLgBJfEUZWnWtPbS663cFn77bhjks5bfHnDwA%3D%3D)
 
 ## Dynamic reconfigure DWM1001
@@ -26,7 +26,7 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
 - [ ] Calculate shortest path from Tag to a Anchor using A* Algorithm
 - [ ] Display shortest path in RViz
 - [ ] Display actual path in RViz
-- [ ] Dynamic configuration for DWM1001 dev board
+- [x] Dynamic configuration for DWM1001 dev board
 - [ ] Dynamic configuration for drone
 - [ ] Joystick controls for emergency takeoff and land
 - [ ] Neural Network/AI that will manage flight controller after couple of laps
