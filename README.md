@@ -1,5 +1,6 @@
 [![Build Status](http://94.2.115.49:8080/buildStatus/icon?job=testing)](http://94.2.115.49:8080/job/testing/)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+[![HitCount](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001.svg)](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001)
 
 # FYP_Autonomus_Drone_DWM1001
 
