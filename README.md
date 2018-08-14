@@ -1,5 +1,7 @@
 [![Build Status](http://94.2.115.49:8080/buildStatus/icon?job=testing)](http://94.2.115.49:8080/job/testing/)
 
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+
 # FYP_Autonomus_Drone_DWM1001
 
 Final year project that consist in autonomus drone, developed in ROS using UWB DWM1001 sensors
@@ -11,11 +13,13 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
 # Abstract 
 ![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram.png?token=AO45C05pXrDjVLWjscxHtIeme5V2u6LIks5bdegywA%3D%3D)
 
+## Dynamic reconfigure DWM1001
+In this package 
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/dynamic_config.png?token=AO45C_U_21l0DxnwtksrGWyNPu9QgesEks5bezMowA%3D%3D)
 ## DWM1001 Network example with RVIZ
 ![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/DWM1001_Network.png?token=AO45CyLgBJfEUZWnWtPbS663cFn77bhjks5bfHnDwA%3D%3D)
 
-## Dynamic reconfigure DWM1001
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/dynamic_config.png?token=AO45C_U_21l0DxnwtksrGWyNPu9QgesEks5bezMowA%3D%3D)
+
 ### Roadmap
 - [x] Create RTLS network from Android App
 - [x] Access DWM1001 API via UART
