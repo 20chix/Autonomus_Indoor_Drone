@@ -8,7 +8,7 @@
 
 Final year project that consist in autonomus drone, developed in ROS using UWB DWM1001 dev board
 
-# We have 4 DWM1001 3 anchors and 1 tag
+# 4 DWM1001, 3 anchors and 1 tag
  The tag will be attached to a drone and  3 anchors will be placed on the ground, which will create a triangle.
  The goal is to make the ARDrone follow each anchor and one imaginary anchor which will be placed across coordinates 0,0.
 
