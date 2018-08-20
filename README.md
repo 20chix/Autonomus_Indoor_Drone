@@ -15,6 +15,8 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
 # Abstract 
 ![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram.png?token=AO45C4eNqW3AnQL1E036tFJ3s1KIHFfwks5bhAZqwA%3D%3D)
 
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram_dev_board.png?token=AO45C0DC26OMC9PjMv1PUlwOIk6pRYEmks5bhAcCwA%3D%3D)
+
 ## Dynamic reconfigure DWM1001
 In this package we want to be able to change some variable from ground station, while the drone is flying.
 
