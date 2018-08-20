@@ -13,7 +13,7 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
  The goal is to make the ARDrone follow each anchor and one imaginary anchor which will be placed across coordinates 0,0.
 
 # Abstract 
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram.png?token=AO45C05pXrDjVLWjscxHtIeme5V2u6LIks5bdegywA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram.png?token=AO45C4eNqW3AnQL1E036tFJ3s1KIHFfwks5bhAZqwA%3D%3D)
 
 ## Dynamic reconfigure DWM1001
 In this package we want to be able to change some variable from ground station, while the drone is flying.
