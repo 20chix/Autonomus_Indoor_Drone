@@ -17,9 +17,10 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
 
 ![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram_dev_board.png?token=AO45C0DC26OMC9PjMv1PUlwOIk6pRYEmks5bhAcCwA%3D%3D)
 
-## Packages
-### Shortest_path
-This package is responsible to 
+# Packages
+## Shortest_path 
+This package is responsible for calculating the shortest from the tag to a anchor at the time, this package will publish a string of directions for example 777788888844444442222222111111. We will use these directions in order to control the drone.
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/Shortest_Path.png?token=AO45Cz8Lvaa3ptkORqt7MzPKfE1l8hWdks5bhlwqwA%3D%3D)
 
 
 ## Dynamic reconfigure DWM1001
