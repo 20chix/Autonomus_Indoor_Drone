@@ -20,12 +20,12 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
 ## Dynamic reconfigure DWM1001
 In this package we want to be able to change some variable from ground station, while the drone is flying.
 
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/dynamic_config.png?token=AO45C_U_21l0DxnwtksrGWyNPu9QgesEks5bezMowA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/dynamic_config.png?token=AO45C3CO77Aa8DxZQyxA-oq_oVtv11tRks5bhlRlwA%3D%3D)
 
 ## DWM1001 Network example with RVIZ
 In this package we visualize the DWM1001 network coordinates in RVIZ, using simple marker tutorial. 
 
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/DWM1001_Network.png?token=AO45CyLgBJfEUZWnWtPbS663cFn77bhjks5bfHnDwA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/DWM1001_Network.png?token=AO45C1WgUxFjc6e9d7bAp7ieUUyNsPYWks5bhlSHwA%3D%3D)
 
 
 ### Roadmap
