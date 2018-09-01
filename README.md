@@ -1,15 +1,40 @@
 [![Build Status](http://94.2.115.49:8080/buildStatus/icon?job=testing)](http://94.2.115.49:8080/job/testing/)
+![HitCount](https://img.shields.io/badge/ROS%20version-kinetic-blue.svg)
+![HitCount](https://img.shields.io/badge/Supported%20OS-Ubuntu%2016.04-orange.svg)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+[![HitCount](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001.svg)](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001)
 
-# FYP_Autonomus_Drone_DWM1001
+# FYP_Autonomus_Drone_DWM1001_
 
-Final year project that consist in autonomus drone, developed in ROS using UWB DWM1001 sensors
+Final year project that consist in autonomus drone, developed in ROS using UWB DWM1001 dev board
 
-# We have 4 DWM1001 3 anchors and 1 tag
- The tag will be attached to the drone and the 3 anchors will be put on the ground, which should create a triangle.
+# 4 DWM1001, 3 anchors and 1 tag
+ The tag will be attached to a drone and  3 anchors will be placed on the ground, which will create a triangle.
  The goal is to make the ARDrone follow each anchor and one imaginary anchor which will be placed across coordinates 0,0.
 
-# Example 
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram.png?token=AO45C05pXrDjVLWjscxHtIeme5V2u6LIks5bdegywA%3D%3D)
+# Abstract 
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram.png?token=AO45C4eNqW3AnQL1E036tFJ3s1KIHFfwks5bhAZqwA%3D%3D)
+
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/FYP_Diagram_dev_board.png?token=AO45C0DC26OMC9PjMv1PUlwOIk6pRYEmks5bhAcCwA%3D%3D)
+
+# Packages
+## localizer_dwm1001
+This package is responsible on getting the network coordinates (tag and anchors) from dwm1001 dev board via USB.
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/decawave-dwm1001-dev-large.jpg?token=AO45C44AcfG2WANKPxFLSnRj4_MgYJl4ks5bhl9lwA%3D%3D)
+
+## shortest_path 
+This package is responsible for calculating the shortest, using a* algorithm, from the tag to a anchor at the time, this package will publish a string of directions for example 777788888844444442222222111111. We will use these directions to control the drone.
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/Shortest_Path.png?token=AO45Cz8Lvaa3ptkORqt7MzPKfE1l8hWdks5bhlwqwA%3D%3D)
+
+## Dynamic reconfigure DWM1001
+In this package we want to be able to change some variable from ground station, while the drone is flying.
+
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/dynamic_config.png?token=AO45C3CO77Aa8DxZQyxA-oq_oVtv11tRks5bhlRlwA%3D%3D)
+
+## DWM1001 Network example with RVIZ
+In this package we visualize the DWM1001 network coordinates in RVIZ, using simple marker tutorial. 
+
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/DWM1001_Network.png?token=AO45C1WgUxFjc6e9d7bAp7ieUUyNsPYWks5bhlSHwA%3D%3D)
 
 
 ### Roadmap
@@ -22,7 +47,7 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
 - [ ] Calculate shortest path from Tag to a Anchor using A* Algorithm
 - [ ] Display shortest path in RViz
 - [ ] Display actual path in RViz
-- [ ] Dynamic configuration for DWM1001 dev board
+- [x] Dynamic configuration for DWM1001 dev board
 - [ ] Dynamic configuration for drone
 - [ ] Joystick controls for emergency takeoff and land
 - [ ] Neural Network/AI that will manage flight controller after couple of laps
