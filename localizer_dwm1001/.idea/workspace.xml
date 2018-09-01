@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d2fcdf8-e71f-4523-86e5-6e4412be23de" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../astar/.idea/astar.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../astar/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../astar/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../astar/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../astar/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/dwm1001_distance.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/dwm1001_main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,20 +33,23 @@
     <session id="-1597861218">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.25" value="1" />
-          <entry key="project.open.time.26" value="2" />
+          <entry key="project.open.time.26" value="3" />
           <entry key="project.open.time.27" value="2" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.30" value="2" />
+          <entry key="project.open.time.41" value="1" />
           <entry key="project.open.time.42" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="10" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.opened" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="cfg" value="5" />
-          <entry key="py" value="6" />
+          <entry key="py" value="9" />
           <entry key="txt" value="2" />
           <entry key="xml" value="1" />
         </counts>
@@ -52,7 +58,7 @@
         <counts>
           <entry key="Ini" value="5" />
           <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="6" />
+          <entry key="Python" value="9" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
@@ -60,7 +66,7 @@
         <counts>
           <entry key="cfg" value="345" />
           <entry key="dummy" value="7" />
-          <entry key="py" value="3875" />
+          <entry key="py" value="3890" />
           <entry key="txt" value="60" />
           <entry key="xml" value="1" />
         </counts>
@@ -69,7 +75,7 @@
         <counts>
           <entry key="Ini" value="345" />
           <entry key="PLAIN_TEXT" value="67" />
-          <entry key="Python" value="3875" />
+          <entry key="Python" value="3890" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
@@ -81,8 +87,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="533">
-              <caret line="49" column="37" lean-forward="true" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="37" />
+            <state relative-caret-position="510">
+              <caret line="34" selection-start-line="34" selection-end-line="34" />
               <folding>
                 <element signature="e#22#34#0" expanded="true" />
               </folding>
@@ -90,11 +96,21 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../astar/src/astar.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../astar/src/main.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/dwm1001_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="549">
-              <caret line="215" column="12" selection-start-line="215" selection-start-column="12" selection-end-line="215" selection-end-column="12" />
+            <state relative-caret-position="555">
+              <caret line="52" column="55" selection-start-line="52" selection-start-column="55" selection-end-line="52" selection-end-column="55" />
               <folding>
                 <element signature="e#23#35#0" expanded="true" />
                 <marker date="1534195547520" expanded="true" signature="7483:7517" ph="..." />
@@ -104,10 +120,15 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../beginner_tutorials/scripts/listener.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="270">
-              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+              <caret line="18" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
         </entry>
@@ -159,6 +180,7 @@
         <option value="$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py" />
         <option value="$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg" />
         <option value="$PROJECT_DIR$/scripts/dwm1001_main.py" />
+        <option value="$PROJECT_DIR$/../astar/src/main.py" />
       </list>
     </option>
   </component>
@@ -169,10 +191,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="3" />
-    <option name="y" value="24" />
-    <option name="width" value="1195" />
-    <option name="height" value="960" />
+    <option name="x" value="1703" />
+    <option name="y" value="-4" />
+    <option name="width" value="1193" />
+    <option name="height" value="952" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -180,7 +202,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -200,27 +221,28 @@
             </path>
             <path>
               <item name="localizer_dwm1001" type="b2602c69:ProjectViewProjectNode" />
-              <item name="beginner_tutorials" type="462c0819:PsiDirectoryNode" />
+              <item name="astar" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="localizer_dwm1001" type="b2602c69:ProjectViewProjectNode" />
-              <item name="beginner_tutorials" type="462c0819:PsiDirectoryNode" />
-              <item name="cfg" type="462c0819:PsiDirectoryNode" />
+              <item name="astar" type="462c0819:PsiDirectoryNode" />
+              <item name="include" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="localizer_dwm1001" type="b2602c69:ProjectViewProjectNode" />
-              <item name="beginner_tutorials" type="462c0819:PsiDirectoryNode" />
-              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="astar" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../beginner_tutorials" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../astar" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -248,10 +270,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="64" y="-11" width="1217" height="1036" extended-state="6" />
+    <frame x="1344" y="-11" width="1217" height="1036" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27288282" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28828058" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -310,13 +332,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/dwm1001_apiCommands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../beginner_tutorials/cfg/GUI.cfg">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -326,31 +341,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../beginner_tutorials/scripts/talker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="533">
-          <caret line="49" column="37" lean-forward="true" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="37" />
+        <state relative-caret-position="510">
+          <caret line="34" selection-start-line="34" selection-end-line="34" />
           <folding>
             <element signature="e#22#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/dwm1001_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="549">
-          <caret line="215" column="12" selection-start-line="215" selection-start-column="12" selection-end-line="215" selection-end-column="12" />
+        <state relative-caret-position="555">
+          <caret line="52" column="55" selection-start-line="52" selection-start-column="55" selection-end-line="52" selection-end-column="55" />
           <folding>
             <element signature="e#23#35#0" expanded="true" />
             <marker date="1534195547520" expanded="true" signature="7483:7517" ph="..." />
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../beginner_tutorials/scripts/listener.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cfg/DWM1001_Tune_Serial.cfg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/dwm1001_apiCommands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../astar/src/astar.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../astar/src/main.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>
