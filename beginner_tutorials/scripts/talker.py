@@ -22,8 +22,17 @@ def talker():
 
 
 
-    pub = rospy.Publisher('chatter', String, queue_size=10)
     rospy.init_node('talker', anonymous=True)
+
+
+    # initialize our topics
+    pub_Network  = rospy.Publisher('DWM1001_Network',          String, queue_size=10)
+    pub_Anchor_0 = rospy.Publisher('DWM1001_Network_Anchor_0', String, queue_size=10)
+    pub_Anchor_1 = rospy.Publisher('DWM1001_Network_Anchor_1', String, queue_size=10)
+    pub_Anchor_2 = rospy.Publisher('DWM1001_Network_Anchor_2', String, queue_size=10)
+    pub_Tag      = rospy.Publisher('DWM1001_Network_Tag',      String, queue_size=10)
+
+
     srv = Server(GUIConfig, callback)
     rate = rospy.Rate(10) # 10hz
     counter = 0
@@ -31,16 +40,20 @@ def talker():
     while not rospy.is_shutdown():
 
 
-        cars.update({"dwm1001_network_info" : str(counter)})
+        #cars.update({"dwm1001_network_info" : str(counter)})
+
+        pub_Anchor_0.publish("0  0  0")
+        pub_Anchor_1.publish("0  0  0")
+        pub_Anchor_2.publish("0  0  0")
+        pub_Tag.publish("0  0  0")
 
 
-        rospy.loginfo(toBePrint)
+        rospy.loginfo("0  0  0")
 
 
         srv.update_configuration(cars)
 
         counter = counter + 1
-        pub.publish(str(toBePrint))
         rate.sleep()
 
 

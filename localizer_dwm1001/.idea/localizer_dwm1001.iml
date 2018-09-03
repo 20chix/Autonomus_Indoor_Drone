@@ -8,6 +8,7 @@
     <orderEntry type="module" module-name="generate_map" />
     <orderEntry type="module" module-name="beginner_tutorials" />
     <orderEntry type="module" module-name="astar" />
+    <orderEntry type="module" module-name="fyp" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />
