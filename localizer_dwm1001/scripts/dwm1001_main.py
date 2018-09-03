@@ -149,13 +149,12 @@ def main():
 
 
             try:
+                #Get numbers of anchors
                 DWM1001_NETWORK.anchors = arr[1]
                 rospy.loginfo("Number(s) of Anchors: " + arr[1])
+                #TODO delete this after debugging
                 rospy.loginfo("Length of array: " + str(len(arr)))
-
-                ##########################################
-                # Publish coordinates of tag and anchors #
-                ##########################################
+                # Publish coordinates of tag and anchors
                 pub_Network.publish( str("x:" + arr[4] + "y:" + arr[5] + " z: " + arr[6]))
                 pub_Anchor_0.publish(str(arr[4] + " " + arr[5] + " " + arr[6]))
                 pub_Anchor_1.publish(str(arr[10]+ " " + arr[11]+ " " + arr[12]))
