@@ -9,7 +9,7 @@ import astar as ASTAR
 #Initialize node
 rospy.init_node('astar', anonymous=False)
 # declare publiusher
-pub = rospy.Publisher('shortest_path', String, queue_size=10)
+pubblishRoute = rospy.Publisher('shortest_path', String, queue_size=10)
 # 10hz
 rate = rospy.Rate(10)
 # number of possible directions to move on the map
@@ -23,41 +23,73 @@ elif possibleDirections == 8:
     dx = [1, 1, 0, -1, -1, -1, 0, 1]
     dy = [0, 1, 1, 1, 0, -1, -1, -1]
 
-# Coordinates start and finish point
-xStart = 0
-yStart = 0
-xFinish = 39
-yFinish = 0
+
+anchor0Coordinates_x = 0
+anchor0Coordinates_y = 0
+anchor1Coordinates_x = 0
+anchor1Coordinates_y = 0
+anchor2Coordinates_x = 0
+anchor2Coordinates_y = 0
+tagCoordinates_x = 0
+tagCoordinates_y = 0
+
+
+# horizontal size of the map
+mapSizeN = 40
+# vertical size of the map
+mapSizeM = 40
+# declare empty array
+the_map = []
+row = [0] * mapSizeN
+# create empty map
+for i in range(mapSizeM):
+    the_map.append(list(row))
+
 
 #TODO get coordinates from topic
 def DWM1001_Network_Anchor_0callback(data):
-    #rospy.loginfo('Anchor 0 data: ' + str(data.data))
-    rate.sleep()
+    global anchor0Coordinates_x,anchor0Coordinates_y
+
+    coordinates = data.data.split()
+    anchor0Coordinates_x = int(coordinates[0])
+    anchor0Coordinates_y = int(coordinates[1])
 
 #TODO get coordinates from topic
 def DWM1001_Network_Anchor_1callback(data):
-    #rospy.loginfo('Anchor 1 data: ' + str(data.data))
-    rate.sleep()
+    global anchor1Coordinates_x,anchor1Coordinates_y
+
+    coordinates = data.data.split()
+    anchor1Coordinates_x = int(coordinates[0])
+    anchor1Coordinates_y = int(coordinates[1])
 
 #TODO get coordinates from topic
 def DWM1001_Network_Anchor_2callback(data):
-    #rospy.loginfo('Anchor 2 data: ' + str(data.data))
-    rate.sleep()
+    global anchor2Coordinates_x,anchor2Coordinates_y
+
+    coordinates = data.data.split()
+    anchor2Coordinates_x = int(coordinates[0])
+    anchor2Coordinates_y = int(coordinates[1])
 
 #TODO get coordinates from topic
 def DWM1001_Network_Tagcallback(data):
-    #rospy.loginfo('Tag data:      ' + str(data.data))
-    rate.sleep()
+    global tagCoordinates_x, tagCoordinates_y
 
+    coordinates = data.data.split()
+    tagCoordinates_x = int(coordinates[0])
+    tagCoordinates_y = int(coordinates[1])
 
 def RouteNcallback(data):
-    rospy.loginfo('Route Number: ' + str(data.data))
+    global routeNumber
+    global pubblishRoute
+
     rate.sleep()
 
     if(data.data == "1"):
-        rospy.loginfo('Route Number: 1')
+        rospy.loginfo('Route Number: 1 ' + str(anchor0Coordinates_x))
     elif (data.data == "2"):
-        rospy.loginfo('Route Number: 2')
+        route = ASTAR.pathFind(the_map, mapSizeN, mapSizeM, possibleDirections, dx, dy, tagCoordinates_x, tagCoordinates_y, anchor2Coordinates_x, anchor2Coordinates_y)
+        rospy.loginfo('Route Number: 2, directions: ' + str(route))
+        pubblishRoute.publish(route)
     elif(data.data == "3"):
         rospy.loginfo('Route Number: 3')
     elif (data.data == "0"):
@@ -72,19 +104,10 @@ rospy.Subscriber('DWM1001_Network_Anchor_0', String, DWM1001_Network_Anchor_0cal
 rospy.Subscriber('DWM1001_Network_Anchor_1', String, DWM1001_Network_Anchor_1callback)
 rospy.Subscriber('DWM1001_Network_Anchor_2', String, DWM1001_Network_Anchor_2callback)
 rospy.Subscriber('DWM1001_Network_Tag',      String, DWM1001_Network_Tagcallback)
-rospy.Subscriber('Route_N',      String, RouteNcallback)
+rospy.Subscriber('route_number',      String, RouteNcallback)
 rospy.spin()
 
-# horizontal size of the map
-mapSizeN = 40
-# vertical size of the map
-mapSizeM = 40
-# declare empty array
-the_map = []
-row = [0] * mapSizeN
-# create empty map
-for i in range(mapSizeM):
-    the_map.append(list(row))
+
 
 # TODO, add obstacles if you need to fillout the map with a '0' pattern, meaning obstcles
 #for x in range(mapSizeN / 8, mapSizeN * 7 / 8):

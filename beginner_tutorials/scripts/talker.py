@@ -22,7 +22,7 @@ def talker():
 
 
 
-    rospy.init_node('talker', anonymous=True)
+    rospy.init_node('DWM1001_API', anonymous=False)
 
 
     # initialize our topics
@@ -43,9 +43,9 @@ def talker():
         #cars.update({"dwm1001_network_info" : str(counter)})
 
         pub_Anchor_0.publish("0  0  0")
-        pub_Anchor_1.publish("0  0  0")
-        pub_Anchor_2.publish("0  0  0")
-        pub_Tag.publish("0  0  0")
+        pub_Anchor_1.publish("1  1  1")
+        pub_Anchor_2.publish("2  2  2")
+        pub_Tag.publish("5  5  5")
 
 
         rospy.loginfo("0  0  0")
