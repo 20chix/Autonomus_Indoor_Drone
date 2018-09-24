@@ -20,7 +20,7 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
 # Packages
 ## localizer_dwm1001
 This package is responsible on getting the network coordinates (tag and anchors) from dwm1001 dev board via USB.
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/FYP_Diagram_dev_board.png?token=AO45Cx5yM6_zGc8Co0YhHkRyRJ-SQKqBks5blvBMwA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/FYP_Diagram_dev_board.png?token=AO45C6bm2Ham34bclDihkppyqwFIukuhks5bsiQzwA%3D%3D)
 
 ## shortest_path 
 This package is responsible for calculating the shortest, using a* algorithm, from the tag to a anchor at the time, this package will publish a string of directions for example 777788888844444442222222111111. We will use these directions to control the drone.
