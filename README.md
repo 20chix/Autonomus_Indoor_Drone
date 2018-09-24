@@ -15,7 +15,7 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
 # Abstract 
 ![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/FYP_Diagram.png?token=AO45C53xUIdrgVjp64R74f0K0lF9WtFIks5bsiPcwA%3D%3D)
 
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/decawave-dwm1001-dev-large.jpg?token=AO45C05PEJV_wlSvzzwAnzC4Kd6ODRdjks5blvBzwA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/decawave-dwm1001-dev-large.jpg?token=AO45C-eb6jv3Io3O_k6rf_wopKmkcU8jks5bsiQXwA%3D%3D)
 
 # Packages
 ## localizer_dwm1001
