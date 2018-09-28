@@ -2,6 +2,7 @@
 import rospy
 from std_msgs.msg import String
 
+#Astar callback, just print the data for now
 def astarCallback(data):
     rospy.loginfo("Astar directions: " +str(data.data))
 
@@ -11,17 +12,22 @@ def talker():
 
 
 
-
+    # Initialize ros node fyp
     rospy.init_node('fyp', anonymous=False)
     # initialize our topics
     pub_RouteN = rospy.Publisher('route_number', String, queue_size=10)
-    rate = rospy.Rate(10) # 10hz
+    # Initialize rate 10hz
+    rate = rospy.Rate(10)
+    
 
 
-
+    # Inifinite loop
     while not rospy.is_shutdown():
+        # Pubblish a dummy data for now, this will publish the route that we are going to need
         pub_RouteN.publish("2")
+        # Show me the route
         rospy.loginfo("Route 2")
+        # Sleep for 10hz
         rate.sleep()
 
 rospy.Subscriber('shortest_path', String, astarCallback)
