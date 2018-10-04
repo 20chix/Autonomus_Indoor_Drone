@@ -42,6 +42,7 @@ def main():
     pub_Anchor_0 = rospy.Publisher('DWM1001_Network_Anchor_0', String, queue_size=10)
     pub_Anchor_1 = rospy.Publisher('DWM1001_Network_Anchor_1', String, queue_size=10)
     pub_Anchor_2 = rospy.Publisher('DWM1001_Network_Anchor_2', String, queue_size=10)
+    pub_Anchor_3 = rospy.Publisher('DWM1001_Network_Anchor_3', String, queue_size=10)
     pub_Tag      = rospy.Publisher('DWM1001_Network_Tag',      String, queue_size=10)
 
     # initialize the node
@@ -159,7 +160,8 @@ def main():
                 pub_Anchor_0.publish(str(arr[4] + " " + arr[5] + " " + arr[6]))
                 pub_Anchor_1.publish(str(arr[10]+ " " + arr[11]+ " " + arr[12]))
                 pub_Anchor_2.publish(str(arr[16]+ " " + arr[17]+ " " + arr[18]))
-                pub_Tag.publish(str(arr[21]+ " " + arr[22]+ " " + arr[23]))
+                pub_Anchor_3.publish(str(arr[22] + " " + arr[23] + " " + arr[24]))
+                pub_Tag.publish(str(arr[27]+ " " + arr[28]+ " " + arr[29]))
                 # flush buffer of serial port
                 #serialPortDWM1001.flush()
 

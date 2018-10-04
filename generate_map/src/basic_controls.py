@@ -62,6 +62,11 @@ anchor2x = 0
 anchor2y = 0
 anchor2z = 0
 
+anchor3x = 0
+anchor3y = 0
+anchor3z = 0
+
+
 rospy.init_node("generate_map")
 server = InteractiveMarkerServer("DWM1001_Anchors_And_Tag_Server")
 
@@ -165,34 +170,7 @@ def makeAnchorMarker(position, name):
 
 
 
-def Anchor1callback(data):
-    global server
-    global anchor1x
-    global anchor1y
-    global anchor1z
 
-
-    coordinates = data.data.split()
-
-
-    # Get the coordinates of the Tag in this format 0 0 0, then split this string using .split() function
-    try:
-        # Get coordinates
-        anchor1x = float(coordinates[0])
-        anchor1y = float(coordinates[1])
-        anchor1z = float(coordinates[2])
-        # Create a new marker with passed coordinates
-        position = Point(anchor1x, anchor1y, anchor1z)
-        # Add description to the marker
-        makeAnchorMarker(position, "Anchor 1")
-
-        # TODO remove this after, Debugging purpose
-        rospy.loginfo("Anchor1 x: " + str(anchor1x) + " y: " + str(anchor1y) + " z: " + str(anchor1z))
-
-    except IndexError:
-        rospy.loginfo("Index error")
-    except ValueError:
-       rospy.loginfo("Value error")
 
 
 def Anchor0callback(data):
@@ -225,6 +203,35 @@ def Anchor0callback(data):
 
 
 
+def Anchor1callback(data):
+    global server
+    global anchor1x
+    global anchor1y
+    global anchor1z
+
+
+    coordinates = data.data.split()
+
+
+    # Get the coordinates of the Tag in this format 0 0 0, then split this string using .split() function
+    try:
+        # Get coordinates
+        anchor1x = float(coordinates[0])
+        anchor1y = float(coordinates[1])
+        anchor1z = float(coordinates[2])
+        # Create a new marker with passed coordinates
+        position = Point(anchor1x, anchor1y, anchor1z)
+        # Add description to the marker
+        makeAnchorMarker(position, "Anchor 1")
+
+        # TODO remove this after, Debugging purpose
+        rospy.loginfo("Anchor1 x: " + str(anchor1x) + " y: " + str(anchor1y) + " z: " + str(anchor1z))
+
+    except IndexError:
+        rospy.loginfo("Index error")
+    except ValueError:
+       rospy.loginfo("Value error")
+
 
 
 def Anchor2callback(data):
@@ -255,6 +262,32 @@ def Anchor2callback(data):
     except ValueError:
        rospy.loginfo("Value error")
 
+def Anchor3callback(data):
+    global server
+    global anchor3x
+    global anchor3y
+    global anchor3z
+
+    coordinates = data.data.split()
+
+
+    # Get the coordinates of the Tag in this format 0 0 0, then split this string using .split() function
+    try:
+        # Get coordinates
+        anchor3x = float(coordinates[0])
+        anchor3y = float(coordinates[1])
+        anchor3z = float(coordinates[2])
+        # Create a new marker with passed coordinates
+        position = Point(anchor3x, anchor3y, anchor3z)
+        # Add description to the marker
+        makeAnchorMarker(position, "Anchor 3")
+        # TODO remove this after, Debugging purpose
+        rospy.loginfo("Anchor3 x: " + str(anchor3x) + " y: " + str(anchor3y) + " z: " + str(anchor3z))
+
+    except IndexError:
+        rospy.loginfo("Index error")
+    except ValueError:
+       rospy.loginfo("Value error")
 
 def tagCallback(data):
     global tagx
@@ -286,6 +319,9 @@ def tagCallback(data):
 
 
 
+
+
+
 if __name__=="__main__":
     server.applyChanges()
 
@@ -293,6 +329,7 @@ if __name__=="__main__":
     rospy.Subscriber("DWM1001_Network_Anchor_0", String, Anchor0callback)
     rospy.Subscriber("DWM1001_Network_Anchor_1", String, Anchor1callback)
     rospy.Subscriber("DWM1001_Network_Anchor_2", String, Anchor2callback)
+    rospy.Subscriber("DWM1001_Network_Anchor_3", String, Anchor3callback)
     rospy.Subscriber("DWM1001_Network_Tag", String, tagCallback)
 
 
