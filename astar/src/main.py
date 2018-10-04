@@ -8,9 +8,9 @@ import astar as ASTAR
 
 #Initialize node
 rospy.init_node('astar', anonymous=False)
-# declare publiusher
+# declare publisher
 pubblishRoute = rospy.Publisher('shortest_path', String, queue_size=10)
-# 10hz
+# Initialize rate to 10hz
 rate = rospy.Rate(10)
 # number of possible directions to move on the map
 possibleDirections = 8
@@ -23,7 +23,7 @@ elif possibleDirections == 8:
     dx = [1, 1, 0, -1, -1, -1, 0, 1]
     dy = [0, 1, 1, 1, 0, -1, -1, -1]
 
-
+# TODO replace these coordinate with coordinates from dwm1001
 anchor0Coordinates_x = 0
 anchor0Coordinates_y = 0
 anchor1Coordinates_x = 0

@@ -13,18 +13,18 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
  The goal is to make the ARDrone follow each anchor and one imaginary anchor which will be placed across coordinates 0,0.
 
 # Abstract 
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/FYP_Diagram.png?token=AO45C8hJS0hZzwOLYRXy8OLeLWcDp8U5ks5blvA9wA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/FYP_Diagram.png?token=AO45C53xUIdrgVjp64R74f0K0lF9WtFIks5bsiPcwA%3D%3D)
 
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/decawave-dwm1001-dev-large.jpg?token=AO45C05PEJV_wlSvzzwAnzC4Kd6ODRdjks5blvBzwA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/decawave-dwm1001-dev-large.jpg?token=AO45C-eb6jv3Io3O_k6rf_wopKmkcU8jks5bsiQXwA%3D%3D)
 
 # Packages
 ## localizer_dwm1001
 This package is responsible on getting the network coordinates (tag and anchors) from dwm1001 dev board via USB.
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/FYP_Diagram_dev_board.png?token=AO45Cx5yM6_zGc8Co0YhHkRyRJ-SQKqBks5blvBMwA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/FYP_Diagram_dev_board.png?token=AO45C6bm2Ham34bclDihkppyqwFIukuhks5bsiQzwA%3D%3D)
 
 ## shortest_path 
 This package is responsible for calculating the shortest, using a* algorithm, from the tag to a anchor at the time, this package will publish a string of directions for example 777788888844444442222222111111. We will use these directions to control the drone.
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/Shortest_Path.png?token=AO45C2YCvbFbI6EW754bj_Gk9jXcce_vks5blvBfwA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/Shortest_Path.png?token=AO45CwmqAOcbhsyQRIiNdp5qELCVVlyXks5bsiP5wA%3D%3D)
 
 ## Dynamic reconfigure DWM1001
 In this package we want to be able to change some variable from ground station, while the drone is flying.
@@ -34,7 +34,7 @@ In this package we want to be able to change some variable from ground station, 
 ## DWM1001 Network example with RVIZ
 In this package we visualize the DWM1001 network coordinates in RVIZ, using simple marker tutorial. 
 
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/DWM1001_Network.png?token=AO45C7O2X5cidhcgTzfs3aFqwQcyiiZwks5blvAkwA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/DWM1001_Network.png?token=AO45C4GEr4m26mhZ1Sk-E_s61FVpOPYCks5bsiPBwA%3D%3D)
 
 
 ### Roadmap
