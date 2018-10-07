@@ -1,4 +1,13 @@
 #!/usr/bin/env python
+""" For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
+"""
+__author__ = "Hadi Elmekawi"
+__copyright__ = "Copyright 2018, FYP Autonumous Indoor Drone"
+__version__ = "1.0"
+__maintainer__ = "Hadi Elmekawi"
+__email__ = "hadi.elme92@gmail.com"
+__status__ = "Development"
+
 
 import rospy
 import serial
@@ -12,6 +21,7 @@ from dwm1001_serialPort import SERIAL_PORT_DETAILS
 from dwm1001_apiCommands import DWM1001_API_COMMANDS
 from dwm1001_anchors import DWM1001_ANCHORS
 from dwm1001_network import DWM1001_NETWORK
+from dwm1001_sys_defs import SYS_DEFS
 
 
 from dynamic_reconfigure.server import Server
@@ -50,8 +60,11 @@ def main():
 
     # intialize dynamic configuration
     dynamicConfigServer = Server(DWM1001_Tune_SerialConfig, callbackDynamicConfig)
+    # set close port to true
     dynamicConfigClosePort.update({"close_port": True })
+    # set the open port to false
     dynamicConfigOpenPort.update({"open_port" : False})
+    # now update the server
     dynamicConfigServer.update_configuration(dynamicConfigOpenPort)
     dynamicConfigServer.update_configuration(dynamicConfigClosePort)
 
@@ -60,7 +73,8 @@ def main():
 
     # close the serial port in case the previous run didn't closed it properly
     serialPortDWM1001.close()
-    time.sleep(10)
+    # sleep for one sec
+    time.sleep(1)
     # open serial port
     serialPortDWM1001.open()
 
@@ -68,119 +82,95 @@ def main():
     # check if the serial port is opened
     if(serialPortDWM1001.isOpen()):
 
+        # update the server with opened port and closed port
         dynamicConfigClosePort.update({"close_port": False})
         dynamicConfigOpenPort.update({"open_port": True})
+        # update name of serial port in dynamic configuration
         dynamicConfigSerialPort = {"serial_port": str(SERIAL_PORT_DETAILS.name)}
+        # now update the server
         dynamicConfigServer.update_configuration(dynamicConfigOpenPort)
         dynamicConfigServer.update_configuration(dynamicConfigClosePort)
         dynamicConfigServer.update_configuration(dynamicConfigSerialPort)
-
         rospy.loginfo("Port opened: "+ str(SERIAL_PORT_DETAILS.name) );
-        serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
+        serialPortDWM1001.write(DWM1001_API_COMMANDS.RESET)
+        serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
         time.sleep(0.5)
-        serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
+        serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
+        time.sleep(0.5)
+        serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
 
     # check if the serial port is not open
     else:
         rospy.loginfo("Can't open port: "+ str(SERIAL_PORT_DETAILS.name))
 
     # give some time to DWM1001 to wake up
-    time.sleep(5)
+    time.sleep(2)
     # send command lec, so we can get positions is CSV format
-    serialPortDWM1001.write(DWM1001_API_COMMANDS.LecPlusEnter)
+    serialPortDWM1001.write(DWM1001_API_COMMANDS.LEC)
+    serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
     rospy.loginfo("Reading DWM1001 coordinates")
-
-
-    while True:
-        serialReadLine = serialPortDWM1001.read_until()
-        rospy.loginfo("Waiting for DWM1001 to wake up " + str(serialReadLine))
-        rate.sleep()
-        if "Command not found" in serialReadLine:
-            rospy.loginfo("Command not found trying again")
-            pub_Network.publish("Command not found trying again")
-            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
-            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
-            time.sleep(1.5)
-            serialPortDWM1001.write(DWM1001_API_COMMANDS.LecPlusEnter)
-            time.sleep(2.5)
-        elif "dwm>" in serialReadLine:
-            rospy.loginfo("DWM1001 API is ready to receive commands")
-            pub_Network.publish("DWM1001 API is ready to receive commands")
-            #serialPortDWM1001.reset_input_buffer()
-            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
-            time.sleep(0.2)
-            break
-        elif "" in serialReadLine :
-            rospy.loginfo("DWM1001 is not responding, received nothing, trying again")
-            serialPortDWM1001.reset_input_buffer()
-            serialPortDWM1001.write(DWM1001_API_COMMANDS.LecPlusEnter)
-            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
-            time.sleep(0.1)
-            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
-        elif"dwm> lec" in serialReadLine:
-            rospy.loginfo("DWM1001 is not responding, received dwm>lec but not position, trying again")
-            pub_Network.publish("DWM1001 is not responding, received dwm>lec but not position, trying again")
-            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
-            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
-            time.sleep(2.5)
-            serialPortDWM1001.write(DWM1001_API_COMMANDS.LecPlusEnter)
-            time.sleep(2.5)
-        elif"DIST" in serialReadLine:
-            break
-        elif "License" in serialReadLine:
-            break
-        else:
-            break
-
-
 
     try:
 
         while not rospy.is_shutdown():
+            # just read everything from serial port
             serialReadLine = serialPortDWM1001.read_until()
-            serialPortDWM1001.reset_input_buffer()
-
+            # sleep for 10Hz - because why not
             rate.sleep()
 
-            arr = []
-
+            # declare array that will hold network data such us coordinates of anchor and tag
             # split serial port message by comma ','
-            arr = [ x.strip() for x in serialReadLine.strip().split(',') ]
-
-
+            networkDataArraya = [ x.strip() for x in serialReadLine.strip().split(',') ]
 
             try:
                 #Get numbers of anchors
-                DWM1001_NETWORK.anchors = arr[1]
-                rospy.loginfo("Number(s) of Anchors: " + arr[1])
+                DWM1001_NETWORK.anchors = networkDataArraya[1]
+                # TODO delete this after debugging
+                rospy.loginfo("Number(s) of Anchors: " + networkDataArraya[1])
                 #TODO delete this after debugging
-                rospy.loginfo("Length of array: " + str(len(arr)))
-                # Publish coordinates of tag and anchors
-                pub_Network.publish( str("x:" + arr[4] + "y:" + arr[5] + " z: " + arr[6]))
-                pub_Anchor_0.publish(str(arr[4] + " " + arr[5] + " " + arr[6]))
-                pub_Anchor_1.publish(str(arr[10]+ " " + arr[11]+ " " + arr[12]))
-                pub_Anchor_2.publish(str(arr[16]+ " " + arr[17]+ " " + arr[18]))
-                pub_Anchor_3.publish(str(arr[22] + " " + arr[23] + " " + arr[24]))
-                pub_Tag.publish(str(arr[27]+ " " + arr[28]+ " " + arr[29]))
-                # flush buffer of serial port
-                #serialPortDWM1001.flush()
+                rospy.loginfo("Length of array: " + str(len(networkDataArraya)))
+
+                # publish coordinates and info of the network
+                pub_Network.publish( str(networkDataArraya))
+                # pubblish coordinates for first anchor
+                pub_Anchor_0.publish(str(networkDataArraya[SYS_DEFS.INDEX_4] + " "
+                                         + networkDataArraya[SYS_DEFS.INDEX_5] + " "
+                                         + networkDataArraya[SYS_DEFS.INDEX_6]))
+                # publish coordinates for second anchor
+                pub_Anchor_1.publish(str(networkDataArraya[SYS_DEFS.INDEX_10]+ " "
+                                         + networkDataArraya[SYS_DEFS.INDEX_11]+ " "
+                                         + networkDataArraya[SYS_DEFS.INDEX_12]))
+                # publish coordinates for third anchor
+                pub_Anchor_2.publish(str(networkDataArraya[SYS_DEFS.INDEX_16]+ " "
+                                         + networkDataArraya[SYS_DEFS.INDEX_17]+ " "
+                                         + networkDataArraya[SYS_DEFS.INDEX_18]))
+                # publish coordinates for fourth anchor
+                pub_Anchor_3.publish(str(networkDataArraya[SYS_DEFS.INDEX_22]+ " "
+                                         + networkDataArraya[SYS_DEFS.INDEX_23]+ " "
+                                         + networkDataArraya[SYS_DEFS.INDEX_24]))
+                # publish coordinates for tag
+                pub_Tag.publish(str(networkDataArraya[SYS_DEFS.INDEX_27]+ " "
+                                    + networkDataArraya[SYS_DEFS.INDEX_28]+ " "
+                                    + networkDataArraya[SYS_DEFS.INDEX_29]))
 
             except IndexError:
-                DWM1001_NETWORK.anchors = ''
-
-            rospy.loginfo(arr)
+                rospy.loginfo("Found index error in the network array!DO SOMETHING!")
+            # print coordinates and info of the network
+            rospy.loginfo(networkDataArraya)
 
 
     except KeyboardInterrupt:
         rospy.loginfo("Quitting DWM1001 Shell Mode and closing port, allow 1 second for UWB recovery")
+        serialPortDWM1001.write(DWM1001_API_COMMANDS.RESET)
+        serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
 
     finally:
-        rospy.loginfo("Trying to quit, but is not easy!!!")
-        serialPortDWM1001.reset_input_buffer()
-        serialPortDWM1001.write(DWM1001_API_COMMANDS.Quit)
+        rospy.loginfo("Quitting, and sending reset command to dev board")
+        # serialPortDWM1001.reset_input_buffer()
+        serialPortDWM1001.write(DWM1001_API_COMMANDS.RESET)
         serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
         rate.sleep()
-        if "bye" in serialReadLine:
+        if "reset" in serialReadLine:
             rospy.loginfo("succesfully closed ")
             serialPortDWM1001.close()
 
