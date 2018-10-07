@@ -36,6 +36,11 @@ In this package we visualize the DWM1001 network coordinates in RVIZ, using simp
 
 ![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/Screenshot%20from%202018-10-07%2013-31-00.png)
 
+## ROS Topic monitor
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/Screenshot%20from%202018-10-07%2014-02-37.png)
+
+
+
 
 ### Roadmap
 - [x] Create RTLS network from Android App
