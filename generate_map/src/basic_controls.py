@@ -70,6 +70,8 @@ anchor3z = 0
 rospy.init_node("generate_map")
 server = InteractiveMarkerServer("DWM1001_Anchors_And_Tag_Server")
 
+pub_line_min_dist = rospy.Publisher('~line_min_dist', Marker, queue_size=1)
+
 
 def processFeedback(feedback):
     p = feedback.pose.position
@@ -90,8 +92,6 @@ def makeBoxControlAnchor(msg):
     control.always_visible = True
     control.markers.append( makeGreyCubeAnchor(msg) )
     msg.controls.append( control )
-
-
     return control
 
 # Marker for tag
@@ -111,7 +111,7 @@ def makeWhiteSphereTag( msg ):
 
 def makeTagMarker(position, name):
     int_marker = InteractiveMarker()
-    int_marker.header.frame_id = "base_link"
+    int_marker.header.frame_id = "map"
     int_marker.pose.position = position
     int_marker.scale = 1
 
@@ -148,7 +148,7 @@ def makeGreyCubeAnchor( msg ):
 
 def makeAnchorMarker(position, name):
     int_marker = InteractiveMarker()
-    int_marker.header.frame_id = "base_link"
+    int_marker.header.frame_id = "map"
     int_marker.pose.position = position
     int_marker.scale = 1
 
@@ -311,7 +311,6 @@ def tagCallback(data):
         server.applyChanges()
         # TODO remove this after, Debugging purpose
         rospy.loginfo("Tag x: " + str(tagx) + " y: " + str(tagy) + " z: " + str(tagy))
-
     except IndexError:
         rospy.loginfo("Index error")
     except ValueError:

@@ -5,6 +5,8 @@ import math
 import time
 import random
 import astar as ASTAR
+from visualization_msgs.msg import *
+from geometry_msgs.msg import Point
 
 #Initialize node
 rospy.init_node('astar', anonymous=False)
@@ -26,18 +28,25 @@ elif possibleDirections == 8:
 # TODO replace these coordinate with coordinates from dwm1001
 anchor0Coordinates_x = 0
 anchor0Coordinates_y = 0
+anchor0Coordinates_z = 0
+
 anchor1Coordinates_x = 0
 anchor1Coordinates_y = 0
+anchor1Coordinates_z = 0
+
 anchor2Coordinates_x = 0
 anchor2Coordinates_y = 0
+anchor2Coordinates_z = 0
+
 tagCoordinates_x = 0
 tagCoordinates_y = 0
+tagCoordinates_z = 0
 
 
 # horizontal size of the map
-mapSizeN = 40
+mapSizeN = 200
 # vertical size of the map
-mapSizeM = 40
+mapSizeM = 200
 # declare empty array
 the_map = []
 row = [0] * mapSizeN
@@ -46,37 +55,101 @@ for i in range(mapSizeM):
     the_map.append(list(row))
 
 
+
+pub_line_min_dist = rospy.Publisher('~Astar_line_min_dist', Marker, queue_size=1)
+
+# Draw a line
+def DrawALine(tagx, tagy, tagz, goalx, goaly, goalz):
+    marker = Marker()
+    marker.header.frame_id = "map"
+    marker.type = marker.LINE_STRIP
+    marker.action = marker.ADD
+
+    # marker scale
+    marker.scale.x = 0.05
+    marker.scale.y = 0.05
+    marker.scale.z = 0.05
+
+    # marker color
+    marker.color.a = 1.0
+    marker.color.r = 1.0
+    marker.color.g = 1.0
+    marker.color.b = 0.0
+
+    # marker orientaiton
+    marker.pose.orientation.x = 0.0
+    marker.pose.orientation.y = 0.0
+    marker.pose.orientation.z = 0.0
+    marker.pose.orientation.w = 1.0
+
+    # marker position
+    #marker.pose.position.x = tagx
+    #marker.pose.position.y = tagy
+    #marker.pose.position.z = tagz
+
+    # marker line points
+    marker.points = []
+
+
+    # first point
+    first_line_point = Point()
+    first_line_point.x = tagx
+    first_line_point.y = tagy
+    first_line_point.z = tagz
+    marker.points.append(first_line_point)
+    # second point
+    second_line_point = Point()
+    second_line_point.x = goalx
+    second_line_point.y = goaly
+    second_line_point.z = goalz
+    marker.points.append(second_line_point)
+
+
+    # Publish the Marker
+    pub_line_min_dist.publish(marker)
+
+    rospy.loginfo('Publishing example line')
+
+
+
 #TODO get coordinates from topic
 def DWM1001_Network_Anchor_0callback(data):
-    global anchor0Coordinates_x,anchor0Coordinates_y
+    global anchor0Coordinates_x,anchor0Coordinates_y, anchor0Coordinates_z
 
     coordinates = data.data.split()
     anchor0Coordinates_x = int(coordinates[0])
     anchor0Coordinates_y = int(coordinates[1])
+    anchor0Coordinates_z = int(coordinates[2])
 
 #TODO get coordinates from topic
 def DWM1001_Network_Anchor_1callback(data):
-    global anchor1Coordinates_x,anchor1Coordinates_y
+    global anchor1Coordinates_x,anchor1Coordinates_y, anchor1Coordinates_z
 
     coordinates = data.data.split()
     anchor1Coordinates_x = int(coordinates[0])
     anchor1Coordinates_y = int(coordinates[1])
+    anchor1Coordinates_z = int(coordinates[2])
+
 
 #TODO get coordinates from topic
 def DWM1001_Network_Anchor_2callback(data):
-    global anchor2Coordinates_x,anchor2Coordinates_y
+    global anchor2Coordinates_x,anchor2Coordinates_y, anchor2Coordinates_z
 
     coordinates = data.data.split()
     anchor2Coordinates_x = int(coordinates[0])
     anchor2Coordinates_y = int(coordinates[1])
+    anchor2Coordinates_z = int(coordinates[2])
+
 
 #TODO get coordinates from topic
 def DWM1001_Network_Tagcallback(data):
-    global tagCoordinates_x, tagCoordinates_y
+    global tagCoordinates_x, tagCoordinates_y, tagCoordinates_z
 
     coordinates = data.data.split()
     tagCoordinates_x = int(coordinates[0])
     tagCoordinates_y = int(coordinates[1])
+    tagCoordinates_z = int(coordinates[2])
+
 
 def RouteNcallback(data):
     global routeNumber
@@ -85,9 +158,31 @@ def RouteNcallback(data):
     rate.sleep()
 
     if(data.data == "1"):
-        rospy.loginfo('Route Number: 1 ' + str(anchor0Coordinates_x))
+        route = ASTAR.pathFind(the_map,
+                               mapSizeN,
+                               mapSizeM,
+                               possibleDirections,
+                               dx,
+                               dy,
+                               tagCoordinates_x,
+                               tagCoordinates_y,
+                               anchor1Coordinates_x,
+                               anchor1Coordinates_y)
+        DrawALine(tagCoordinates_x, tagCoordinates_y, tagCoordinates_z, anchor1Coordinates_x, anchor1Coordinates_y, anchor1Coordinates_z, )
+        rospy.loginfo('Route Number: 1, directions: ' + str(route))
+        pubblishRoute.publish(route)
     elif (data.data == "2"):
-        route = ASTAR.pathFind(the_map, mapSizeN, mapSizeM, possibleDirections, dx, dy, tagCoordinates_x, tagCoordinates_y, anchor2Coordinates_x, anchor2Coordinates_y)
+        route = ASTAR.pathFind(the_map,
+                               mapSizeN,
+                               mapSizeM,
+                               possibleDirections,
+                               dx,
+                               dy,
+                               tagCoordinates_x,
+                               tagCoordinates_y,
+                               anchor2Coordinates_x,
+                               anchor2Coordinates_y)
+        DrawALine(tagCoordinates_x, tagCoordinates_y, 0, anchor2Coordinates_x, anchor2Coordinates_y, 0, )
         rospy.loginfo('Route Number: 2, directions: ' + str(route))
         pubblishRoute.publish(route)
     elif(data.data == "3"):
@@ -106,6 +201,7 @@ rospy.Subscriber('DWM1001_Network_Anchor_2', String, DWM1001_Network_Anchor_2cal
 rospy.Subscriber('DWM1001_Network_Tag',      String, DWM1001_Network_Tagcallback)
 rospy.Subscriber('route_number',      String, RouteNcallback)
 rospy.spin()
+
 
 
 

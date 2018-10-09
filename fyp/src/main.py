@@ -24,9 +24,9 @@ def talker():
     # Inifinite loop
     while not rospy.is_shutdown():
         # Pubblish a dummy data for now, this will publish the route that we are going to need
-        pub_RouteN.publish("2")
+        pub_RouteN.publish("1")
         # Show me the route
-        rospy.loginfo("Route 2")
+        rospy.loginfo("Route 1")
         # Sleep for 10hz
         rate.sleep()
 
