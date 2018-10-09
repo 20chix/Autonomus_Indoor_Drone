@@ -34,7 +34,12 @@ In this package we want to be able to change some variable from ground station, 
 ## DWM1001 Network example with RVIZ
 In this package we visualize the DWM1001 network coordinates in RVIZ, using simple marker tutorial. 
 
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/DWM1001_Network.png?token=AO45C4GEr4m26mhZ1Sk-E_s61FVpOPYCks5bsiPBwA%3D%3D)
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/Screenshot%20from%202018-10-07%2013-31-00.png)
+
+## ROS Topic monitor
+![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/Screenshot%20from%202018-10-07%2014-02-37.png)
+
+
 
 
 ### Roadmap
@@ -44,7 +49,7 @@ In this package we visualize the DWM1001 network coordinates in RVIZ, using simp
 - [x] Get Tag position in Python
 - [x] Display Anchors in RViz
 - [x] Display Tag in RViz
-- [ ] Calculate shortest path from Tag to a Anchor using A* Algorithm
+- [x] Calculate shortest path from Tag to a Anchor using A* Algorithm
 - [ ] Display shortest path in RViz
 - [ ] Display actual path in RViz
 - [x] Dynamic configuration for DWM1001 dev board
