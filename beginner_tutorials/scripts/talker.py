@@ -30,6 +30,7 @@ def talker():
     pub_Anchor_0 = rospy.Publisher('DWM1001_Network_Anchor_0', String, queue_size=10)
     pub_Anchor_1 = rospy.Publisher('DWM1001_Network_Anchor_1', String, queue_size=10)
     pub_Anchor_2 = rospy.Publisher('DWM1001_Network_Anchor_2', String, queue_size=10)
+    pub_Anchor_3 = rospy.Publisher('DWM1001_Network_Anchor_3', String, queue_size=10)
     pub_Tag      = rospy.Publisher('DWM1001_Network_Tag',      String, queue_size=10)
 
 
@@ -42,10 +43,11 @@ def talker():
 
         #cars.update({"dwm1001_network_info" : str(counter)})
 
-        pub_Anchor_0.publish("0  0  0")
-        pub_Anchor_1.publish("1  1  1")
-        pub_Anchor_2.publish("2  2  2")
-        pub_Tag.publish("5  5  5")
+        pub_Anchor_0.publish("0   0   0")
+        pub_Anchor_1.publish("0   30  0")
+        pub_Anchor_2.publish("30  30  0")
+        pub_Anchor_3.publish("30   0  0")
+        pub_Tag.publish(     "15  15  3")
 
 
         rospy.loginfo("0  0  0")
