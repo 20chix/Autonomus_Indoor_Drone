@@ -38,6 +38,10 @@ anchor2Coordinates_x = 0
 anchor2Coordinates_y = 0
 anchor2Coordinates_z = 0
 
+anchor3Coordinates_x = 0
+anchor3Coordinates_y = 0
+anchor3Coordinates_z = 0
+
 tagCoordinates_x = 0
 tagCoordinates_y = 0
 tagCoordinates_z = 0
@@ -56,7 +60,7 @@ for i in range(mapSizeM):
 
 
 
-pub_line_min_dist = rospy.Publisher('~Astar_line_min_dist', Marker, queue_size=1)
+pub_line_min_dist = rospy.Publisher('~astar_line_min_dist', Marker, queue_size=1)
 
 # Draw a line
 def DrawALine(tagx, tagy, tagz, goalx, goaly, goalz):
@@ -139,6 +143,15 @@ def DWM1001_Network_Anchor_2callback(data):
     anchor2Coordinates_x = int(coordinates[0])
     anchor2Coordinates_y = int(coordinates[1])
     anchor2Coordinates_z = int(coordinates[2])
+
+#TODO get coordinates from topic
+def DWM1001_Network_Anchor_3callback(data):
+    global anchor3Coordinates_x,anchor3Coordinates_y, anchor3Coordinates_z
+
+    coordinates = data.data.split()
+    anchor3Coordinates_x = int(coordinates[0])
+    anchor3Coordinates_y = int(coordinates[1])
+    anchor3Coordinates_z = int(coordinates[2])
 
 
 #TODO get coordinates from topic
