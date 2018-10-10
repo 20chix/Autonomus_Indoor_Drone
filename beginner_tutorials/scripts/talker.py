@@ -47,7 +47,7 @@ def talker():
         pub_Anchor_1.publish("0   30  0")
         pub_Anchor_2.publish("30  30  0")
         pub_Anchor_3.publish("30   0  0")
-        pub_Tag.publish(     "15  15  3")
+        pub_Tag.publish(     " 0  5  3")
 
 
         rospy.loginfo("0  0  0")
