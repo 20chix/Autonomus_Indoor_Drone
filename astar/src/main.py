@@ -249,6 +249,7 @@ def RouteNcallback(data):
 rospy.Subscriber('DWM1001_Network_Anchor_0', String, DWM1001_Network_Anchor_0callback)
 rospy.Subscriber('DWM1001_Network_Anchor_1', String, DWM1001_Network_Anchor_1callback)
 rospy.Subscriber('DWM1001_Network_Anchor_2', String, DWM1001_Network_Anchor_2callback)
+rospy.Subscriber('DWM1001_Network_Anchor_3', String, DWM1001_Network_Anchor_3callback)
 rospy.Subscriber('DWM1001_Network_Tag',      String, DWM1001_Network_Tagcallback)
 rospy.Subscriber('route_number',      String, RouteNcallback)
 rospy.spin()
