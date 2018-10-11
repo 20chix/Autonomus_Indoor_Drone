@@ -56,6 +56,17 @@ def talker():
         pub_Tag.publish(     dummy_tag)
 
 
+        radius = 15
+        theta = math.radians(angle)
+        counter_x = radius * math.cos(theta)
+        counter_y = radius * math.sin(theta)
+
+        angle = angle + 1
+
+        if angle => 360:
+            angle = 0
+
+            
         rospy.loginfo("sending dummy values: tag = "+ str(dummy_tag))
 
         dummy_tag = str(counter_x) + " " + str(counter_y) + " " + str(counter_z)
@@ -63,15 +74,7 @@ def talker():
         srv.update_configuration(cars)
 
 
-        radius = 15
-        theta = math.radians(angle)
-        counter_x = radius*math.cos(theta)
-        counter_y = radius*math.sin(theta)
 
-        angle = angle + 1
-
-        if angle => 360:
-            angle = 0
 
         #if counter_y > 26:
         #    counter_x = counter_x + 0.3
