@@ -61,9 +61,14 @@ def talker():
         srv.update_configuration(cars)
 
 
+        radius = 15
+        for angle in range(0, 361):
+            theta = math.radians(angle)
+            counter_x = radius*math.cos(theta)
+            counter_y = radius*math.sin(theta)
 
-        counter_x = 0 + math.cos(counter_y)*15
-        counter_y = 0 + math.sin(counter_y)*15
+
+
         #if counter_y > 26:
         #    counter_x = counter_x + 0.3
 
