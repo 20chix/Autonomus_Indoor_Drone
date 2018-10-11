@@ -116,18 +116,18 @@ def DWM1001_Network_Anchor_0callback(data):
     global anchor0Coordinates_x,anchor0Coordinates_y, anchor0Coordinates_z
 
     coordinates = data.data.split()
-    anchor0Coordinates_x = int(coordinates[0])
-    anchor0Coordinates_y = int(coordinates[1])
-    anchor0Coordinates_z = int(coordinates[2])
+    anchor0Coordinates_x = float(coordinates[0])
+    anchor0Coordinates_y = float(coordinates[1])
+    anchor0Coordinates_z = float(coordinates[2])
 
 #TODO get coordinates from topic
 def DWM1001_Network_Anchor_1callback(data):
     global anchor1Coordinates_x,anchor1Coordinates_y, anchor1Coordinates_z
 
     coordinates = data.data.split()
-    anchor1Coordinates_x = int(coordinates[0])
-    anchor1Coordinates_y = int(coordinates[1])
-    anchor1Coordinates_z = int(coordinates[2])
+    anchor1Coordinates_x = float(coordinates[0])
+    anchor1Coordinates_y = float(coordinates[1])
+    anchor1Coordinates_z = float(coordinates[2])
 
 
 #TODO get coordinates from topic
@@ -135,18 +135,18 @@ def DWM1001_Network_Anchor_2callback(data):
     global anchor2Coordinates_x,anchor2Coordinates_y, anchor2Coordinates_z
 
     coordinates = data.data.split()
-    anchor2Coordinates_x = int(coordinates[0])
-    anchor2Coordinates_y = int(coordinates[1])
-    anchor2Coordinates_z = int(coordinates[2])
+    anchor2Coordinates_x = float(coordinates[0])
+    anchor2Coordinates_y = float(coordinates[1])
+    anchor2Coordinates_z = float(coordinates[2])
 
 #TODO get coordinates from topic
 def DWM1001_Network_Anchor_3callback(data):
     global anchor3Coordinates_x,anchor3Coordinates_y, anchor3Coordinates_z
 
     coordinates = data.data.split()
-    anchor3Coordinates_x = int(coordinates[0])
-    anchor3Coordinates_y = int(coordinates[1])
-    anchor3Coordinates_z = int(coordinates[2])
+    anchor3Coordinates_x = float(coordinates[0])
+    anchor3Coordinates_y = float(coordinates[1])
+    anchor3Coordinates_z = float(coordinates[2])
 
 
 #TODO get coordinates from topic
@@ -154,9 +154,9 @@ def DWM1001_Network_Tagcallback(data):
     global tagCoordinates_x, tagCoordinates_y, tagCoordinates_z
 
     coordinates = data.data.split()
-    tagCoordinates_x = int(coordinates[0])
-    tagCoordinates_y = int(coordinates[1])
-    tagCoordinates_z = int(coordinates[2])
+    tagCoordinates_x = float(coordinates[0])
+    tagCoordinates_y = float(coordinates[1])
+    tagCoordinates_z = float(coordinates[2])
 
 
 def RouteNcallback(data):
