@@ -49,7 +49,10 @@ def talker():
 
     while not rospy.is_shutdown():
 
-       
+        coordinates_tag = dummy_tag.split()
+        coordinates_anchor_0 = dummy_anchor_0.split()
+
+       inc_x = int(coordinates_tag[0]) -  int(coordinates_anchor_0[0])
 
 
         radius = 15
@@ -74,7 +77,7 @@ def talker():
         pub_Anchor_3.publish(dummy_anchor_3)
         pub_Tag.publish(     dummy_tag)
 
-        
+
         srv.update_configuration(cars)
 
 
