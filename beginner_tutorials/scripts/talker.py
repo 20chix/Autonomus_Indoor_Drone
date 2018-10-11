@@ -77,7 +77,7 @@ def callback(config, level):
 
     toBePrint = config["serial_port"]
 
-    config["dwm1001_network_info"] = str(counter_1)
+    config["dwm1001_network_info"] = str(counter_x)
 
     rospy.loginfo("""Reconfigure Request: {dwm1001_network_info}, {open_port},\ 
           {serial_port}, {close_port}""".format(**config))
