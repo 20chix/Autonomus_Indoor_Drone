@@ -58,8 +58,8 @@ def talker():
 
         radius = 15
         theta = math.radians(angle)
-        counter_x = radius * math.cos(theta)
-        counter_y = radius * math.sin(theta)
+        counter_y = radius * math.cos(theta)
+        counter_x = radius * math.sin(theta)
 
         angle = angle + 1
 
