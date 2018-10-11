@@ -54,7 +54,7 @@ def talker():
 
         rospy.loginfo("sending dummy values: tag = "+ str(dummy_tag))
 
-        dummy_tag = counter_1 + " " + counter_2 + " " + counter_3
+        dummy_tag = str(counter_1) + " " + str(counter_2) + " " + str(counter_3)
 
         srv.update_configuration(cars)
 
