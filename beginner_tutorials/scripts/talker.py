@@ -62,8 +62,8 @@ def talker():
 
 
 
-        counter_x = 0 + cos(90)*15
-        counter_y = 0 + sin(90)*15
+        counter_x = 0 + math.cos(90)*15
+        counter_y = 0 + math.sin(90)*15
         #if counter_y > 26:
         #    counter_x = counter_x + 0.3
 
