@@ -19,7 +19,7 @@ dummy_anchor_0 = "0   0   0"
 dummy_anchor_1 = "0   30  0"
 dummy_anchor_2 = "30  30  0"
 dummy_anchor_3 = "30   0  0"
-dummy_tag      = " 0   5  3"
+dummy_tag      = " 0   0  3"
 
 cars = {"dwm1001_network_info": 0 }
 
