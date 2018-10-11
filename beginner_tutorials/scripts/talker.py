@@ -59,12 +59,15 @@ def talker():
         srv.update_configuration(cars)
 
 
+        if counter_1 > 26:
+            counter_2 = counter_2 + 0.3
+
         if counter_1 > 30:
-            counter_1 = 0
+            counter_1 = 30
 
         counter_1 = counter_1 + 0.3
-        counter_2 = counter_2 + 0.001
-        counter_3 = counter_3 + 0.00001
+        #counter_2 = counter_2 + 0.001
+        #counter_3 = counter_3 + 0.00001
 
         rate.sleep()
 
