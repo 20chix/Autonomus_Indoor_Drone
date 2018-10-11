@@ -7,9 +7,9 @@ from beginner_tutorials.cfg import GUIConfig
 
 
 toBePrint = ""
-counter_1 = 0
-counter_2 = 0
-counter_3 = 0
+counter_x = 0
+counter_y = 0
+counter_z = 0
 
 dummy_anchor_0 = "0   0   0"
 dummy_anchor_1 = "0   30  0"
@@ -54,18 +54,18 @@ def talker():
 
         rospy.loginfo("sending dummy values: tag = "+ str(dummy_tag))
 
-        dummy_tag = str(counter_2) + " " + str(counter_1) + " " + str(counter_3)
+        dummy_tag = str(counter_x) + " " + str(counter_y) + " " + str(counter_z)
 
         srv.update_configuration(cars)
 
 
-        if counter_1 > 26:
-            counter_2 = counter_2 + 0.3
+        if counter_y > 26:
+            counter_x = counter_x + 0.3
 
-        if counter_1 > 30:
-            counter_1 = 30
+        if counter_y > 30:
+            counter_y = 30
 
-        counter_1 = counter_1 + 0.3
+        counter_y = counter_y + 0.3
         #counter_2 = counter_2 + 0.001
         #counter_3 = counter_3 + 0.00001
 
