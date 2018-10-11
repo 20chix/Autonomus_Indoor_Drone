@@ -49,11 +49,7 @@ def talker():
 
     while not rospy.is_shutdown():
 
-        pub_Anchor_0.publish(dummy_anchor_0)
-        pub_Anchor_1.publish(dummy_anchor_1)
-        pub_Anchor_2.publish(dummy_anchor_2)
-        pub_Anchor_3.publish(dummy_anchor_3)
-        pub_Tag.publish(     dummy_tag)
+       
 
 
         radius = 15
@@ -72,6 +68,13 @@ def talker():
 
         dummy_tag = str(counter_x) + " " + str(counter_y) + " " + str(counter_z)
 
+        pub_Anchor_0.publish(dummy_anchor_0)
+        pub_Anchor_1.publish(dummy_anchor_1)
+        pub_Anchor_2.publish(dummy_anchor_2)
+        pub_Anchor_3.publish(dummy_anchor_3)
+        pub_Tag.publish(     dummy_tag)
+
+        
         srv.update_configuration(cars)
 
 
