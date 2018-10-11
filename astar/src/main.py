@@ -154,7 +154,7 @@ def DWM1001_Network_Tagcallback(data):
     global tagCoordinates_x, tagCoordinates_y, tagCoordinates_z
 
     coordinates = data.data.split()
-    tagCoordinates_x = int(coordinates[0])
+    tagCoordinates_x = int(int(coordinates[0])
     tagCoordinates_y = int(coordinates[1])
     tagCoordinates_z = int(coordinates[2])
 
