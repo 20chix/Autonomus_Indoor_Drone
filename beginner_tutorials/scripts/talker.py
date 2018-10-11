@@ -56,7 +56,7 @@ def talker():
         pub_Tag.publish(     dummy_tag)
 
 
-        radius = 20
+        radius = 15
         theta = math.radians(angle)
         counter_y = radius * math.cos(theta) + 0
         counter_x = radius * math.sin(theta) + 0
