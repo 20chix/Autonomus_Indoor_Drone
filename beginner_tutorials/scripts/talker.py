@@ -70,6 +70,7 @@ def talker():
 
         if counter_y < 26:
             counter_y = counter_y + 0.3
+            #hi
 
 
         
