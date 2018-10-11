@@ -68,7 +68,11 @@ def talker():
         if counter_x > 26:
             counter_y = counter_y - 0.3
 
-        counter_y = counter_y + 0.3
+        if counter_y < 26:
+            counter_y = counter_y + 0.3
+
+
+        
         #counter_2 = counter_2 + 0.001
         #counter_3 = counter_3 + 0.00001
 
