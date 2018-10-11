@@ -25,7 +25,7 @@ cars = {"dwm1001_network_info": 0 }
 
 
 def talker():
-    global counter_1, counter_2, counter_3, dummy_tag
+    global counter_x, counter_y, counter_z, dummy_tag
     global cars
     
     # initialize node
