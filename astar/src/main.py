@@ -155,8 +155,8 @@ def DWM1001_Network_Tagcallback(data):
 
     coordinates = data.data.split()
     tagCoordinates_x = int(float(coordinates[0]))
-    tagCoordinates_y = int(coordinates[1])
-    tagCoordinates_z = int(coordinates[2])
+    tagCoordinates_y = int(float(coordinates[1]))
+    tagCoordinates_z = int(float(coordinates[2]))
 
 
 def RouteNcallback(data):
