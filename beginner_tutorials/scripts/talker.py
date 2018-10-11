@@ -52,7 +52,7 @@ def talker():
         coordinates_tag = dummy_tag.split()
         coordinates_anchor_0 = dummy_anchor_0.split()
 
-        inc_x = int(coordinates_tag[0]) -  int(coordinates_anchor_0[0])
+        inc_x = int(float(coordinates_tag[0]) -  float(coordinates_anchor_0[0]))
 
 
         radius = 15
