@@ -116,9 +116,9 @@ def DWM1001_Network_Anchor_0callback(data):
     global anchor0Coordinates_x,anchor0Coordinates_y, anchor0Coordinates_z
 
     coordinates = data.data.split()
-    anchor0Coordinates_x = int(coordinates[0])
-    anchor0Coordinates_y = int(coordinates[1])
-    anchor0Coordinates_z = int(coordinates[2])
+    anchor0Coordinates_x = int(float(coordinates[0]))
+    anchor0Coordinates_y = int(float(coordinates[1]))
+    anchor0Coordinates_z = int(float(coordinates[2]))
 
 #TODO get coordinates from topic
 def DWM1001_Network_Anchor_1callback(data):
@@ -199,15 +199,15 @@ def RouteNcallback(data):
                                dy,
                                tagCoordinates_x,
                                tagCoordinates_y,
-                               anchor2Coordinates_x,
-                               anchor2Coordinates_y)
+                               anchor1Coordinates_x,
+                               anchor1Coordinates_y)
         # Draw line on Rviz
         DrawALine(tagCoordinates_x, 
                   tagCoordinates_y, 
                   tagCoordinates_z, 
-                  anchor2Coordinates_x, 
-                  anchor2Coordinates_y, 
-                  anchor2Coordinates_z)
+                  anchor1Coordinates_x, 
+                  anchor1Coordinates_y, 
+                  anchor1Coordinates_z)
         # Log route
         rospy.loginfo('Route Number: 1, directions: ' + str(route))
         # Pubblish route
