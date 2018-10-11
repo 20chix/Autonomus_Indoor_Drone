@@ -13,6 +13,8 @@ counter_x = 0
 counter_y = 0
 counter_z = 0
 
+angle = 0
+
 dummy_anchor_0 = "0   0   0"
 dummy_anchor_1 = "0   30  0"
 dummy_anchor_2 = "30  30  0"
@@ -27,7 +29,7 @@ cars = {"dwm1001_network_info": 0 }
 
 
 def talker():
-    global counter_x, counter_y, counter_z, dummy_tag
+    global counter_x, counter_y, counter_z, dummy_tag, angle
     global cars
     
     # initialize node
@@ -62,12 +64,14 @@ def talker():
 
 
         radius = 15
-        for angle in range(0, 361):
-            theta = math.radians(angle)
-            counter_x = radius*math.cos(theta)
-            counter_y = radius*math.sin(theta)
+        theta = math.radians(angle)
+        counter_x = radius*math.cos(theta)
+        counter_y = radius*math.sin(theta)
 
+        angle = angle + 1
 
+        if angle => 360:
+            angle = 0
 
         #if counter_y > 26:
         #    counter_x = counter_x + 0.3
