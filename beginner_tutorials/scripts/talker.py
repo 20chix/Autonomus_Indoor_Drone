@@ -59,17 +59,20 @@ def talker():
         srv.update_configuration(cars)
 
 
-        if counter_y > 26:
-            counter_x = counter_x + 0.3
 
-        if counter_y > 30:
-            counter_y = 30
+        counter_x = 0 + cos(90)*15
+        counter_y = 0 + sin(90)*15
+        #if counter_y > 26:
+        #    counter_x = counter_x + 0.3
+
+        #if counter_y > 30:
+        #    counter_y = 30
         
-        if counter_x > 26:
-            counter_y = counter_y - 0.3
+        #if counter_x > 26:
+        #    counter_y = counter_y - 0.3
 
-        if counter_y < 26:
-            counter_y = counter_y + 0.3
+        #if counter_y < 26:
+        #    counter_y = counter_y + 0.3
             #hi
 
 
