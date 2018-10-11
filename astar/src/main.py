@@ -86,11 +86,6 @@ def DrawALine(tagx, tagy, tagz, goalx, goaly, goalz):
     marker.pose.orientation.z = 0.0
     marker.pose.orientation.w = 1.0
 
-    # marker position
-    #marker.pose.position.x = tagx
-    #marker.pose.position.y = tagy
-    #marker.pose.position.z = tagz
-
     # marker line points
     marker.points = []
 
@@ -112,7 +107,7 @@ def DrawALine(tagx, tagy, tagz, goalx, goaly, goalz):
     # Publish the Marker
     pub_line_min_dist.publish(marker)
 
-    rospy.loginfo('Publishing example line')
+    rospy.loginfo('Drawing line')
 
 
 
