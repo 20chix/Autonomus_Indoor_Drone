@@ -53,18 +53,21 @@ def talker():
         coordinates_anchor_0 = dummy_anchor_0.split()
 
         inc_x = int(float(coordinates_tag[0]) -  float(coordinates_anchor_0[0]))
+        inc_y = int(float(coordinates_tag[1]) -  float(coordinates_anchor_0[1]))
+
+        angle_to_goal = math.atan2(inc_y, inc_x)
 
 
-        radius = 15
-        theta = math.radians(angle)
-        counter_y = radius * math.cos(theta) + 0
-        counter_x = radius * math.sin(theta) + 0
+        #radius = 15
+        #theta = math.radians(angle)
+        #counter_y = radius * math.cos(theta) + 0
+        #counter_x = radius * math.sin(theta) + 0
 
 
-        angle = angle + 1
+        #angle = angle + 1
 
-        if angle > 360:
-            angle = 0
+       # if angle > 360:
+        #    angle = 0
 
 
         rospy.loginfo("sending dummy values: tag = "+ str(dummy_tag))
