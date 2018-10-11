@@ -63,10 +63,10 @@ def talker():
 
         angle = angle + 1
 
-        if angle => 360:
+        if angle > 360:
             angle = 0
 
-            
+
         rospy.loginfo("sending dummy values: tag = "+ str(dummy_tag))
 
         dummy_tag = str(counter_x) + " " + str(counter_y) + " " + str(counter_z)
