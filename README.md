@@ -34,8 +34,6 @@ In this package we want to be able to change some variable from ground station, 
 ## DWM1001 Network example with RVIZ
 In this package we visualize the DWM1001 network coordinates in RVIZ, using simple marker tutorial. 
 
-![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/DWM1001_Network.png?raw=true)
-
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/Screenshot%20from%202018-10-07%2013-31-00.png?raw=true)
 
 
@@ -53,7 +51,7 @@ In this package we visualize the DWM1001 network coordinates in RVIZ, using simp
 - [x] Display Anchors in RViz
 - [x] Display Tag in RViz
 - [x] Calculate shortest path from Tag to a Anchor using A* Algorithm
-- [ ] Display shortest path in RViz
+- [x] Display shortest path in RViz
 - [ ] Display actual path in RViz
 - [x] Dynamic configuration for DWM1001 dev board
 - [ ] Dynamic configuration for drone
