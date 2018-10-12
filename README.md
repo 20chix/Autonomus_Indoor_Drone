@@ -1,10 +1,10 @@
-[![Build Status](http://94.2.115.49:8080/buildStatus/icon?job=testing)](http://94.2.115.49:8080/job/testing/)
+[![Build Status](http://90.211.148.158:8080/buildStatus/icon?job=testing)](http://94.2.115.49:8080/job/testing/)
 ![HitCount](https://img.shields.io/badge/ROS%20version-kinetic-blue.svg)
 ![HitCount](https://img.shields.io/badge/Supported%20OS-Ubuntu%2016.04-orange.svg)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 [![HitCount](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001.svg)](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001)
 
-# FYP_Autonomus_Drone_DWM1001_
+# FYP_Autonomus_Drone_DWM1001_ 
 
 Final year project that consist in autonomus drone, developed in ROS using UWB DWM1001 dev board
 
@@ -34,7 +34,7 @@ In this package we want to be able to change some variable from ground station, 
 ## DWM1001 Network example with RVIZ
 In this package we visualize the DWM1001 network coordinates in RVIZ, using simple marker tutorial. 
 
-![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/Screenshot%20from%202018-10-07%2013-31-00.png)
+![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/DWM1001_Network.png?raw=true)
 
 ## ROS Topic monitor
 ![alt text](https://raw.githubusercontent.com/20chix/FYP_Autonomus_Drone_DWM1001/master/resources/Screenshot%20from%202018-10-07%2014-02-37.png)
