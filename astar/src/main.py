@@ -125,9 +125,9 @@ def DWM1001_Network_Anchor_1callback(data):
     global anchor1Coordinates_x,anchor1Coordinates_y, anchor1Coordinates_z
 
     coordinates = data.data.split()
-    anchor1Coordinates_x = int(coordinates[0])
-    anchor1Coordinates_y = int(coordinates[1])
-    anchor1Coordinates_z = int(coordinates[2])
+    anchor1Coordinates_x = int(float(coordinates[0]))
+    anchor1Coordinates_y = int(float(coordinates[1]))
+    anchor1Coordinates_z = int(float(coordinates[2]))
 
 
 #TODO get coordinates from topic
@@ -135,18 +135,18 @@ def DWM1001_Network_Anchor_2callback(data):
     global anchor2Coordinates_x,anchor2Coordinates_y, anchor2Coordinates_z
 
     coordinates = data.data.split()
-    anchor2Coordinates_x = int(coordinates[0])
-    anchor2Coordinates_y = int(coordinates[1])
-    anchor2Coordinates_z = int(coordinates[2])
+    anchor2Coordinates_x = int(float(coordinates[0]))
+    anchor2Coordinates_y = int(float(coordinates[1]))
+    anchor2Coordinates_z = int(float(coordinates[2]))
 
 #TODO get coordinates from topic
 def DWM1001_Network_Anchor_3callback(data):
     global anchor3Coordinates_x,anchor3Coordinates_y, anchor3Coordinates_z
 
     coordinates = data.data.split()
-    anchor3Coordinates_x = int(coordinates[0])
-    anchor3Coordinates_y = int(coordinates[1])
-    anchor3Coordinates_z = int(coordinates[2])
+    anchor3Coordinates_x = int(float(coordinates[0]))
+    anchor3Coordinates_y = int(float(coordinates[1]))
+    anchor3Coordinates_z = int(float(coordinates[2]))
 
 
 #TODO get coordinates from topic
@@ -236,6 +236,11 @@ def RouteNcallback(data):
         # Pubblish route
         pubblishRoute.publish(route)
 
+    else:
+        rospy.loginfo('No route pubblished: ')
+
+
+
 
 
 
@@ -247,6 +252,7 @@ rospy.Subscriber('DWM1001_Network_Anchor_2', String, DWM1001_Network_Anchor_2cal
 rospy.Subscriber('DWM1001_Network_Anchor_3', String, DWM1001_Network_Anchor_3callback)
 rospy.Subscriber('DWM1001_Network_Tag',      String, DWM1001_Network_Tagcallback)
 rospy.Subscriber('route_number',      String, RouteNcallback)
+rospy.loginfo('Waiting for route')
 rospy.spin()
 
 

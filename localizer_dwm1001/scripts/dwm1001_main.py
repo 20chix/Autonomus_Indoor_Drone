@@ -162,13 +162,13 @@ def main():
     except KeyboardInterrupt:
         rospy.loginfo("Quitting DWM1001 Shell Mode and closing port, allow 1 second for UWB recovery")
         serialPortDWM1001.write(DWM1001_API_COMMANDS.RESET)
-        serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
+        serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
 
     finally:
         rospy.loginfo("Quitting, and sending reset command to dev board")
         # serialPortDWM1001.reset_input_buffer()
         serialPortDWM1001.write(DWM1001_API_COMMANDS.RESET)
-        serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
+        serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
         rate.sleep()
         if "reset" in serialReadLine:
             rospy.loginfo("succesfully closed ")

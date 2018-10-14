@@ -70,9 +70,8 @@ def talker():
         #    angle = 0
 
 
-        rospy.loginfo("sending dummy values: tag = "+ str(dummy_tag))
-
         dummy_tag = str(counter_x) + " " + str(counter_y) + " " + str(counter_z)
+        rospy.loginfo("sending dummy values: tag = "+ str(dummy_tag))
 
         pub_Anchor_0.publish(dummy_anchor_0)
         pub_Anchor_1.publish(dummy_anchor_1)
@@ -100,7 +99,7 @@ def talker():
             #hi
 
 
-        counter_y = counter_y + 0.3
+        counter_y = counter_y + 0.01
         #counter_2 = counter_2 + 0.001
         #counter_3 = counter_3 + 0.00001
 

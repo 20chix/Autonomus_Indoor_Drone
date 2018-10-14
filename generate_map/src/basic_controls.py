@@ -116,6 +116,7 @@ def makeTagMarker(position, name):
     int_marker.scale = 1
 
     int_marker.name = name
+    int_marker.description = name
 
     makeBoxControlTag(int_marker)
 
@@ -151,7 +152,7 @@ def makeAnchorMarker(position, name):
     int_marker.header.frame_id = "map"
     int_marker.pose.position = position
     int_marker.scale = 1
-
+    int_marker.description = name
     int_marker.name = name
 
     makeBoxControlAnchor(int_marker)
