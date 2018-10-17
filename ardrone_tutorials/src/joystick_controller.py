@@ -87,4 +87,4 @@ if __name__=='__main__':
 
 	# and only progresses to here once the application has been shutdown
 	rospy.signal_shutdown('Great Flying!')
-	sys.exit(status)
+	#sys.exit(status)

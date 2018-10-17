@@ -50,7 +50,7 @@
           <entry key="cfg" value="5" />
           <entry key="launch" value="7" />
           <entry key="math" value="1" />
-          <entry key="py" value="35" />
+          <entry key="py" value="36" />
           <entry key="txt" value="4" />
           <entry key="xml" value="1" />
         </counts>
@@ -59,7 +59,7 @@
         <counts>
           <entry key="Ini" value="5" />
           <entry key="PLAIN_TEXT" value="11" />
-          <entry key="Python" value="35" />
+          <entry key="Python" value="36" />
           <entry key="XML" value="1" />
           <entry key="roslaunch" value="2" />
         </counts>
@@ -69,7 +69,7 @@
           <entry key="cfg" value="345" />
           <entry key="dummy" value="7" />
           <entry key="launch" value="371" />
-          <entry key="py" value="8953" />
+          <entry key="py" value="8954" />
           <entry key="txt" value="60" />
           <entry key="xml" value="1" />
         </counts>
@@ -78,7 +78,7 @@
         <counts>
           <entry key="Ini" value="345" />
           <entry key="PLAIN_TEXT" value="415" />
-          <entry key="Python" value="8953" />
+          <entry key="Python" value="8954" />
           <entry key="XML" value="1" />
           <entry key="roslaunch" value="23" />
         </counts>
@@ -89,14 +89,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../astar/src/main.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/joystick_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3705">
-              <caret line="254" column="32" selection-start-line="254" selection-start-column="32" selection-end-line="254" selection-end-column="32" />
-              <folding>
-                <element signature="e#22#34#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="725">
+              <caret line="89" column="5" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -104,67 +101,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/dwm1001_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="183" column="22" selection-start-line="183" selection-start-column="20" selection-end-line="183" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../generate_map/src/basic_controls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="146" column="17" selection-start-line="146" selection-start-column="17" selection-end-line="146" selection-end-column="17" />
-              <folding>
-                <element signature="e#1558#1570#0" expanded="true" />
-                <marker date="1539554641197" expanded="true" signature="2905:2907" ph="..." />
-                <marker date="1539554641197" expanded="true" signature="7683:8537" ph="..." />
-                <marker date="1539554641197" expanded="true" signature="9406:9411" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/joystick_controller.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="501">
-              <caret line="42" column="40" lean-forward="true" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/drone_controller.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-459" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/drone_status.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/drone_video_display.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/dwm1001_apiCommands.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="20" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../astar/src/astar.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1200">
-              <caret line="83" column="61" selection-start-line="83" selection-start-column="61" selection-end-line="83" selection-end-column="61" />
+            <state relative-caret-position="320">
+              <caret line="161" column="29" lean-forward="true" selection-start-line="161" selection-start-column="4" selection-end-line="161" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -556,13 +494,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/dwm1001_main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="183" column="22" selection-start-line="183" selection-start-column="20" selection-end-line="183" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/drone_controller.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-459" />
@@ -574,10 +505,17 @@
     <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/drone_video_display.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/dwm1001_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="161" column="29" lean-forward="true" selection-start-line="161" selection-start-column="4" selection-end-line="161" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/joystick_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="42" column="40" lean-forward="true" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
+        <state relative-caret-position="725">
+          <caret line="89" column="5" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
         </state>
       </provider>
     </entry>
