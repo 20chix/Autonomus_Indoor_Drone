@@ -1,4 +1,12 @@
 #!/usr/bin/env python
+
+__author__     = "Hadi Elmekawi"
+__version__    = "1.0"
+__maintainer__ = "Hadi Elmekawi"
+__email__      = "w1530819@my.westminster.ac.uk"
+__status__     = "Development"
+
+
 import serial
 
 class SERIAL_PORT_DETAILS:

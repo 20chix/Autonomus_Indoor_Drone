@@ -82,7 +82,7 @@ if __name__=='__main__':
 	subJoystick = rospy.Subscriber('/joy', Joy, ReceiveJoystickMessage)
 
 	rospy.spin()
-	
+
 	# executes the QT application
 	#display.show()
 	#status = app.exec_()

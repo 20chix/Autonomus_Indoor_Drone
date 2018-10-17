@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 """ For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
 """
-__author__ = "Hadi Elmekawi"
-__copyright__ = "Copyright 2018, FYP Autonumous Indoor Drone"
-__version__ = "1.0"
+#!/usr/bin/env python
+
+__author__     = "Hadi Elmekawi"
+__version__    = "1.0"
 __maintainer__ = "Hadi Elmekawi"
-__email__ = "hadi.elme92@gmail.com"
-__status__ = "Development"
+__email__      = "w1530819@my.westminster.ac.uk"
+__status__     = "Development"
 
 
 import rospy
@@ -47,7 +48,7 @@ def main():
     global dynamicConfigOpenPort
     global dynamicConfigClosePort
 
-    # initialize our topics
+    # initialize  topics
     pub_Network  = rospy.Publisher('DWM1001_Network',          String, queue_size=10)
     pub_Anchor_0 = rospy.Publisher('DWM1001_Network_Anchor_0', String, queue_size=10)
     pub_Anchor_1 = rospy.Publisher('DWM1001_Network_Anchor_1', String, queue_size=10)
@@ -64,11 +65,11 @@ def main():
     dynamicConfigClosePort.update({"close_port": True })
     # set the open port to false
     dynamicConfigOpenPort.update({"open_port" : False})
-    # now update the server
+    # update the server
     dynamicConfigServer.update_configuration(dynamicConfigOpenPort)
     dynamicConfigServer.update_configuration(dynamicConfigClosePort)
 
-    # initialize ros rate, this will be used for sleep
+    # initialize ros rate
     rate = rospy.Rate(100)  # 10hz
 
     # close the serial port in case the previous run didn't closed it properly
@@ -87,19 +88,22 @@ def main():
         dynamicConfigOpenPort.update({"open_port": True})
         # update name of serial port in dynamic configuration
         dynamicConfigSerialPort = {"serial_port": str(SERIAL_PORT_DETAILS.name)}
-        # now update the server
+        # now update server configuration
         dynamicConfigServer.update_configuration(dynamicConfigOpenPort)
         dynamicConfigServer.update_configuration(dynamicConfigClosePort)
         dynamicConfigServer.update_configuration(dynamicConfigSerialPort)
         rospy.loginfo("Port opened: "+ str(SERIAL_PORT_DETAILS.name) );
+        # reset incase previuos run didn't close properly
         serialPortDWM1001.write(DWM1001_API_COMMANDS.RESET)
+        # send ENTER two times in order to access api
         serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
         time.sleep(0.5)
         serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
         time.sleep(0.5)
+        # send a third one - why not
         serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
 
-    # check if the serial port is not open
+    # if is not open
     else:
         rospy.loginfo("Can't open port: "+ str(SERIAL_PORT_DETAILS.name))
 
@@ -120,43 +124,43 @@ def main():
 
             # declare array that will hold network data such us coordinates of anchor and tag
             # split serial port message by comma ','
-            networkDataArraya = [ x.strip() for x in serialReadLine.strip().split(',') ]
+            networkDataArray = [ x.strip() for x in serialReadLine.strip().split(',') ]
 
             try:
                 #Get numbers of anchors
-                DWM1001_NETWORK.anchors = networkDataArraya[1]
+                DWM1001_NETWORK.anchors = networkDataArray[1]
                 # TODO delete this after debugging
-                rospy.loginfo("Number(s) of Anchors: " + networkDataArraya[1])
+                rospy.loginfo("Number(s) of Anchors: " + networkDataArray[1])
                 #TODO delete this after debugging
-                rospy.loginfo("Length of array: " + str(len(networkDataArraya)))
+                rospy.loginfo("Length of array: " + str(len(networkDataArray)))
 
                 # publish coordinates and info of the network
-                pub_Network.publish( str(networkDataArraya))
+                pub_Network.publish( str(networkDataArray))
                 # pubblish coordinates for first anchor
-                pub_Anchor_0.publish(str(networkDataArraya[SYS_DEFS.INDEX_4] + " "
-                                         + networkDataArraya[SYS_DEFS.INDEX_5] + " "
-                                         + networkDataArraya[SYS_DEFS.INDEX_6]))
+                pub_Anchor_0.publish(str(networkDataArray[SYS_DEFS.INDEX_4] + " "
+                                         + networkDataArray[SYS_DEFS.INDEX_5] + " "
+                                         + networkDataArray[SYS_DEFS.INDEX_6]))
                 # publish coordinates for second anchor
-                pub_Anchor_1.publish(str(networkDataArraya[SYS_DEFS.INDEX_10]+ " "
-                                         + networkDataArraya[SYS_DEFS.INDEX_11]+ " "
-                                         + networkDataArraya[SYS_DEFS.INDEX_12]))
+                pub_Anchor_1.publish(str(networkDataArray[SYS_DEFS.INDEX_10]+ " "
+                                         + networkDataArray[SYS_DEFS.INDEX_11]+ " "
+                                         + networkDataArray[SYS_DEFS.INDEX_12]))
                 # publish coordinates for third anchor
-                pub_Anchor_2.publish(str(networkDataArraya[SYS_DEFS.INDEX_16]+ " "
-                                         + networkDataArraya[SYS_DEFS.INDEX_17]+ " "
-                                         + networkDataArraya[SYS_DEFS.INDEX_18]))
+                pub_Anchor_2.publish(str(networkDataArray[SYS_DEFS.INDEX_16]+ " "
+                                         + networkDataArray[SYS_DEFS.INDEX_17]+ " "
+                                         + networkDataArray[SYS_DEFS.INDEX_18]))
                 # publish coordinates for fourth anchor
-                pub_Anchor_3.publish(str(networkDataArraya[SYS_DEFS.INDEX_22]+ " "
-                                         + networkDataArraya[SYS_DEFS.INDEX_23]+ " "
-                                         + networkDataArraya[SYS_DEFS.INDEX_24]))
+                pub_Anchor_3.publish(str(networkDataArray[SYS_DEFS.INDEX_22]+ " "
+                                         + networkDataArray[SYS_DEFS.INDEX_23]+ " "
+                                         + networkDataArray[SYS_DEFS.INDEX_24]))
                 # publish coordinates for tag
-                pub_Tag.publish(str(networkDataArraya[SYS_DEFS.INDEX_27]+ " "
-                                    + networkDataArraya[SYS_DEFS.INDEX_28]+ " "
-                                    + networkDataArraya[SYS_DEFS.INDEX_29]))
+                pub_Tag.publish(str(networkDataArray[SYS_DEFS.INDEX_27]+ " "
+                                    + networkDataArray[SYS_DEFS.INDEX_28]+ " "
+                                    + networkDataArray[SYS_DEFS.INDEX_29]))
 
             except IndexError:
                 rospy.loginfo("Found index error in the network array!DO SOMETHING!")
             # print coordinates and info of the network
-            rospy.loginfo(networkDataArraya)
+            rospy.loginfo(networkDataArray)
 
 
     except KeyboardInterrupt:

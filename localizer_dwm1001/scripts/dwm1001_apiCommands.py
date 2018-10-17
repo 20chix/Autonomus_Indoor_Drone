@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 """ For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
 """
-__author__ = "Hadi Elmekawi"
-__copyright__ = "Copyright 2007, The Cogent Project"
-__version__ = "1.0"
+
+__author__     = "Hadi Elmekawi"
+__version__    = "1.0"
 __maintainer__ = "Hadi Elmekawi"
-__email__ = "hadi.elme92@gmail.com"
-__status__ = "Development"
+__email__      = "w1530819@my.westminster.ac.uk"
+__status__     = "Development"
 
 class DWM1001_API_COMMANDS:
         DOUBLE_ENTER     = b'\r\r'   # ASCII char for double Enter

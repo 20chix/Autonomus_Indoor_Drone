@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="localizer_dwm1001" type="dwm1001_main.py" name="localizer_dwm1001" output="screen" />
+</launch>
