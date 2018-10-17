@@ -20,39 +20,36 @@ from sensor_msgs.msg import Joy
 from PySide import QtCore, QtGui
 
 # define the default mapping between joystick buttons and their corresponding actions
-ButtonEmergency = 0
-ButtonLand      = 1
-ButtonTakeoff   = 3
+ButtonEmergency 		= 0
+ButtonEmergencyBackUp   = 7
+ButtonLand      		= 1
+ButtonTakeoff   		= 3
 
 # define the default mapping between joystick axes and their corresponding directions
-AxisRoll        = 0
-AxisPitch       = 1
-AxisYaw         = 3
-AxisZ           = 4
+AxisRoll        		= 0
+AxisPitch       		= 1
+AxisYaw         		= 3
+AxisZ           		= 4
 
 # define the default scaling to apply to the axis inputs. useful where an axis is inverted
-ScaleRoll       = 1.0
-ScalePitch      = 1.0
-ScaleYaw        = 1.0
-ScaleZ          = 1.0
+ScaleRoll       		= 1.0
+ScalePitch      		= 1.0
+ScaleYaw        		= 1.0
+ScaleZ          		= 1.0
 
 # handles the reception of joystick packets
 def ReceiveJoystickMessage(data):
-	if data.buttons[ButtonEmergency]==1:
-		rospy.loginfo("Emergency Button Pressed: "+ str(ButtonEmergency))
+	if data.buttons[ButtonEmergency] == 1:
+		rospy.loginfo("Emergency Button Pressed: " + str(ButtonEmergency))
 		controller.SendEmergency()
-	elif data.buttons[ButtonLand]==1:
+	elif data.buttons[ButtonLand] == 1:
 		rospy.loginfo("Land Button Pressed: " + str(ButtonLand))
 		controller.SendLand()
-	elif data.buttons[ButtonTakeoff]==1:
-		rospy.loginfo("Takeoff Button Pressed: "+ str(ButtonTakeoff))
+	elif data.buttons[ButtonTakeoff] == 1:
+		rospy.loginfo("Takeoff Button Pressed: " + str(ButtonTakeoff))
 		controller.SendTakeoff()
-	elif data.buttons[4]==1:
-		rospy.loginfo("pressed number 4")
-	elif data.buttons[6]==1:
-		rospy.loginfo("pressed 6")
-	elif data.buttons[7]==1:
-		rospy.loginfo("pressed 7")
+	elif data.buttons[ButtonEmergencyBackUp] == 1:
+		rospy.loginfo("Emergency backup Button Pressed: " + str(ButtonEmergencyBackUp))
 	else:
 		controller.SetCommand(data.axes[AxisRoll]/ScaleRoll,data.axes[AxisPitch]/ScalePitch,data.axes[AxisYaw]/ScaleYaw,data.axes[AxisZ]/ScaleZ)
 
@@ -85,8 +82,8 @@ if __name__=='__main__':
 	subJoystick = rospy.Subscriber('/joy', Joy, ReceiveJoystickMessage)
 	
 	# executes the QT application
-	display.show()
-	status = app.exec_()
+	#display.show()
+	#status = app.exec_()
 
 	# and only progresses to here once the application has been shutdown
 	rospy.signal_shutdown('Great Flying!')

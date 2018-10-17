@@ -69,7 +69,7 @@
           <entry key="cfg" value="345" />
           <entry key="dummy" value="7" />
           <entry key="launch" value="371" />
-          <entry key="py" value="8854" />
+          <entry key="py" value="8953" />
           <entry key="txt" value="60" />
           <entry key="xml" value="1" />
         </counts>
@@ -78,7 +78,7 @@
         <counts>
           <entry key="Ini" value="345" />
           <entry key="PLAIN_TEXT" value="415" />
-          <entry key="Python" value="8854" />
+          <entry key="Python" value="8953" />
           <entry key="XML" value="1" />
           <entry key="roslaunch" value="23" />
         </counts>
@@ -128,8 +128,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/joystick_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="44" column="48" selection-start-line="44" selection-start-column="48" selection-end-line="44" selection-end-column="48" />
+            <state relative-caret-position="501">
+              <caret line="42" column="40" lean-forward="true" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -576,8 +576,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/joystick_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="44" column="48" selection-start-line="44" selection-start-column="48" selection-end-line="44" selection-end-column="48" />
+        <state relative-caret-position="501">
+          <caret line="42" column="40" lean-forward="true" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
         </state>
       </provider>
     </entry>
