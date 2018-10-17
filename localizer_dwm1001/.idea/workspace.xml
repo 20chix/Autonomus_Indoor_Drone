@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d2fcdf8-e71f-4523-86e5-6e4412be23de" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../ardrone_tutorials/.idea/ardrone_tutorials.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ardrone_tutorials/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ardrone_tutorials/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ardrone_tutorials/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ardrone_tutorials/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ardrone_tutorials/src/joystick_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/../ardrone_tutorials/src/joystick_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/localizer_dwm1001.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/localizer_dwm1001.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -76,7 +69,7 @@
           <entry key="cfg" value="345" />
           <entry key="dummy" value="7" />
           <entry key="launch" value="371" />
-          <entry key="py" value="8813" />
+          <entry key="py" value="8852" />
           <entry key="txt" value="60" />
           <entry key="xml" value="1" />
         </counts>
@@ -85,7 +78,7 @@
         <counts>
           <entry key="Ini" value="345" />
           <entry key="PLAIN_TEXT" value="415" />
-          <entry key="Python" value="8813" />
+          <entry key="Python" value="8852" />
           <entry key="XML" value="1" />
           <entry key="roslaunch" value="23" />
         </counts>
@@ -135,8 +128,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/joystick_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="42" column="32" selection-start-line="42" selection-start-column="19" selection-end-line="42" selection-end-column="32" />
+            <state relative-caret-position="435">
+              <caret line="44" column="60" selection-start-line="44" selection-start-column="60" selection-end-line="44" selection-end-column="60" />
             </state>
           </provider>
         </entry>
@@ -583,8 +576,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../ardrone_tutorials/src/joystick_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="42" column="32" selection-start-line="42" selection-start-column="19" selection-end-line="42" selection-end-column="32" />
+        <state relative-caret-position="435">
+          <caret line="44" column="60" selection-start-line="44" selection-start-column="60" selection-end-line="44" selection-end-column="60" />
         </state>
       </provider>
     </entry>
