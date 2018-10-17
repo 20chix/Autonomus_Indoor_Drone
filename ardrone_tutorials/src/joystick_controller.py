@@ -42,7 +42,7 @@ def ReceiveJoystickMessage(data):
 		rospy.loginfo("Emergency Button Pressed: "+ str(ButtonEmergency))
 		controller.SendEmergency()
 	elif data.buttons[ButtonLand]==1:
-		rospy.loginfo("Land Button Pressed: " str(ButtonLand))
+		rospy.loginfo("Land Button Pressed: " + str(ButtonLand))
 		controller.SendLand()
 	elif data.buttons[ButtonTakeoff]==1:
 		rospy.loginfo("Takeoff Button Pressed: "+ str(ButtonTakeoff))
