@@ -47,6 +47,14 @@ def ReceiveJoystickMessage(data):
 	elif data.buttons[ButtonTakeoff]==1:
 		rospy.loginfo("Takeoff Button Pressed")
 		controller.SendTakeoff()
+	elif data.buttons[3]==1:
+		rospy.loginfo("pressed number 3")
+	elif data.buttons[4]==1:
+		rospy.loginfo("pressed number 4")
+	elif data.buttons[6]==1:
+		rospy.loginfo("pressed 6")
+	elif data.buttons[7]==1:
+		rospy.loginfo("pressed 7")
 	else:
 		controller.SetCommand(data.axes[AxisRoll]/ScaleRoll,data.axes[AxisPitch]/ScalePitch,data.axes[AxisYaw]/ScaleYaw,data.axes[AxisZ]/ScaleZ)
 
