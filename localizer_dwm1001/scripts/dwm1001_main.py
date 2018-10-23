@@ -20,8 +20,8 @@ from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist     
 from dwm1001_serialPort import SERIAL_PORT_DETAILS
 from dwm1001_apiCommands import DWM1001_API_COMMANDS
-from dwm1001_anchors import DWM1001_ANCHORS
-from dwm1001_network import DWM1001_NETWORK
+#from dwm1001_anchors import DWM1001_ANCHORS
+#from dwm1001_network import DWM1001_NETWORK
 from dwm1001_sys_defs import SYS_DEFS
 
 
@@ -128,7 +128,7 @@ def main():
 
             try:
                 #Get numbers of anchors
-                DWM1001_NETWORK.anchors = networkDataArray[1]
+                #DWM1001_NETWORK.anchors = networkDataArray[1]
                 # TODO delete this after debugging
                 rospy.loginfo("Number(s) of Anchors: " + networkDataArray[1])
                 #TODO delete this after debugging
@@ -137,21 +137,21 @@ def main():
                 # publish coordinates and info of the network
                 pub_Network.publish( str(networkDataArray))
                 # pubblish coordinates for first anchor
-                pub_Anchor_0.publish(str(networkDataArray[SYS_DEFS.INDEX_4] + " "
-                                         + networkDataArray[SYS_DEFS.INDEX_5] + " "
-                                         + networkDataArray[SYS_DEFS.INDEX_6]))
+                pub_Anchor_0.publish(str(networkDataArray[SYS_DEFS.INDEX_22] + " "
+                                         + networkDataArray[SYS_DEFS.INDEX_23] + " "
+                                         + networkDataArray[SYS_DEFS.INDEX_24]))
                 # publish coordinates for second anchor
-                pub_Anchor_1.publish(str(networkDataArray[SYS_DEFS.INDEX_10]+ " "
-                                         + networkDataArray[SYS_DEFS.INDEX_11]+ " "
-                                         + networkDataArray[SYS_DEFS.INDEX_12]))
-                # publish coordinates for third anchor
-                pub_Anchor_2.publish(str(networkDataArray[SYS_DEFS.INDEX_16]+ " "
+                pub_Anchor_1.publish(str(networkDataArray[SYS_DEFS.INDEX_16]+ " "
                                          + networkDataArray[SYS_DEFS.INDEX_17]+ " "
                                          + networkDataArray[SYS_DEFS.INDEX_18]))
+                # publish coordinates for third anchor
+                pub_Anchor_2.publish(str(networkDataArray[SYS_DEFS.INDEX_4]+ " "
+                                         + networkDataArray[SYS_DEFS.INDEX_5]+ " "
+                                         + networkDataArray[SYS_DEFS.INDEX_6]))
                 # publish coordinates for fourth anchor
-                pub_Anchor_3.publish(str(networkDataArray[SYS_DEFS.INDEX_22]+ " "
-                                         + networkDataArray[SYS_DEFS.INDEX_23]+ " "
-                                         + networkDataArray[SYS_DEFS.INDEX_24]))
+                pub_Anchor_3.publish(str(networkDataArray[SYS_DEFS.INDEX_10]+ " "
+                                         + networkDataArray[SYS_DEFS.INDEX_11]+ " "
+                                         + networkDataArray[SYS_DEFS.INDEX_12]))
                 # publish coordinates for tag
                 pub_Tag.publish(str(networkDataArray[SYS_DEFS.INDEX_27]+ " "
                                     + networkDataArray[SYS_DEFS.INDEX_28]+ " "

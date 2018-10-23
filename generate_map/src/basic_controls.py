@@ -312,6 +312,7 @@ def tagCallback(data):
         server.applyChanges()
         # TODO remove this after, Debugging purpose
         rospy.loginfo("Tag x: " + str(tagx) + " y: " + str(tagy) + " z: " + str(tagy))
+
     except IndexError:
         rospy.loginfo("Index error")
     except ValueError:
@@ -323,7 +324,7 @@ def tagCallback(data):
 
 
 if __name__=="__main__":
-    server.applyChanges()
+    #server.applyChanges()
 
 
     rospy.Subscriber("DWM1001_Network_Anchor_0", String, Anchor0callback)
@@ -336,7 +337,7 @@ if __name__=="__main__":
 
 
     # 'commit' changes and send to all clients
-    server.applyChanges()
+   # server.applyChanges()
 
 
 
