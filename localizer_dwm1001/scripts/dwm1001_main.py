@@ -83,8 +83,9 @@ def main():
     # check if the serial port is opened
     if(serialPortDWM1001.isOpen()):
 
-        # update the server with opened port and closed port
+        # update the server with opened port
         dynamicConfigClosePort.update({"close_port": False})
+        # update the server with close port
         dynamicConfigOpenPort.update({"open_port": True})
         # update name of serial port in dynamic configuration
         dynamicConfigSerialPort = {"serial_port": str(SERIAL_PORT_DETAILS.name)}
@@ -93,6 +94,7 @@ def main():
         dynamicConfigServer.update_configuration(dynamicConfigClosePort)
         dynamicConfigServer.update_configuration(dynamicConfigSerialPort)
         rospy.loginfo("Port opened: "+ str(SERIAL_PORT_DETAILS.name) );
+
         # reset incase previuos run didn't close properly
         serialPortDWM1001.write(DWM1001_API_COMMANDS.RESET)
         # send ENTER two times in order to access api
@@ -122,8 +124,8 @@ def main():
             # sleep for 10Hz - because why not
             rate.sleep()
 
-            # declare array that will hold network data such us coordinates of anchor and tag
-            # split serial port message by comma ','
+            """" Declare array that will hold network data such us coordinates of anchor and tag
+                 split serial port message by comma ',' """
             networkDataArray = [ x.strip() for x in serialReadLine.strip().split(',') ]
 
             try:
@@ -180,7 +182,8 @@ def main():
 
 
 
-# Receives joystick messages (subscribed to Joy topic)
+""" TODO use this for future maintanance, when you want to control DWM from joy
+    Receives joystick messages (subscribed to Joy topic) """
 def JoyCallback(data):
     global startButton
 
@@ -189,6 +192,10 @@ def JoyCallback(data):
         startButton = True
     else:
         startButton = False
+
+
+
+
 
 def callbackDynamicConfig(config, leve):
     global serialPortDWM1001
