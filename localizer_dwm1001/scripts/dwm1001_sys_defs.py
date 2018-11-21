@@ -49,3 +49,4 @@ class SYS_DEFS:
     INDEX_38    = 38
     INDEX_39    = 39
     INDEX_40    = 40
+
