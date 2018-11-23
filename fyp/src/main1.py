@@ -8,6 +8,21 @@ from geometry_msgs.msg import Twist
 from drone_controller import BasicDroneController
 
 
+
+
+
+
+
+
+
+# -linear.x: move backward
+# +linear.x: move forward
+# -linear.y: move right
+# +linear.y: move left
+# -linear.z: move down
+# +linear.z: move up
+# -angular.z: turn right
+# +angular.z: turn left
 class MoveSquareClass(object):
     def __init__(self):
 
@@ -22,7 +37,7 @@ class MoveSquareClass(object):
         while not self.ctrl_c:
             connections = self.publish_once_in_cmd_vel.get_num_connections()
             if connections > 0:
-                self._pub_cmd_vel.pubblish(cmd)
+                self.pub_position.pubblish(cmd)
                 rospy.loginfo("Publish in cmd_vel...")
                 break
             else:
@@ -32,23 +47,23 @@ class MoveSquareClass(object):
     # function that stops the drone from any movement
     def strop_drone(self):
         rospy.loginfo("Stopping...")
-        self._move_msg.linear.x = 0.0
-        self._move_msg.angular.z = 0.0
-        self.publish_once_in_cmd_vel(self._move_msg)
+        self.command.linear.x = 0.0
+        self.command.angular.z = 0.0
+        self.publish_once_in_cmd_vel(self.command)
 
     #function that makes the drone turn 90 degrees
     def turn_drone(self):
         rospy.loginfo("Turning...")
-        self._move_msg.linear.x  = 0.0
-        self._move_msg.angular.z = 1.0
-        self.publish_once_in_cmd_vel(self._move_msg)
+        self.command.linear.x  = 0.0
+        self.command.angular.z = 1.0
+        self.publish_once_in_cmd_vel(self.command)
 
     # function that makes the drone move forward
     def move_forward_drone(self):
         rospy.loginfo("Moving forward...")
-        self._move_msg.linear.x  = 1.0
-        self._move_msg.angular.z = 0.0
-        self.publish_once_in_cmd_vel(self._move_msg)
+        self.command.linear.x  = 1.0
+        self.command.angular.z = 0.0
+        self.publish_once_in_cmd_vel(self.command)
 
     def move_square(self):
         # this callback is called when the action server is called.
@@ -59,18 +74,13 @@ class MoveSquareClass(object):
         r = rospy.Rate(1)
 
         # define the differen publishers and messages that will be used
-        self._pub_cmd_vel = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-        self._move_msg = Twist()
-        self._pub_takeoff = rospy.Publisher('/ardrone/takeoff', Empty, queue_size=1)
-        self._takeoff_msg = Empty()
-        self._pub_land = rospy.Publisher('/ardrone/land', Empty, queue_size=1)
-        self._land_msg = Empty()
-
+        self.pub_position = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+        self.command = Twist()
 
         # make the drone takeoff
         i=0
         while not i == 3:
-            self._pub_takeoff.publish(self._takeoff_msg)
+            controller.SendTakeoff()
             rospy.loginfo("Taking off...")
             time.sleep(1)
             i += 1
@@ -109,9 +119,10 @@ if __name__ == '__main__':
     controller = BasicDroneController()
 
 
-    move_square1 = MoveSquareClass()
+
+    move_square = MoveSquareClass()
     try:
-        move_square1.move_square()
+        move_square.move_square()
     except rospy.ROSInterruptException:
         pass
 
