@@ -11,13 +11,21 @@ import rospy
 
 # Load the DroneController class, which handles interactions with the drone, and the DroneVideoDisplay class, which handles video display
 from drone_controller import BasicDroneController
+<<<<<<< HEAD
 from drone_video_display import DroneVideoDisplay
+=======
+#from drone_video_display import DroneVideoDisplay
+>>>>>>> 410daadcf797ed23d70aa61705d3a7b16f9a75c5
 
 # Import the joystick message
 from sensor_msgs.msg import Joy
 
 # Finally the GUI libraries
+<<<<<<< HEAD
 from PySide import QtCore, QtGui
+=======
+#from PySide import QtCore, QtGui
+>>>>>>> 410daadcf797ed23d70aa61705d3a7b16f9a75c5
 
 # define the default mapping between joystick buttons and their corresponding actions
 ButtonEmergency 		= 0
@@ -28,8 +36,13 @@ ButtonTakeoff   		= 3
 # define the default mapping between joystick axes and their corresponding directions
 AxisRoll        		= 0
 AxisPitch       		= 1
+<<<<<<< HEAD
 AxisYaw         		= 3
 AxisZ           		= 4
+=======
+AxisYaw         		= 2
+AxisZ           		= 3
+>>>>>>> 410daadcf797ed23d70aa61705d3a7b16f9a75c5
 
 # define the default scaling to apply to the axis inputs. useful where an axis is inverted
 ScaleRoll       		= 1.0
@@ -54,6 +67,19 @@ def ReceiveJoystickMessage(data):
 		controller.SetCommand(data.axes[AxisRoll]/ScaleRoll,data.axes[AxisPitch]/ScalePitch,data.axes[AxisYaw]/ScaleYaw,data.axes[AxisZ]/ScaleZ)
 
 
+<<<<<<< HEAD
+=======
+
+	"""elif data.axes[AxisRoll] != 0:
+		rospy.loginfo("Rolling:  " + str(data.axes[AxisRoll]))
+	elif data.axes[AxisPitch] != 0:
+		rospy.loginfo("Pitching:  " + str(data.axes[AxisPitch]))
+	elif data.axes[AxisYaw] != 0:
+		rospy.loginfo("Yawing:  " + str(data.axes[AxisYaw]))
+	elif data.axes[AxisZ] != 0:
+		rospy.loginfo("AxisZ:  " + str(data.axes[AxisZ])) """
+
+>>>>>>> 410daadcf797ed23d70aa61705d3a7b16f9a75c5
 # Setup the application
 if __name__=='__main__':
 	import sys
