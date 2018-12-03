@@ -26,6 +26,7 @@ This package is responsible on getting the network coordinates (tag and anchors)
 
 ## shortest_path 
 This package is responsible for calculating the shortest, using a* algorithm, from the tag to a anchor at the time, this package will publish a string of directions for example 777788888844444442222222111111. We will use these directions to control the drone.
+
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/Shortest_Path.png?raw=true)
 
 ## Dynamic reconfigure DWM1001
