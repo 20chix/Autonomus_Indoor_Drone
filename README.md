@@ -4,9 +4,11 @@
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 [![HitCount](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001.svg)](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001)
 
-# FYP_Autonomus_Drone_DWM1001_ 
+# Abstract
 
-Final year project that consist in autonomus drone, developed in ROS using UWB DWM1001 dev board
+The aim of my final year project consists in a development of a system that involve the use of a drone that would have to fly indoor autonomously, around waypoints(anchors) based on the shortest path calculated and stream all the information via network to a ground station. Without any human interaction.
+
+In order to make the drone fly autonomously I’ll need some hardware to start with. For example, in order to get all the coordinates of all the anchors I’ll need few dev-boards provided by Decawave called dwm1001. These dev-boards can be used as anchors or as a tag. A tag is the master dev-board, is the one that we will use to receive all the coordinates and distances from all the anchors. We will then pass these coordinates and distances to the raspberry pi via UART or SPI. The raspberry pi will then filter all these coordinates and pass it into ROS (Robot Operating System)
 
 # 4 DWM1001, 3 anchors and 1 tag
  The tag will be attached to a drone and  3 anchors will be placed on the ground, which will create a triangle.
