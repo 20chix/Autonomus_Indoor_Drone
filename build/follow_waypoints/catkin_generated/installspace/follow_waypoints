@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+
+from follow_waypoints import follow_waypoints
+
+if __name__ == '__main__':
+    follow_waypoints.main()

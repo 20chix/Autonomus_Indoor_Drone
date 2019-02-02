@@ -1,0 +1,11 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~serial_port" : \b [str] A string parameter min: , default: , max: 
+- \b "~open_port" : \b [bool] Open serial port min: False, default: False, max: True
+- \b "~close_port" : \b [bool] Close serial port min: False, default: False, max: True
+- \b "~dwm1001_network_info" : \b [str] A string parameter min: , default: , max: 
+- \b "~quit_dwm1001_api" : \b [bool] Quit DWM1001 API min: False, default: False, max: True
+- \b "~exit" : \b [bool] Exit ROS min: False, default: False, max: True
+

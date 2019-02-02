@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../ardrone_tutorials/.idea/ardrone_tutorials.iml" filepath="$PROJECT_DIR$/../ardrone_tutorials/.idea/ardrone_tutorials.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../astar/.idea/astar.iml" filepath="$PROJECT_DIR$/../astar/.idea/astar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../beginner_tutorials/.idea/beginner_tutorials.iml" filepath="$PROJECT_DIR$/../beginner_tutorials/.idea/beginner_tutorials.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../fyp/.idea/fyp.iml" filepath="$PROJECT_DIR$/../fyp/.idea/fyp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../generate_map/.idea/generate_map.iml" filepath="$PROJECT_DIR$/../generate_map/.idea/generate_map.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/localizer_dwm1001.iml" filepath="$PROJECT_DIR$/.idea/localizer_dwm1001.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../.idea/src.iml" filepath="$PROJECT_DIR$/../.idea/src.iml" />
+    </modules>
+  </component>
+</project>

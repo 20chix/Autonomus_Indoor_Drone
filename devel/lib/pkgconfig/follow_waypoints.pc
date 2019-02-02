@@ -1,0 +1,8 @@
+prefix=/home/hadi/catkin_ws/devel
+
+Name: follow_waypoints
+Description: Description of follow_waypoints
+Version: 0.3.0
+Cflags: 
+Libs: -L/home/hadi/catkin_ws/devel/lib -lfollow_waypoints
+Requires: actionlib geometry_msgs move_base_msgs rospy smach std_msgs

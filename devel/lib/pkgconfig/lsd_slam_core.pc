@@ -1,0 +1,8 @@
+prefix=/home/hadi/catkin_ws/devel
+
+Name: lsd_slam_core
+Description: Description of lsd_slam_core
+Version: 0.0.0
+Cflags: -I/home/hadi/catkin_ws/devel/include -I/usr/include/eigen3
+Libs: -L/home/hadi/catkin_ws/devel/lib -llsdslam
+Requires: libg2o

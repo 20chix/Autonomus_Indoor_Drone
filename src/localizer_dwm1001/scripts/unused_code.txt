@@ -1,0 +1,46 @@
+
+
+
+
+
+    while True:
+        serialReadLine = serialPortDWM1001.read_until()
+        rospy.loginfo("Waiting for DWM1001 to wake up " + str(serialReadLine))
+        rate.sleep()
+        if "Command not found" in serialReadLine:
+            rospy.loginfo("Command not found trying again")
+            pub_Network.publish("Command not found trying again")
+            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
+            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
+            time.sleep(1.5)
+            serialPortDWM1001.write(DWM1001_API_COMMANDS.LecPlusEnter)
+            time.sleep(2.5)
+        elif "dwm>" in serialReadLine:
+            rospy.loginfo("DWM1001 API is ready to receive commands")
+            pub_Network.publish("DWM1001 API is ready to receive commands")
+            #serialPortDWM1001.reset_input_buffer()
+            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
+            time.sleep(0.2)
+            break
+        elif "" in serialReadLine :
+            rospy.loginfo("DWM1001 is not responding, received nothing, trying again")
+            #serialPortDWM1001.reset_input_buffer()
+            serialPortDWM1001.write(DWM1001_API_COMMANDS.LecPlusEnter)
+            time.sleep(0.1)
+            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
+        elif"dwm> lec" in serialReadLine:
+            rospy.loginfo("DWM1001 is not responding, received dwm>lec but not position, trying again")
+            pub_Network.publish("DWM1001 is not responding, received dwm>lec but not position, trying again")
+            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
+            serialPortDWM1001.write(DWM1001_API_COMMANDS.SingleEnter)
+            time.sleep(2.5)
+            serialPortDWM1001.write(DWM1001_API_COMMANDS.LecPlusEnter)
+            time.sleep(2.5)
+        elif"DIST" in serialReadLine:
+            break
+        elif "License" in serialReadLine:
+            break
+        else:
+            break
+
+

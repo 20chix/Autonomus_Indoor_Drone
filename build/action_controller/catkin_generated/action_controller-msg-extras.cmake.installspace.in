@@ -1,0 +1,2 @@
+set(action_controller_MESSAGE_FILES "msg/MultiDofFollowJointTrajectoryFeedback.msg;msg/MultiDofFollowJointTrajectoryGoal.msg;msg/MultiDofFollowJointTrajectoryResult.msg;msg/MultiDofFollowJointTrajectoryActionFeedback.msg;msg/MultiDofFollowJointTrajectoryActionGoal.msg;msg/MultiDofFollowJointTrajectoryActionResult.msg;msg/MultiDofFollowJointTrajectoryAction.msg")
+set(action_controller_SERVICE_FILES "")

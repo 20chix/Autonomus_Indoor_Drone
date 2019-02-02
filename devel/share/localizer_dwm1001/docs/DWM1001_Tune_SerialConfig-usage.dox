@@ -1,0 +1,12 @@
+\subsubsection usage Usage
+\verbatim
+<node name="localizer_dwm1001" pkg="localizer_dwm1001" type="localizer_dwm1001">
+  <param name="serial_port" type="str" value="" />
+  <param name="open_port" type="bool" value="False" />
+  <param name="close_port" type="bool" value="False" />
+  <param name="dwm1001_network_info" type="str" value="" />
+  <param name="quit_dwm1001_api" type="bool" value="False" />
+  <param name="exit" type="bool" value="False" />
+</node>
+\endverbatim
+
