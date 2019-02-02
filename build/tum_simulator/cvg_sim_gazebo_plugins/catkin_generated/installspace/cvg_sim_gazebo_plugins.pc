@@ -1,0 +1,8 @@
+prefix=/home/hadi/catkin_ws/install
+
+Name: cvg_sim_gazebo_plugins
+Description: Description of cvg_sim_gazebo_plugins
+Version: 0.0.0
+Cflags: -I/home/hadi/catkin_ws/install/include
+Libs: -L/home/hadi/catkin_ws/install/lib -lreset_plugin -lhector_gazebo_ros_baro -lhector_gazebo_quadrotor_simple_controller -lhector_gazebo_quadrotor_state_controller
+Requires: image_transport cvg_sim_msgs

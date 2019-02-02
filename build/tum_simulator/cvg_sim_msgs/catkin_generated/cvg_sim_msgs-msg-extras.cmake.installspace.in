@@ -1,0 +1,2 @@
+set(cvg_sim_msgs_MESSAGE_FILES "msg/Altimeter.msg;msg/Altitude.msg;msg/AttitudeCommand.msg;msg/Compass.msg;msg/ControllerState.msg;msg/HeadingCommand.msg;msg/HeightCommand.msg;msg/MotorCommand.msg;msg/MotorPWM.msg;msg/MotorStatus.msg;msg/PositionXYCommand.msg;msg/RawImu.msg;msg/RawMagnetic.msg;msg/RawRC.msg;msg/RC.msg;msg/RuddersCommand.msg;msg/ServoCommand.msg;msg/Supply.msg;msg/ThrustCommand.msg;msg/VelocityXYCommand.msg;msg/VelocityZCommand.msg;msg/YawrateCommand.msg")
+set(cvg_sim_msgs_SERVICE_FILES "")

@@ -1,0 +1,11 @@
+<launch>
+
+    <include file="/home/hadi/catkin_ws/src/beginner_tutorials/launch/beginner_tutorials.launch" />
+
+    <include file="/home/hadi/catkin_ws/src/generate_map/launch/generate_map.launch" />
+
+    <include file="/home/hadi/catkin_ws/src/astar/launch/astar.launch" />
+
+    <node pkg="fyp" type="main.py" name="fyp"/>
+
+</launch>

@@ -1,0 +1,8 @@
+prefix=/home/hadi/catkin_ws/install
+
+Name: localizer_dwm1001
+Description: Description of localizer_dwm1001
+Version: 0.0.0
+Cflags: -I/home/hadi/catkin_ws/install/include
+Libs: -L/home/hadi/catkin_ws/install/lib 
+Requires: 

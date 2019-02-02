@@ -1,0 +1,15 @@
+<package>
+  <description brief="AR.Drone Tutorials">
+  	Controllers developed for the "Up and flying with the AR.Drone and ROS" tutorial series
+  </description>
+  <author>Mike Hamer</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://github.com/mikehamer/ardrone_tutorials</url>
+
+  <depend package="ardrone_autonomy" />
+  <depend package="joy" />
+  
+</package>
+
+

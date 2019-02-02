@@ -1,0 +1,20 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~actionCode" : \b [str] A string parameter min: , default: 1, max: 
+- \b "~take_off" : \b [bool] Take off Drone min: False, default: False, max: True
+- \b "~land" : \b [bool] Land Drone min: False, default: False, max: True
+- \b "~forward" : \b [bool] Move Forward min: False, default: False, max: True
+- \b "~backward" : \b [bool] Move Backward min: False, default: False, max: True
+- \b "~left" : \b [bool] Move Left min: False, default: False, max: True
+- \b "~right" : \b [bool] Move Right min: False, default: False, max: True
+- \b "~hover" : \b [bool] Halt min: False, default: False, max: True
+- \b "~targetInMapX" : \b [double] target x min: -10.0, default: 0.0, max: 10.0
+- \b "~targetInMapY" : \b [double] target y min: -10.0, default: 0.0, max: 10.0
+- \b "~targetInMapZ" : \b [double] target z min: -10.0, default: 0.0, max: 10.0
+- \b "~look_at_waypoint" : \b [bool] Look at way point min: False, default: False, max: True
+- \b "~go_to_waypoint" : \b [bool] Go to point min: False, default: False, max: True
+- \b "~look_and_go" : \b [bool] Look and Go min: False, default: False, max: True
+- \b "~get_waypoint" : \b [bool] Get Waypoint min: False, default: False, max: True
+

@@ -1,0 +1,8 @@
+prefix=/home/hadi/catkin_ws/install
+
+Name: drone_way_pointer
+Description: Description of drone_way_pointer
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/hadi/catkin_ws/install/lib 
+Requires: 

@@ -1,0 +1,21 @@
+\subsubsection usage Usage
+\verbatim
+<node name="fyp" pkg="fyp" type="fyp">
+  <param name="actionCode" type="str" value="1" />
+  <param name="take_off" type="bool" value="False" />
+  <param name="land" type="bool" value="False" />
+  <param name="forward" type="bool" value="False" />
+  <param name="backward" type="bool" value="False" />
+  <param name="left" type="bool" value="False" />
+  <param name="right" type="bool" value="False" />
+  <param name="hover" type="bool" value="False" />
+  <param name="targetInMapX" type="double" value="0.0" />
+  <param name="targetInMapY" type="double" value="0.0" />
+  <param name="targetInMapZ" type="double" value="0.0" />
+  <param name="look_at_waypoint" type="bool" value="False" />
+  <param name="go_to_waypoint" type="bool" value="False" />
+  <param name="look_and_go" type="bool" value="False" />
+  <param name="get_waypoint" type="bool" value="False" />
+</node>
+\endverbatim
+

@@ -1,0 +1,2 @@
+ardrone_tutorials:astar:beginner_tutorials:drone_waypointer:fyp:generate_map:interactive_marker_tutorials:joy:localizer_dwm1001:rqt_mypkg:tum_simulator/cvg_sim_gazebo:tum_simulator/cvg_sim_gazebo_plugins:tum_simulator/cvg_sim_msgs:tum_simulator/message_to_tf:tum_simulator/tum_simulator:turtlesim_cleaner
+-DCATKIN_DEVEL_PREFIX=/home/hadi/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/hadi/catkin_ws/install -G Unix Makefiles

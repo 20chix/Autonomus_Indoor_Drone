@@ -1,0 +1,8 @@
+prefix=/home/hadi/catkin_ws/devel
+
+Name: move_quadcopter
+Description: Description of move_quadcopter
+Version: 0.0.0
+Cflags: -I/home/hadi/catkin_ws/devel/include
+Libs: -L/home/hadi/catkin_ws/devel/lib 
+Requires: 
