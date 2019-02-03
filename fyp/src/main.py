@@ -118,8 +118,6 @@ def init():
 
     lastDroneData.timeStamp = rospy.Time()
     currentDroneData.timeStamp = rospy.Time()
-    rospy.loginfo("Current dd " + str(currentDroneData.timeStamp))
-    rospy.loginfo("last c  dd  " + str(lastDroneData.timeStamp))
     messageTwist = setUpTwist(0, 0, 0, 0, 0, 0)
 
 
@@ -134,11 +132,8 @@ def init():
 
 def run():
     global currentDroneData , actionCode, latchStartTime, latched, wayHomePtr, pub_cmd_vel, pub_takeoff, pub_land, pub_reset
-
-
-
-    rospy.loginfo("inside run...")
     latchTime = rospy.Duration(5.0)
+    rospy.loginfo("Waiting for a command")
 
 
     # Decide Saftey Action if Saftey-Loops are enables
@@ -153,7 +148,6 @@ def run():
 
         # Take off
         elif actionCode == 1:
-            rospy.loginfo("inside state 1...")
             if (not latched):
                 latchStartTime = rospy.get_rostime()
                 latched = True
@@ -161,16 +155,11 @@ def run():
             if rospy.get_rostime() < latchStartTime + latchTime:
                 pub_takeoff.publish(takeoff_msg)
                 rospy.loginfo("taking off")
-                rospy.loginfo("going to %s %s %s" % (
-                    estimatedPoseDR.position.x, estimatedPoseDR.position.y,
-                    estimatedPoseDR.position.y))
-
             else:
                 command(0, 0, 0, 0, 0, 0)
                 actionCode = 0
         # Land
         elif actionCode == 2:
-            rospy.loginfo("inside state 2...")
             if currentDroneData.z <= 0.5:
 
                 if (not latched):
@@ -179,7 +168,7 @@ def run():
 
                 if (rospy.get_rostime() < latchStartTime + latchTime):
                     pub_land.publish(land_msg)
-                    rospy.loginfo("landing")
+                    rospy.loginfo("Landing...")
                 else:
                     actionCode = 0
 
@@ -195,14 +184,35 @@ def run():
 
         # Go to Waypoint
         elif actionCode == 4:
-            rospy.loginfo("inside state 4...")
             returnTargetInDrone(targetInMap)
-            gain = 0.3
-            xAct = (targetInDrone.position.x * gain)
-            yAct = (targetInDrone.position.y * gain)
-            zAct = (targetInDrone.position.z * gain)
-            rospy.loginfo("going to %s %s %s %s %s %s" % (xAct, yAct, zAct, 0, 0, 0))
-            command(xAct, yAct, zAct, 0, 0, 0)
+            if not wayPointReached(waypointAccuracy):
+
+                gain = 0.3
+                xAct = (targetInDrone.position.x * gain)
+                yAct = (targetInDrone.position.y * gain)
+                zAct = (targetInDrone.position.z * gain)
+
+                rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
+                              " Y: " + str(realPose.pose.position.y) +
+                              " Z: " + str(realPose.pose.position.z))
+                rospy.loginfo("Acceleration X: " + str(xAct) +
+                              " Y: " + str(yAct) +
+                              " Z: " + str(zAct))
+
+                rospy.loginfo("Current DD X: " + str(currentDroneData.x) +
+                              " Y: " + str(currentDroneData.y) +
+                              " Z: " + str(currentDroneData.z))
+
+                rospy.loginfo("Target DD X: " + str(targetInDrone.position.x) +
+                              " Y: " + str(targetInDrone.position.y) +
+                              " Z: " + str(targetInDrone.position.z))
+
+                command(xAct, yAct, zAct, 0, 0, 0)
+            else:
+                rospy.loginfo("Waypoint Reached ")
+                command(0, 0, 0, 0, 0, 0)
+                actionCode = 0
+
 
         # Look at waypoint
         elif actionCode == 5:
@@ -564,47 +574,66 @@ def droneGUICallback( config, level):
     if config["land"] == True:
         actionCode = 2
         config["land"] = False
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+
     elif config["take_off"] == True:
         actionCode = 1
         config["take_off"] = False
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+
     elif config["forward"] == True:
         config["forward"] = False
         actionCode = 0
         command(1, 0, 0, 0, 0, 0)
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+
     elif config["backward"] == True:
         config["backward"] = False
         actionCode = 0
         command(-1, 0, 0, 0, 0, 0)
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+
     elif config["left"] == True:
         config["left"] = False
         actionCode = 0
         command(0, 0.5, 0, 0, 0, 0)
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+
     elif config["right"] == True:
         config["right"] = False
         actionCode = 0
         command(0, -0.5, 0, 0, 0, 0)
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+
     elif config["hover"] == True:
         config["hover"] = False
         actionCode = 0
         command(0, 0, 0, 0, 0, 0)
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+
     elif config["look_at_waypoint"] == True:
         config["look_at_waypoint"] = False
         targetInMap.position.x = config["targetInMapX"]
         targetInMap.position.y = config["targetInMapY"]
         targetInMap.position.z = config["targetInMapZ"]
         actionCode = 5
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+
     elif config["go_to_waypoint"] == True:
         config["go_to_waypoint"] = False
         targetInMap.position.x = config["targetInMapX"]
         targetInMap.position.y = config["targetInMapY"]
         targetInMap.position.z = config["targetInMapZ"]
         actionCode = 4
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+
     elif config["look_and_go"] == True:
         config["look_and_go"] = False
         targetInMap.position.x = config["targetInMapX"]
         targetInMap.position.y = config["targetInMapY"]
         targetInMap.position.z = config["targetInMapZ"]
         actionCode = 7
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
 
     elif config["get_waypoint"] == True:
         config["get_waypoint"] = False
@@ -612,8 +641,8 @@ def droneGUICallback( config, level):
         targetInMap.position.y = config["targetInMapY"]
         targetInMap.position.z = config["targetInMapZ"]
         actionCode = 6
+        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
 
-    rospy.loginfo("""Reconfigure Request: {actionCode}""".format(**config))
     return config
 
 
