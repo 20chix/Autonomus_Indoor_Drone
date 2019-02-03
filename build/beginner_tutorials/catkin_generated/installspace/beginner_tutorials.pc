@@ -1,8 +1,0 @@
-prefix=/home/hadi/catkin_ws/install
-
-Name: beginner_tutorials
-Description: Description of beginner_tutorials
-Version: 0.0.0
-Cflags: -I/home/hadi/catkin_ws/install/include
-Libs: -L/home/hadi/catkin_ws/install/lib 
-Requires: 

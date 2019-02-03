@@ -1,8 +1,0 @@
-prefix=/home/hadi/catkin_ws/install
-
-Name: ardrone_config
-Description: Description of ardrone_config
-Version: 0.3.0
-Cflags: 
-Libs: -L/home/hadi/catkin_ws/install/lib 
-Requires: 

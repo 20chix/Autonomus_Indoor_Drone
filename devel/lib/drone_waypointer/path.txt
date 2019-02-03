@@ -1,2 +1,0 @@
- [Time]          [X]          [Y]          [Z]       [XVel]       [YVel]       [ZVel]       [XAcc]       [YAcc]       [ZAcc]       [XRot]       [YRot]       [ZRot]    [XRotVel]    [YRotVel]    [ZRotVel]
-  (Sec)          (m)          (m)          (m)        (m/S)        (m/S)        (m/S)      (m/S^2)      (m/S^2)      (m/S^2)    (Degrees)    (Degrees)    (Degrees)  (Degrees/S)  (Degrees/S)  (Degrees/S)

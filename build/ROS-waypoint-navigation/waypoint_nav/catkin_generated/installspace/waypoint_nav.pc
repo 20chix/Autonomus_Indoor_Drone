@@ -1,8 +1,0 @@
-prefix=/home/hadi/catkin_ws/install
-
-Name: waypoint_nav
-Description: Description of waypoint_nav
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/hadi/catkin_ws/install/lib 
-Requires: 

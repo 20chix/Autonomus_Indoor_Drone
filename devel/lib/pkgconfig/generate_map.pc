@@ -1,8 +1,0 @@
-prefix=/home/hadi/catkin_ws/devel
-
-Name: generate_map
-Description: Description of generate_map
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/hadi/catkin_ws/devel/lib 
-Requires: 

@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC   -shared -Wl,-soname,libhector_gazebo_quadrotor_simple_controller.so -o /home/hadi/catkin_ws/devel/lib/libhector_gazebo_quadrotor_simple_controller.so CMakeFiles/hector_gazebo_quadrotor_simple_controller.dir/src/quadrotor_simple_controller.cpp.o 

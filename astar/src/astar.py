@@ -63,23 +63,23 @@ def pathFind(the_map, mapSizeN, mapSizeM, dirs, directionX, directionY, xStart, 
         open_nodes_map.append(list(row))
         dir_map.append(list(row))
 
-    priorityQueue = [[], []] # priority queues of open (not-yet-tried) nodes
-    priorityQueueIndex = 0 # priority queue index
+    pq = [[], []] # priority queues of open (not-yet-tried) nodes
+    pqi = 0 # priority queue index
     # create the start node and push into list of open nodes
     n0 = node(xStart, yStart, 0, 0)
     n0.updatePriority(xFinish, yFinish)
-    heappush(priorityQueue[priorityQueueIndex], n0)
+    heappush(pq[pqi], n0)
     open_nodes_map[yStart][xStart] = n0.priority # mark it on the open nodes map
 
     # A* search
-    while len(priorityQueue[priorityQueueIndex]) > 0:
+    while len(pq[pqi]) > 0:
         # get the current node w/ the highest priority
         # from the list of open nodes
-        n1 = priorityQueue[priorityQueueIndex][0] # top node
+        n1 = pq[pqi][0] # top node
         n0 = node(n1.xPos, n1.yPos, n1.distance, n1.priority)
         x = n0.xPos
         y = n0.yPos
-        heappop(priorityQueue[priorityQueueIndex]) # remove the node from the open list
+        heappop(pq[pqi]) # remove the node from the open list
         open_nodes_map[y][x] = 0
         closed_nodes_map[y][x] = 1 # mark it on the closed nodes map
 
@@ -112,7 +112,7 @@ def pathFind(the_map, mapSizeN, mapSizeM, dirs, directionX, directionY, xStart, 
                 # if it is not in the open list then add into that
                 if open_nodes_map[ydy][xdx] == 0:
                     open_nodes_map[ydy][xdx] = m0.priority
-                    heappush(priorityQueue[priorityQueueIndex], m0)
+                    heappush(pq[pqi], m0)
                     # mark its parent node direction
                     dir_map[ydy][xdx] = (i + dirs / 2) % dirs
                 elif open_nodes_map[ydy][xdx] > m0.priority:
@@ -121,19 +121,19 @@ def pathFind(the_map, mapSizeN, mapSizeM, dirs, directionX, directionY, xStart, 
                     # update the parent direction
                     dir_map[ydy][xdx] = (i + dirs / 2) % dirs
                     # replace the node
-                    # by emptying one priorityQueue to the other one
+                    # by emptying one pq to the other one
                     # except the node to be replaced will be ignored
                     # and the new node will be pushed in instead
-                    while not (priorityQueue[priorityQueueIndex][0].xPos == xdx and priorityQueue[priorityQueueIndex][0].yPos == ydy):
-                        heappush(priorityQueue[1 - priorityQueueIndex], priorityQueue[priorityQueueIndex][0])
-                        heappop(priorityQueue[priorityQueueIndex])
-                    heappop(priorityQueue[priorityQueueIndex]) # remove the target node
+                    while not (pq[pqi][0].xPos == xdx and pq[pqi][0].yPos == ydy):
+                        heappush(pq[1 - pqi], pq[pqi][0])
+                        heappop(pq[pqi])
+                    heappop(pq[pqi]) # remove the target node
                     # empty the larger size priority queue to the smaller one
-                    if len(priorityQueue[priorityQueueIndex]) > len(priorityQueue[1 - priorityQueueIndex]):
-                        priorityQueueIndex = 1 - priorityQueueIndex
-                    while len(priorityQueue[priorityQueueIndex]) > 0:
-                        heappush(priorityQueue[1-priorityQueueIndex], priorityQueue[priorityQueueIndex][0])
-                        heappop(priorityQueue[priorityQueueIndex])
-                    priorityQueueIndex = 1 - priorityQueueIndex
-                    heappush(priorityQueue[priorityQueueIndex], m0) # add the better node instead
+                    if len(pq[pqi]) > len(pq[1 - pqi]):
+                        pqi = 1 - pqi
+                    while len(pq[pqi]) > 0:
+                        heappush(pq[1-pqi], pq[pqi][0])
+                        heappop(pq[pqi])       
+                    pqi = 1 - pqi
+                    heappush(pq[pqi], m0) # add the better node instead
     return '' # if no route found

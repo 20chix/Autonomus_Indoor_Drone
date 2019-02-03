@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC   -shared -Wl,-soname,libhector_gazebo_ros_baro.so -o /home/hadi/catkin_ws/devel/lib/libhector_gazebo_ros_baro.so CMakeFiles/hector_gazebo_ros_baro.dir/src/gazebo_ros_baro.cpp.o 

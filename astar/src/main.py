@@ -176,20 +176,19 @@ def RouteNcallback(data):
                                dy,
                                tagCoordinates_x,
                                tagCoordinates_y,
-                               anchor2Coordinates_x,
-                               anchor2Coordinates_y)
+                               anchor0Coordinates_x,
+                               anchor0Coordinates_y)
         # Draw line on Rviz
         DrawALine(tagCoordinates_x, 
                     tagCoordinates_y, 
                     tagCoordinates_z, 
-                    anchor2Coordinates_x,
-                    anchor2Coordinates_y,
-                    anchor2Coordinates_z)
+                    anchor0Coordinates_x, 
+                    anchor0Coordinates_y, 
+                    anchor0Coordinates_z)
         # Log route
         rospy.loginfo('Route Number: 0, directions: ' + str(route))
         # Pubblish route
         pubblishRoute.publish(route)
-
     elif (data.data == "1"):
         # Calculate shortest path
         route = ASTAR.pathFind(the_map,

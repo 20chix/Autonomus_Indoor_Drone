@@ -1,8 +1,0 @@
-prefix=/home/hadi/catkin_ws/install
-
-Name: action_controller
-Description: Description of action_controller
-Version: 0.1.0
-Cflags: -I/home/hadi/catkin_ws/install/include
-Libs: -L/home/hadi/catkin_ws/install/lib 
-Requires: message_runtime moveit_core

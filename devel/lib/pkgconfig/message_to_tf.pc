@@ -1,8 +1,0 @@
-prefix=/home/hadi/catkin_ws/devel
-
-Name: message_to_tf
-Description: Description of message_to_tf
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/hadi/catkin_ws/devel/lib 
-Requires: 

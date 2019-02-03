@@ -1,8 +1,0 @@
-prefix=/home/hadi/catkin_ws/install
-
-Name: ardrone_tutorials
-Description: Description of ardrone_tutorials
-Version: 1.0.0
-Cflags: 
-Libs: -L/home/hadi/catkin_ws/install/lib 
-Requires: 

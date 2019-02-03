@@ -1,8 +1,0 @@
-prefix=/home/hadi/catkin_ws/install
-
-Name: simple_navigation_goals
-Description: Description of simple_navigation_goals
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/hadi/catkin_ws/install/lib 
-Requires: 

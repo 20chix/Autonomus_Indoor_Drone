@@ -1,8 +1,0 @@
-prefix=/home/hadi/catkin_ws/devel
-
-Name: cvg_sim_gazebo
-Description: Description of cvg_sim_gazebo
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/hadi/catkin_ws/devel/lib 
-Requires: 

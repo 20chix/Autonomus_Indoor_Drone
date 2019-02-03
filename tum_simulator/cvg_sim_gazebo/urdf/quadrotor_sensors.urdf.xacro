@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 
-
 <robot name="quadrotor_hokuyo_utm30lx"
 xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
 xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
@@ -35,13 +34,11 @@ xmlns:xacro="http://ros.org/wiki/xacro">
       <origin xyz="0.21 0.0 0.01" rpy="0 0 0"/>
     </xacro:generic_camera>
 
-    <!-- Downward facing camera 
+    <!-- Downward facing camera -->
     <xacro:include filename="$(find cvg_sim_gazebo)/urdf/sensors/generic_camera.urdf.xacro" />
     <xacro:generic_camera name="bottom" sim_name="ardrone" parent="base_link" update_rate="60" res_x="640" res_y="360" image_format="R8G8B8" hfov="${81*M_PI/180}">
         <origin xyz="0.15 0.0 0.0" rpy="0 ${M_PI/2} 0"/>
     </xacro:generic_camera>
     
-    -->
-
 </robot>
   

@@ -1,8 +1,0 @@
-prefix=/home/hadi/catkin_ws/install
-
-Name: fyp
-Description: Description of fyp
-Version: 0.0.0
-Cflags: -I/home/hadi/catkin_ws/install/include
-Libs: -L/home/hadi/catkin_ws/install/lib 
-Requires: 

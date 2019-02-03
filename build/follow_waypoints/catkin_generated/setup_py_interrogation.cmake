@@ -1,6 +1,0 @@
-set(follow_waypoints_SETUP_PY_VERSION "0.3.0")
-set(follow_waypoints_SETUP_PY_SCRIPTS "")
-set(follow_waypoints_SETUP_PY_PACKAGES "follow_waypoints")
-set(follow_waypoints_SETUP_PY_PACKAGE_DIRS "src/follow_waypoints")
-set(follow_waypoints_SETUP_PY_MODULES "")
-set(follow_waypoints_SETUP_PY_MODULE_DIRS "")

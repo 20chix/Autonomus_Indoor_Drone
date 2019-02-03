@@ -1,3 +1,0 @@
-<launch>
-    <node pkg="astar" type="main.py" name="shortest_path" />
-</launch>

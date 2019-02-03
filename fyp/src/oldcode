@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+import rospy
+from std_msgs.msg import String
+
+#Astar callback, just print the data for now
+def astarCallback(data):
+    rospy.loginfo("Astar directions: " +str(data.data))
+
+def talker():
+    global counter
+    global cars
+
+
+
+    # Initialize ros node fyp
+    rospy.init_node('fyp', anonymous=False)
+    # initialize our topics
+    pub_RouteN = rospy.Publisher('route_number', String, queue_size=10)
+    # Initialize rate 10hz
+    rate = rospy.Rate(10)
+
+
+
+    # Inifinite loop
+    while not rospy.is_shutdown():
+        # Pubblish a dummy data for now, this will publish the route that we are going to need
+        pub_RouteN.publish("1")
+        # Show me the route
+        rospy.loginfo("Route 1")
+        # Sleep for 10hz
+        rate.sleep()
+
+rospy.Subscriber('shortest_path', String, astarCallback)
+
+
+
+if __name__ == '__main__':
+    try:
+        talker()
+    except rospy.ROSInterruptException:
+        pass
