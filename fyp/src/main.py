@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+
+__author__     = "Hadi Elmekawi"
+__version__    = "1.0"
+__maintainer__ = "Hadi Elmekawi"
+__email__      = "w1530819@my.westminster.ac.uk"
+__status__     = "Development"
+
+
 import rospy
 import time
 from std_msgs.msg import Empty
@@ -105,29 +113,32 @@ pub_cmd_vel = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 pub_takeoff = rospy.Publisher('/ardrone/takeoff', Empty, queue_size=1)
 pub_land = rospy.Publisher('/ardrone/land', Empty, queue_size=1)
 pub_reset = rospy.Publisher("ardrone/reset", Empty, queue_size=1)
+
+
+#Create two instances of lastDroneDataClass
 lastDroneData = lastDroneDataClass()
 currentDroneData = lastDroneDataClass()
+
+
 lastDroneData.xRot = 0
 lastDroneData.yRot = 0
 lastDroneData.zRot = 0
 
 
-
+#Initialise ROS time, initial value of Drone(0,0,0,0,0) and subscribe to /ardrone/navdata and /ground_truth/state
 def init():
     global messageTwist, lastDroneData
 
+    #Initialise last and current drone data to ros time
     lastDroneData.timeStamp = rospy.Time()
     currentDroneData.timeStamp = rospy.Time()
+    #Initialise message twist to 0
     messageTwist = setUpTwist(0, 0, 0, 0, 0, 0)
-
-
-
+    #Initialise Dynamic configuration
     Server(droneGUIConfig, droneGUICallback)
+    #Subscribe to these topics
     rospy.Subscriber('/ardrone/navdata', Navdata, navDataCallBack)
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
-
-
-
     run()
 
 def run():
@@ -324,23 +335,21 @@ def run():
         pub_cmd_vel.publish(messageTwist)
         rate.sleep()
 
-""""This is because pubblishing in topics sometimes fails the first time you pubblish.
-In continuos pubblishing systems therw is no big deal but in systems that pubblish only once
-it IS very important"""
-
-def publishOnceInCmdVel(self, cmd):
-    while not ctrl_c:
-        connections = pub_cmd_vel.get_num_connections()
-        if connections > 0:
-            pub_cmd_vel.publish(cmd)
-            rospy.loginfo("Publish in cmd_vel...")
-            break
-        else:
-            rate.sleep()
-
 def setUpTwist( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
+    """Set up and return a message Twist.
+
+    Keyword arguments:
+    xLinear -- Linear velocity x axis (default 0.0)
+    yLinear -- Linear velocity y axis (default 0.0)
+    zLinear -- Linear velocity z axis (default 0.0)
+    xAngular -- Angular velocity x axis (default 0.0)
+    yAngular -- Angular velocity y axis (default 0.0)
+    zAngular -- Angular velocity z axis (default 0.0)
+
+    """
 
     global messageTwist
+
     messageTwist.linear.x = xLinear
     messageTwist.linear.y = yLinear
     messageTwist.linear.z = zLinear
@@ -350,19 +359,44 @@ def setUpTwist( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
     return messageTwist
 
 def command( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
+    """Form and assign message Twist.
+
+    Keyword arguments:
+    xLinear -- Linear velocity x axis (default 0.0)
+    yLinear -- Linear velocity y axis (default 0.0)
+    zLinear -- Linear velocity z axis (default 0.0)
+    xAngular -- Angular velocity x axis (default 0.0)
+    yAngular -- Angular velocity y axis (default 0.0)
+    zAngular -- Angular velocity z axis (default 0.0)
+
+    """
     global messageTwist
     messageTwist = setUpTwist(xLinear, yLinear, zLinear, xAngular, yAngular, zAngular)
 
-def realPoseCallBack( realPoseData):
+def realPoseCallBack(realPoseData):
+    """Get real position from /ground_truth/state topic
+
+    Keyword arguments:
+    realPoseData -- Pose data from topic
+
+    """
     global realPose
 
     realPose = realPoseData.pose
 
 # Convert the coordinates of the target in the drone frame
 def returnTargetInDrone(target):
+    """Convert the coordinates of the target in the drone frame
+
+    Keyword arguments:
+    target -- Pose data from target in the Map
+
+    """
+
     global currentDroneData
 
     zRot = -(navDataRotZ360 * math.pi / 180)
+
     # Target XYZ to the Map frame
     xt = target.position.x
     yt = target.position.y
@@ -394,6 +428,7 @@ def returnTargetInDrone(target):
 
 # NavData readings
 def navDataCallBack(nav_msg):
+    
     global firstTimeSamplingData, navDataRotZ360, droneState, battery, navDataRotZ, lastDroneData, realPose
 
     currentDroneData.timeStamp = nav_msg.header.stamp

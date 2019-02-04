@@ -1,14 +1,10 @@
 #!/usr/bin/env python
-
-# A basic drone controller class for the tutorial "Up and flying with the AR.Drone and ROS | Getting Started"
-# https://github.com/mikehamer/ardrone_tutorials_getting_started
-
-# This class implements basic control functionality which we will be using in future tutorials.
+# This class implements basic control functionality which we will be using in the main package FYP
 # It can command takeoff/landing/emergency as well as drone movement
 # It also tracks the drone state based on navdata feedback
 
-# Import the ROS libraries, and load the manifest file which through <depend package=... /> will give us access to the project dependencies
-import roslib; roslib.load_manifest('ardrone_tutorials')
+
+import roslib;
 import rospy
 
 # Import the messages we're interested in sending and receiving
@@ -18,7 +14,6 @@ from ardrone_autonomy.msg import Navdata # for receiving navdata feedback
 
 # An enumeration of Drone Statuses
 from drone_status import DroneStatus
-
 
 # Some Constants
 COMMAND_PERIOD = 100 #ms
