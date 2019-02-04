@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """ For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
 """
-#!/usr/bin/env python
 
 __author__     = "Hadi Elmekawi"
 __version__    = "1.0"
@@ -41,12 +40,13 @@ serialPortDWM1001 = serial.Serial(
 )
 
 # initialize topics
-pubblisher_Network  = rospy.Publisher('DWM1001_Network', String, queue_size=10)
+# TODO change this Pose message, String is to messy 
+pubblisher_Network  = rospy.Publisher('DWM1001_Network',          String, queue_size=10)
 pubblisher_Anchor_0 = rospy.Publisher('DWM1001_Network_Anchor_0', String, queue_size=10)
 pubblisher_Anchor_1 = rospy.Publisher('DWM1001_Network_Anchor_1', String, queue_size=10)
 pubblisher_Anchor_2 = rospy.Publisher('DWM1001_Network_Anchor_2', String, queue_size=10)
 pubblisher_Anchor_3 = rospy.Publisher('DWM1001_Network_Anchor_3', String, queue_size=10)
-pubblisher_Tag      = rospy.Publisher('DWM1001_Network_Tag', String, queue_size=10)
+pubblisher_Tag      = rospy.Publisher('DWM1001_Network_Tag',      String, queue_size=10)
 
 
 
@@ -58,12 +58,13 @@ def main():
     serialPortDWM1001.close()
     # sleep for one sec
     time.sleep(1)
+    #TODO Allow permission of serial port from code
     # open serial port
     serialPortDWM1001.open()
 
     # check if the serial port is opened
     if(serialPortDWM1001.isOpen()):
-        rospy.loginfo("Port opened: "+ str(SERIAL_PORT_DETAILS.name) );
+        rospy.loginfo("Port opened: "+ str(SERIAL_PORT_DETAILS.name) )
         # start sending commands to the board so we can initialize the board
         initializeDWM1001API()
         # give some time to DWM1001 to wake up
@@ -190,7 +191,7 @@ def initializeDWM1001API():
     serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
     # sleep for half second
     time.sleep(0.5)
-    # send a third one - why not
+    # send a third one - just in case
     serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
 
 

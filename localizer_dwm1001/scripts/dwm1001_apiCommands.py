@@ -9,8 +9,8 @@ __email__      = "w1530819@my.westminster.ac.uk"
 __status__     = "Development"
 
 class DWM1001_API_COMMANDS:
-        DOUBLE_ENTER     = b'\r\r'   # ASCII char for double Enter
-        SINGLE_ENTER     = b'\r'     # ASCII char for single Enter
+        DOUBLE_ENTER    = b'\r\r'   # ASCII char for double Enter
+        SINGLE_ENTER    = b'\r'     # ASCII char for single Enter
         HELP            = b'?'      # Display help
         QUIT            = b'quit'   # Quit API shell mode
         GC              = b'gc'     # Clears GPIO pin

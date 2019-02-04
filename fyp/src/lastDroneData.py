@@ -5,7 +5,10 @@ import rospy
 
 class lastDroneDataClass:
 
+
+    # timestamp from ROS time
     timeStamp = rospy.Time()
+
     # ACtual Drone Position
     x = 0
     y = 0

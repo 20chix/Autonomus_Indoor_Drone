@@ -1,0 +1,4 @@
+<launch>
+<test test_name="test_code" pkg="fyp" type="test_code.py" />
+
+</launch>
