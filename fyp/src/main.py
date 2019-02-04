@@ -10,15 +10,15 @@ __status__     = "Development"
 
 import rospy
 import time
-from std_msgs.msg import Empty
-from geometry_msgs.msg import Twist
-from geometry_msgs.msg import Pose
-from geometry_msgs.msg import PoseWithCovariance
-from fyp.cfg import droneGUIConfig
+from std_msgs.msg               import Empty
+from geometry_msgs.msg          import Twist
+from geometry_msgs.msg          import Pose
+from geometry_msgs.msg          import PoseWithCovariance
+from fyp.cfg                    import droneGUIConfig
 from dynamic_reconfigure.server import Server
-from nav_msgs.msg import Odometry
-from lastDroneData import lastDroneDataClass
-from ardrone_autonomy.msg import Navdata
+from nav_msgs.msg               import Odometry
+from lastDroneData              import lastDroneDataClass
+from ardrone_autonomy.msg       import Navdata
 import math
 
 
@@ -29,30 +29,28 @@ navDataRotZ = 0
 navDataRotZ360 = 0
 actionCode = 0
 
-#move_msg = Twist()
-#move_msg = setUpTwist(0, 0, 0, 0, 0, 0)
-
-
-targetInMap = Pose()
-lastSavedWaypoint = Pose()
-estimatedPoseDR = Pose()
-realPose = PoseWithCovariance()
-
-
+latchStartTime        = rospy.Duration(5.0)
 externalEstimatedPose = PoseWithCovariance()
 lastSavedWayHomePoint = Pose()
-targetInDrone = Pose()
+targetInDrone         = Pose()
+land_msg              = Empty()
+takeoff_msg           = Empty()
+reset_msg             = Empty()
+messageTwist          = Twist()
+targetInDrone         = Pose()
+targetInMap           = Pose()
+lastSavedWaypoint     = Pose()
+estimatedPoseDR       = Pose()
+realPose              = PoseWithCovariance()
 
-latchStartTime = rospy.Duration(5.0)
 
-land_msg = Empty()
-takeoff_msg = Empty()
-reset_msg = Empty()
-messageTwist = Twist()
-targetInDrone = Pose()
-
-
-ctrl_c = False
+recordFlightPath      = False
+recordData            = False
+recordImages          = False
+firstTimeSamplingData = True
+latched               = False
+samplingFrontCamera   = False
+wasGoingBack          = False
 
 
 targetInMap.position.x = 0
@@ -76,13 +74,7 @@ angleAccuracy = 10
 waypointAccuracy = 0.50
 pointGain = 0.5
 angleGain = 0.5
-recordFlightPath = False
-recordData = False
-recordImages = False
-firstTimeSamplingData = True
-latched = False
 
-samplingFrontCamera = False
 poseEstimationMethod = 1
 estimatedPoseDR.position.x = 0
 estimatedPoseDR.position.y = 0
@@ -91,42 +83,51 @@ externalEstimatedPose.pose.position.x = 0
 externalEstimatedPose.pose.position.y = 0
 externalEstimatedPose.pose.position.z = 0
 
+lastDroneData.xRot = 0
+lastDroneData.yRot = 0
+lastDroneData.zRot = 0
 
 # Safety - Loop Defines
 batteryLandThreshold = 5
 batteryGoHomeThreshold = 50
+
+
 wayHomePtr = -1
 lastSavedWayHomePoint.position.x = 0
 lastSavedWayHomePoint.position.y = 0
 lastSavedWayHomePoint.position.z = 0.1
-wasGoingBack = False
-
-
-# Firstly we setup a ros node, so that we can communicate with the other packages
-rospy.init_node('fyp', anonymous=False)
 lastDataSampleTime = rospy.Time()
 rate = rospy.Rate(50)
-
-
-# define the differen publishers and messages that will be used
-pub_cmd_vel = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-pub_takeoff = rospy.Publisher('/ardrone/takeoff', Empty, queue_size=1)
-pub_land = rospy.Publisher('/ardrone/land', Empty, queue_size=1)
-pub_reset = rospy.Publisher("ardrone/reset", Empty, queue_size=1)
-
 
 #Create two instances of lastDroneDataClass
 lastDroneData = lastDroneDataClass()
 currentDroneData = lastDroneDataClass()
 
 
-lastDroneData.xRot = 0
-lastDroneData.yRot = 0
-lastDroneData.zRot = 0
 
 
-#Initialise ROS time, initial value of Drone(0,0,0,0,0) and subscribe to /ardrone/navdata and /ground_truth/state
+
+# Setup a node 
+rospy.init_node('fyp', anonymous=False)
+
+
+
+# Define publishers and messages that will be used
+pub_cmd_vel = rospy.Publisher('/cmd_vel'        , Twist, queue_size=1)
+pub_takeoff = rospy.Publisher('/ardrone/takeoff', Empty, queue_size=1)
+pub_land    = rospy.Publisher('/ardrone/land'   , Empty, queue_size=1)
+pub_reset   = rospy.Publisher("ardrone/reset"   , Empty, queue_size=1)
+
+
+
 def init():
+    """Initialise ROS time,
+    drone linear and angular velocity
+    and subscribe to /ardrone/navdata and /ground_truth/state
+
+    Keyword arguments:
+
+    """
     global messageTwist, lastDroneData
 
     #Initialise last and current drone data to ros time
@@ -142,6 +143,11 @@ def init():
     run()
 
 def run():
+    """Based on the received command, land,takeoff, go to a waypoint, pivot and go to waypoint or go to origin 
+
+    Keyword arguments:
+
+    """
     global currentDroneData , actionCode, latchStartTime, latched, wayHomePtr, pub_cmd_vel, pub_takeoff, pub_land, pub_reset
     latchTime = rospy.Duration(5.0)
     rospy.loginfo("Waiting for a command")
@@ -426,8 +432,14 @@ def returnTargetInDrone(target):
         elif (targetInDrone.position.y < 0):
             targetInDrone.orientation.z = -(math.pi) / 2
 
-# NavData readings
+
 def navDataCallBack(nav_msg):
+    """Read navdata from the arDrone
+
+    Keyword arguments:
+    nav_msg -- NavData data from target in the Map
+
+    """
     
     global firstTimeSamplingData, navDataRotZ360, droneState, battery, navDataRotZ, lastDroneData, realPose
 
@@ -492,8 +504,12 @@ def navDataCallBack(nav_msg):
     firstTimeSamplingData = False
     lastDroneData = currentDroneData
 
-# Estimate the Pose internaly using Dead Reckoning
 def estimatePoseDeadReckoning():
+    """Estimate the Pose internaly using Dead Reckoning
+
+    Keyword arguments:
+
+    """
 
     zRot = navDataRotZ360 * math.pi / 180
     dt = (currentDroneData.timeStamp - lastDroneData.timeStamp).toSec()
@@ -506,8 +522,12 @@ def estimatePoseDeadReckoning():
     estimatedPoseDR.position.y = yd1 + (math.sin(zRot) * (xd2) + math.cos(zRot) * (yd2))
     estimatedPoseDR.position.z = estimatedPoseDR.position.z + currentDroneData.zVel * dt  # m
 
-# Determine if the waypoint has been reached with a tolerance level
 def wayPointReached(tolerance):
+    """Determine if the waypoint is reached with a tolerance level
+
+    Keyword arguments:
+    
+    """
     global currentDroneData
     if ((abs(targetInDrone.position.x)) < tolerance) :
         if ((abs(targetInDrone.position.y)) < tolerance) :
@@ -515,8 +535,12 @@ def wayPointReached(tolerance):
                 return True
     return False
 
-# Determine if the waypoint is being faced with a tolerance level
 def wayPointFaced(tolerance):
+    """Determine if the waypoint  is faced 
+
+    Keyword arguments:
+    
+    """
     if ((abs(targetInDrone.orientation.z)) < tolerance):
         return True
     return False
@@ -551,58 +575,15 @@ def decideSafetyAction():
                     lastSavedWayHomePoint.position.y = 0
                     lastSavedWayHomePoint.position.z = 0.2
 
-# function that stops the drone from any movement
-def strop_drone(self):
-    rospy.loginfo("Stopping...")
-    command(0, 0, 0, 0, 0, 0)
-    publishOnceInCmdVel(messageTwist)
-
-# function that makes the drone turn 90 degrees
-def turn_drone(self):
-    rospy.loginfo("Turning...")
-    command(0, 0, 0, 0, 0, 1)
-    publishOnceInCmdVel(messageTwist)
-
-# function that makes the drone move forward
-def move_forward_drone(self):
-    rospy.loginfo("Moving forward...")
-    command(1, 0, 0, 0, 0, 0)
-    publishOnceInCmdVel(messageTwist)
-
-def move_square(self):
-
-    # make the drone takeoff
-    i = 0
-    while not i == 3:
-        pub_takeoff.publish(takeoff_msg)
-        rospy.loginfo("Taking off...")
-        time.sleep(1)
-        i += 1
-
-    # define the seconds to move in each side of the square (which is taken from the goal) and the seconds to turn
-    sideSeconds = 2
-    turnSeconds = 1.5
-
-    i = 0
-    for i in range(0, 4):
-        # Logic that makes the robot move forward and turn
-        move_forward_drone()
-        time.sleep(sideSeconds)
-        turn_drone()
-        time.sleep(turnSeconds)
-        rospy.loginfo("loops " + str(i))
-        # the sequence is computed at 1 HZ frequency
-
-    strop_drone()
-    i = 0
-
-    while not i == 3:
-        pub_land.publish(land_msg)
-        rospy.loginfo('Landing')
-        time.sleep(1)
-        i += 1
 
 def droneGUICallback( config, level):
+    """Dynamic configuration to control waypoints 
+
+    Keyword arguments:
+    config -- data passed from GUI
+    
+    """
+
     global actionCode, targetInMap
     #actionCode = int(config["actionCode"])
 
