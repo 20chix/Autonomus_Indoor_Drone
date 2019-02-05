@@ -1,0 +1,8 @@
+<launch>
+
+
+<!--<test test-name="test_fyp" pkg="fyp" type="test_code.py" />-->
+<test test-name="test_fyp" pkg="fyp" type="test_ardrone_navdata.py" />
+
+
+</launch>

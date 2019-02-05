@@ -19,6 +19,8 @@ from dynamic_reconfigure.server import Server
 from nav_msgs.msg               import Odometry
 from lastDroneData              import lastDroneDataClass
 from ardrone_autonomy.msg       import Navdata
+from xml.dom.minidom            import parse
+
 import math
 
 
@@ -83,6 +85,11 @@ externalEstimatedPose.pose.position.x = 0
 externalEstimatedPose.pose.position.y = 0
 externalEstimatedPose.pose.position.z = 0
 
+#Create two instances of lastDroneDataClass
+lastDroneData = lastDroneDataClass()
+currentDroneData = lastDroneDataClass()
+
+
 lastDroneData.xRot = 0
 lastDroneData.yRot = 0
 lastDroneData.zRot = 0
@@ -96,12 +103,8 @@ wayHomePtr = -1
 lastSavedWayHomePoint.position.x = 0
 lastSavedWayHomePoint.position.y = 0
 lastSavedWayHomePoint.position.z = 0.1
-lastDataSampleTime = rospy.Time()
-rate = rospy.Rate(50)
 
-#Create two instances of lastDroneDataClass
-lastDroneData = lastDroneDataClass()
-currentDroneData = lastDroneDataClass()
+
 
 
 
@@ -109,6 +112,8 @@ currentDroneData = lastDroneDataClass()
 
 # Setup a node 
 rospy.init_node('fyp', anonymous=False)
+lastDataSampleTime = rospy.Time()
+rate = rospy.Rate(50)
 
 
 
@@ -281,7 +286,6 @@ def run():
 
         # Follow Flightpath
         elif actionCode == 8:
-            rospy.loginfo("inside state 8...")
             returnTargetInDrone(targetInMap)
             if (currentWaypointPtr > -1):
                 # If Waypoint reached
@@ -574,6 +578,30 @@ def decideSafetyAction():
                     lastSavedWayHomePoint.position.x = 0
                     lastSavedWayHomePoint.position.y = 0
                     lastSavedWayHomePoint.position.z = 0.2
+
+
+
+
+def followFlightPath():
+    doc = parse("waypoints.xml")
+    waypointsCoordinatesArray = []
+    waypoints = doc.getElementsByTagName("waypoint")
+    targetCoordinates = Pose()
+
+    i = 0
+    for waypoint in waypoints:
+        x = waypoint.getElementsByTagName("x")[0]
+        y = waypoint.getElementsByTagName("y")[0]
+        z = waypoint.getElementsByTagName("z")[0]
+
+        targetCoordinates.position.x = int(x.firstChild.data)
+        targetCoordinates.position.y = int(y.firstChild.data)
+        targetCoordinates.position.z = int(z.firstChild.data)
+
+        waypointsCoordinatesArray.append(targetCoordinates)
+
+        print(waypointsCoordinatesArray[i])
+        i = i + 1
 
 
 def droneGUICallback( config, level):
