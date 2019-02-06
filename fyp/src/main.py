@@ -287,13 +287,10 @@ def run():
 
         # Follow Flightpath
         elif actionCode == 8:
-            global currentWaypointCounterForFlightPath
-            if not extractCoordinatesFromXML(currentWaypointCounterForFlightPath) == None:
-                rospy.loginfo("Got waypoint from XML")
-                targetInDrone.position.x = extractCoordinatesFromXML(currentWaypointCounterForFlightPath).position.x
-                targetInDrone.position.y = extractCoordinatesFromXML(currentWaypointCounterForFlightPath).position.y
-                targetInDrone.position.z = extractCoordinatesFromXML(currentWaypointCounterForFlightPath).position.z
 
+            global currentWaypointCounterForFlightPath
+            if extractCoordinatesFromXML(currentWaypointCounterForFlightPath):
+                rospy.loginfo("waypoint counter: " + str(currentWaypointCounterForFlightPath))
                 returnTargetInDrone(targetInMap)
                 if not wayPointReached(waypointAccuracy):
                     if (wayPointFaced(angleAccuracy)):
@@ -301,20 +298,6 @@ def run():
                         xAct = (targetInDrone.position.x * pointGain)
                         yAct = (targetInDrone.position.y * pointGain)
                         zAct = (targetInDrone.position.z * pointGain)
-                        rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
-                                      " Y: " + str(realPose.pose.position.y) +
-                                      " Z: " + str(realPose.pose.position.z))
-                        rospy.loginfo("Acceleration X: " + str(xAct) +
-                                      " Y: " + str(yAct) +
-                                      " Z: " + str(zAct))
-
-                        rospy.loginfo("Current DD X: " + str(currentDroneData.x) +
-                                      " Y: " + str(currentDroneData.y) +
-                                      " Z: " + str(currentDroneData.z))
-
-                        rospy.loginfo("Target DD X: " + str(targetInDrone.position.x) +
-                                      " Y: " + str(targetInDrone.position.y) +
-                                      " Z: " + str(targetInDrone.position.z))
                         command(xAct, yAct, zAct, 0, 0, zRotAct)
 
                     else:
@@ -323,14 +306,17 @@ def run():
                         command(0, 0, 0, 0, 0, zRotAct)
                 else:
                     rospy.loginfo("Waypoint Reached ")
-                    currentWaypointCounterForFlightPath = currentWaypointCounterForFlightPath + 1
-
-
-
+                    rospy.loginfo("Target DD X: " + str(targetInMap.position.x) +
+                                  " Y: " + str(targetInMap.position.y) +
+                                  " Z: " + str(targetInMap.position.z))
+                    currentWaypointCounterForFlightPath +=  1
             else:
-                rospy.loginfo("Waypoints finished from XML..")
+                rospy.loginfo("XML waypoints finished")
+                currentWaypointCounterForFlightPath = 0
                 command(0, 0, 0, 0, 0, 0)
                 actionCode = 0
+
+
 
 
 
@@ -619,13 +605,13 @@ def extractCoordinatesFromXML(waypointCounterReached):
     waypointCoordinatesFromXML -- Pose format
 
     """
+
+    global targetInMap, currentWaypointCounterForFlightPath, actionCode
     # Parse XML
     treeFromXML = ElementTree.parse('/home/hadi/catkin_ws/src/fyp/src/waypoints.xml')
     # Get the root of XML
     rootInXML = treeFromXML.getroot()
 
-    # Declare an empty Pose object
-    waypointCoordinatesFromXML = Pose()
 
     # Declare an empty array
     waypointsCoordinatesArrayFromXML = []
@@ -646,10 +632,16 @@ def extractCoordinatesFromXML(waypointCounterReached):
     for i in range(len(waypointsCoordinatesArrayFromXML)):
 
         if waypointCounterReached == i:
-            waypointCoordinatesFromXML.position.x = waypointsCoordinatesArrayFromXML[i][0]
-            waypointCoordinatesFromXML.position.y = waypointsCoordinatesArrayFromXML[i][1]
-            waypointCoordinatesFromXML.position.z = waypointsCoordinatesArrayFromXML[i][2]
-            return waypointCoordinatesFromXML
+            targetInMap.position.x = waypointsCoordinatesArrayFromXML[i][0]
+            targetInMap.position.y = waypointsCoordinatesArrayFromXML[i][1]
+            targetInMap.position.z = waypointsCoordinatesArrayFromXML[i][2]
+            return True
+
+
+
+
+
+
 
 
 
@@ -740,6 +732,7 @@ def droneGUICallback( config, level):
     elif config["followFlightPath"] == True:
         config["followFlightPath"]= False
         actionCode = 8
+        #extractCoordinatesFromXML(0)
         rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
 
 
