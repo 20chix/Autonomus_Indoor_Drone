@@ -61,7 +61,7 @@ class LoadWaypointsInGazebo(object):
 
                 spawn_sdf = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
                 resp_sdf = spawn_sdf(model_name + str(counterForSDFModelToLoadSameSDFmultipleTimes), _xml, "/", model_pose, model_reference_frame)
-                rospy.loginfo("Loaded waypoint(s)(%s) succesfully. Now check follow flight path", model_name)
+                rospy.loginfo("Loaded waypoint(s)(%s) succesfully.", model_name+ str(counterForSDFModelToLoadSameSDFmultipleTimes))
 
                 counterForSDFModelToLoadSameSDFmultipleTimes += 1
 
@@ -96,3 +96,24 @@ class LoadWaypointsInGazebo(object):
                                 model_pose = model_pose,
                                 model_type = "sdf",
                                 model_reference_frame = "base_link")
+
+
+    def addWaypointsFromXMLToGazebo(self):
+
+        dir_of_this_script = os.path.dirname(os.path.realpath(__file__))
+
+        gazebo_model_dir = os.path.join(dir_of_this_script, '', 'waypoints')
+
+        # Parse XML
+        treeFromXML = ElementTree.parse(str(gazebo_model_dir) + '/waypoints.xml')
+        # Get the root of XML
+        rootInXML = treeFromXML.getroot()
+
+        # Loop trough each child in XML
+        for coordinateValueInXML in rootInXML.findall('waypoint'):
+            x = coordinateValueInXML.get('x')
+            y = coordinateValueInXML.get('y')
+            z = coordinateValueInXML.get('z')
+            self.populateWaypointsInGazebo(int(x), int(y), int(z))
+
+

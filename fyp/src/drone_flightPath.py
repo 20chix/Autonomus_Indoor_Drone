@@ -5,76 +5,47 @@ from geometry_msgs.msg          import Pose
 from time import sleep
 import xml.etree.ElementTree as ElementTree
 from operator import itemgetter
+import os
 
 
 
 
 
+dir_of_this_script = os.path.dirname(os.path.realpath(__file__))
+
+gazebo_model_dir = os.path.join(dir_of_this_script, '', 'waypoints')
 
 
 
-def extractCoordinatesFromXML(waypointCounterReached):
-    """Get all the coordinate from XML file
-        and assign it into an array of tuples
 
-    :argument
-    waypointCounterReached -- requested waypoint
+# Parse XML
+treeFromXML = ElementTree.parse(str(gazebo_model_dir)+'/waypoints.xml')
+# Get the root of XML
+rootInXML = treeFromXML.getroot()
 
-    :return
-    waypointCoordinatesFromXML -- Pose format
+# Declare an empty Pose object
+waypointCoordinatesFromXML = Pose()
 
-    """
-    # Parse XML
-    treeFromXML = ElementTree.parse('waypoints.xml')
-    # Get the root of XML
-    rootInXML = treeFromXML.getroot()
+# Declare an empty array
+waypointsCoordinatesArrayFromXML = []
 
-    # Declare an empty Pose object
-    waypointCoordinatesFromXML = Pose()
+# Loop trough each child in XML
+for coordinateValueInXML in rootInXML.findall('waypoint'):
+    x = coordinateValueInXML.get('x')
+    y = coordinateValueInXML.get('y')
+    z = coordinateValueInXML.get('z')
 
-    # Declare an empty array
-    waypointsCoordinatesArrayFromXML = []
+    # Create a tuple with x y z value from XML
+    tupleCoordinatesFromXML = (int(x), int(y), int(z))
 
-    # Loop trough each child in XML
-    for coordinateValueInXML in rootInXML.findall('waypoint'):
-        x = coordinateValueInXML.get('x')
-        y = coordinateValueInXML.get('y')
-        z = coordinateValueInXML.get('z')
-
-        # Create a tuple with x y z value from XML
-        tupleCoordinatesFromXML = (int(x), int(y), int(z))
-
-        # Append into array
-        waypointsCoordinatesArrayFromXML.append(tupleCoordinatesFromXML)
-
-    # Loop trough the array of tuple and get only the requested waypoint
-    for i in range(len(waypointsCoordinatesArrayFromXML)):
-
-        if waypointCounterReached == i:
-            waypointCoordinatesFromXML.position.x = waypointsCoordinatesArrayFromXML[i][0]
-            waypointCoordinatesFromXML.position.y = waypointsCoordinatesArrayFromXML[i][1]
-            waypointCoordinatesFromXML.position.z = waypointsCoordinatesArrayFromXML[i][2]
-            return waypointCoordinatesFromXML
+    print("Coordinates")
+    print("X: " + str(x))
+    print("Y: " + str(y))
+    print("Z: " + str(z))
 
 
-if __name__ == '__main__':
 
 
-    try:
+    # Append into array
+    waypointsCoordinatesArrayFromXML.append(tupleCoordinatesFromXML)
 
-        # move_square.actionCode = 2
-
-        waypointCounterToRead = 1
-
-        if extractCoordinatesFromXML(waypointCounterToRead) == None:
-            print("Waypoints finished..")
-        else:
-            print("Requested coordinates")
-            print("X: " + str(extractCoordinatesFromXML(waypointCounterToRead).position.x))
-            print("Y: " + str(extractCoordinatesFromXML(waypointCounterToRead).position.y))
-            print("Z: " + str(extractCoordinatesFromXML(waypointCounterToRead).position.z))
-        # time.sleep(3)
-        # move_square.actionCode = 2
-
-    except rospy.ROSInterruptException:
-        pass

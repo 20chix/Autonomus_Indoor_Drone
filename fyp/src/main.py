@@ -161,17 +161,11 @@ def init():
     #Subscribe to these topics
     rospy.Subscriber('/ardrone/navdata', Navdata, navDataCallBack)
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
-
     gazeboWaypoints = LoadWaypointsInGazebo()
-    gazeboWaypoints.populateWaypointsInGazebo(2, 2, 0)
-    gazeboWaypoints.populateWaypointsInGazebo(0, 2, 0)
-    gazeboWaypoints.populateWaypointsInGazebo(-2, 2, 0)
-    gazeboWaypoints.populateWaypointsInGazebo(-4, 2, 0)
 
 
 
-
-
+    gazeboWaypoints.addWaypointsFromXMLToGazebo()
 
 
 
@@ -636,8 +630,11 @@ def extractCoordinatesFromXML(waypointCounterReached):
     """
 
     global targetInMap, currentWaypointCounterForFlightPath, actionCode
+    dir_of_this_script = os.path.dirname(os.path.realpath(__file__))
+    gazebo_model_dir = os.path.join(dir_of_this_script, '', 'waypoints')
     # Parse XML
-    treeFromXML = ElementTree.parse('/home/mub/catkin_ws/src/fyp/src/waypoints.xml')
+    treeFromXML = ElementTree.parse(str(gazebo_model_dir) + '/waypoints.xml')
+
     # Get the root of XML
     rootInXML = treeFromXML.getroot()
 
