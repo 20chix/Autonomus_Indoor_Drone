@@ -40,7 +40,7 @@ from std_msgs.msg import String
 server = None
 menu_handler = MenuHandler()
 br = None
-counter = 0
+counterForSDFModelToLoadSameSDFmultipleTimes = 0
 
 
 tagx = 0

@@ -11,18 +11,33 @@ __status__     = "Development"
 import rospy
 import time
 from std_msgs.msg               import Empty
-from geometry_msgs.msg          import Twist
-from geometry_msgs.msg          import Pose
-from geometry_msgs.msg          import PoseWithCovariance
 from fyp.cfg                    import droneGUIConfig
 from dynamic_reconfigure.server import Server
 from nav_msgs.msg               import Odometry
 from lastDroneData              import lastDroneDataClass
 from ardrone_autonomy.msg       import Navdata
 import xml.etree.ElementTree    as ElementTree
+from drone_loadWaypointsInGazebo import LoadWaypointsInGazebo
 
 
 import math
+import os
+
+
+
+from gazebo_msgs.srv import (
+    SpawnModel,
+    DeleteModel,
+)
+from geometry_msgs.msg import (
+    PoseWithCovariance,
+    Pose,
+    Twist,
+    Point,
+    Quaternion,
+)
+
+
 
 
 
@@ -146,6 +161,20 @@ def init():
     #Subscribe to these topics
     rospy.Subscriber('/ardrone/navdata', Navdata, navDataCallBack)
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
+
+    gazeboWaypoints = LoadWaypointsInGazebo()
+    gazeboWaypoints.populateWaypointsInGazebo(2, 2, 0)
+    gazeboWaypoints.populateWaypointsInGazebo(0, 2, 0)
+    gazeboWaypoints.populateWaypointsInGazebo(-2, 2, 0)
+    gazeboWaypoints.populateWaypointsInGazebo(-4, 2, 0)
+
+
+
+
+
+
+
+
     run()
 
 def run():
@@ -608,7 +637,7 @@ def extractCoordinatesFromXML(waypointCounterReached):
 
     global targetInMap, currentWaypointCounterForFlightPath, actionCode
     # Parse XML
-    treeFromXML = ElementTree.parse('/home/hadi/catkin_ws/src/fyp/src/waypoints.xml')
+    treeFromXML = ElementTree.parse('/home/mub/catkin_ws/src/fyp/src/waypoints.xml')
     # Get the root of XML
     rootInXML = treeFromXML.getroot()
 

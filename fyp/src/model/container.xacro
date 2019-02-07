@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<robot name="container" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link name="container">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://birl_kitting_experiment_simulation/meshes/container/container.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://birl_kitting_experiment_simulation/meshes/container/container.STL"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="0.1" ixy="0.00103417" ixz="0.80199628" iyy="0.1" iyz="0.00105311" izz="4.96191932"/>
+    </inertial>
+  </link>
+  <gazebo reference="container">
+    <self_collide>1</self_collide>
+    <mu1>1000000</mu1>
+    <mu2>1000000</mu2>
+    <fdir1>0.0 0.0 1.0</fdir1>
+    <kp>1e5</kp>
+    <kd>1.0</kd>
+  </gazebo>
+ 
+</robot>

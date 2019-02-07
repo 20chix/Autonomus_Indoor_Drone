@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<robot name="left_end_effector" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="l_finger" default="extended_narrow"/>
+  <xacro:arg name="l_finger_slot" default="2"/>
+  <xacro:arg name="l_finger_tip" default="paddle_tip"/>
+  <xacro:arg name="l_finger_grasp" default="inner"/> 
+
+  <xacro:arg name="left_camera_frame" default="false"/>
+  <xacro:arg name="left_male_holder" default="false"/>
+  
+  <xacro:include filename="$(find birl_gripper_description)/urdf/electric_gripper/rethink_electric_pa_gripper.xacro" />
+  <xacro:rethink_electric_gripper side="left"
+                                  l_finger="$(arg l_finger)"
+                                  l_finger_slot="$(arg l_finger_slot)"
+                                  l_finger_tip="$(arg l_finger_tip)"
+                                  l_finger_grasp="$(arg l_finger_grasp)"
+                                  r_finger="$(arg l_finger)"
+                                  r_finger_slot="$(arg l_finger_slot)"
+                                  r_finger_tip="$(arg l_finger_tip)"
+                                  r_finger_grasp="$(arg l_finger_grasp)"
+                                  camera_frame="$(arg left_camera_frame)"
+                                  male_holder="$(arg left_male_holder)" />
+</robot>

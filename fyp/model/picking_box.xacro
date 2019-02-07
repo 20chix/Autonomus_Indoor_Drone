@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<robot name="picking_box" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link name="picking_box">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://birl_baxter_description/urdf/box/picking_box/picking_box.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://birl_baxter_description/urdf/box/picking_box/picking_box.STL"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.05"/>
+      <inertia ixx="0.001" ixy="0.00103417" ixz="0.80199628" iyy="6.08689388" iyz="0.00105311" izz="4.96191932"/>
+    </inertial>
+  </link>
+  <gazebo reference="picking_box">
+    <self_collide>1</self_collide>
+    <mu1>1000000</mu1>
+    <mu2>1000000</mu2>
+    <fdir1>0.0 0.0 1.0</fdir1>
+    <kp>1e5</kp>
+    <kd>1.0</kd>
+  </gazebo>
+ 
+</robot>

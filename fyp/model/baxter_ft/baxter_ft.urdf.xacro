@@ -1,0 +1,116 @@
+<?xml version="1.0" ?>
+<robot name="baxter" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="gazebo" default="false"/>
+  <xacro:arg name="pedestal" default="true"/>
+  <!-- TODO: have an arg for pa_demo that sets correct eef's/table/xtion -->
+  <xacro:arg name="table_front" default="false"/>
+  <xacro:arg name="table_right_side" default="false"/>
+  <xacro:arg name="container" default="false"/>
+  <xacro:arg name="asus_xtion" default="false"/>
+  <xacro:arg name="right_camera_frame" default="false"/>
+  <xacro:arg name="left_camera_frame" default="false"/>
+  <xacro:arg name="left_male_holder" default="false"/>  
+  <xacro:arg name="right_male_holder" default="false"/>
+
+    <!--options:
+      
+      finger = extended_wide extended_narrow standard_narrow standard_wide pa_finger
+      finger_slot = 1-6
+      fing_tip = basic_hard_tip basic_soft_tip half_round_tip paddle_tip none-->
+  <xacro:arg name="l_finger"       default="standard_narrow"/>
+  <xacro:arg name="l_finger_slot"  default="5"/>   
+  <xacro:arg name="l_finger_tip"   default="paddle_tip"/>
+  <xacro:arg name="l_finger_grasp" default="inner"/>
+  
+  <xacro:arg name="r_finger"       default="standard_narrow"/>
+  <xacro:arg name="r_finger_slot"  default="5"/>   
+  <xacro:arg name="r_finger_tip"   default="paddle_tip"/>
+  <xacro:arg name="r_finger_grasp" default="inner"/>
+
+  <xacro:arg name="left_ft_sensor" default="true"/>
+  <xacro:arg name="right_ft_sensor" default="true"/>
+  
+  <!-- Baxter Base URDF -->
+  <xacro:include filename="$(find birl_kitting_experiment_simulation)/model/baxter_ft/baxter_base_ft.urdf.xacro">
+    <xacro:arg name="gazebo" value="${gazebo}"/>
+    <xacro:arg name="left_ft_sensor" value="$(arg left_ft_sensor)"/>
+    <xacro:arg name="right_ft_sensor" value="$(arg right_ft_sensor)"/> 
+  </xacro:include>
+
+  <!-- Baxter Pedestal -->
+  <xacro:if value="$(arg pedestal)">
+    <xacro:include filename="$(find baxter_description)/urdf/pedestal/pedestal.xacro">
+      <xacro:arg name="gazebo" value="${gazebo}"/>
+    </xacro:include>
+  </xacro:if>
+
+  <!-- Left End Effector -->
+  
+    <xacro:include filename="$(find birl_kitting_experiment_simulation)/model/baxter_ft/left_end_pa_effector.urdf.xacro" >
+      <xacro:arg name="left_camera_frame" default="$(left_camera_frame)"/>
+      <xacro:arg name="left_male_gripper" default="$(left_male_gripper)"/>
+      <xacro:arg name="l_finger" default="$(l_finger)"/>
+      <xacro:arg name="l_finger_slot" default="$(l_finger_slot)"/>
+      <xacro:arg name="l_finger_tip" default="$(l_finger_tip)"/>
+      <xacro:arg name="l_finger_grasp" default="$(l_finger_grasp)"/>
+    </xacro:include>  
+
+
+    <!-- Right End Effector -->
+    <xacro:include filename="$(find birl_kitting_experiment_simulation)/model/baxter_ft/right_end_pa_effector.urdf.xacro" >
+      <xacro:arg name="right_camera_frame" default="$(right_camera_frame)"/>
+      <xacro:arg name="right_male_gripper" default="$(right_male_gripper)"/>
+      <xacro:arg name="r_finger" default="$(r_finger)"/>
+      <xacro:arg name="r_finger_slot" default="$(r_finger_slot)"/>
+      <xacro:arg name="r_finger_tip" default="$(r_finger_tip)"/>
+      <xacro:arg name="r_finger_grasp" default="$(r_finger_grasp)"/>
+    </xacro:include>
+
+  <!-- Container -->
+  <xacro:if value="$(arg container)">
+    <xacro:include filename="$(find birl_kitting_experiment_simulation)/urdf/box/container/container.xacro">
+    </xacro:include>
+    <joint name="container_fixed" type="fixed">
+      <origin rpy="0 0 -1.57" xyz="0.0 0.0 -0.93"/>
+      <parent link="base"/>
+      <child link="container"/>
+    </joint>
+  </xacro:if>
+
+  <!-- Table -->
+  <xacro:if value="$(arg table_front)">
+    <xacro:include filename="$(find birl_kitting_experiment_simulation)/urdf/table/table_front.xacro">
+    </xacro:include>
+    <joint name="table_fixed_1" type="fixed">
+      <origin rpy="0 0 0" xyz="0.0 0.0 -0.93"/>
+      <parent link="base"/>
+      <child link="table_front"/>
+    </joint>
+  </xacro:if>
+
+  <xacro:if value="$(arg table_right_side)">
+    <xacro:include filename="$(find birl_kitting_experiment_simulation)/urdf/table/table_right_side.xacro">
+    </xacro:include>
+    <joint name="table_fixed_2" type="fixed">
+      <origin rpy="0 0 -1.57" xyz="0.0 -0.2 -0.93"/>
+      <parent link="base"/>
+      <child link="table_right_side"/>
+    </joint>
+  </xacro:if>
+
+  <!-- Asus Xtion -->
+  <xacro:if value="$(arg asus_xtion)">
+    <xacro:include filename="$(find birl_kitting_experiment_simulation)/urdf/asus_xtion/asus_xtion.xacro">
+    </xacro:include>
+    <joint name="camera_base_fixed" type="fixed">
+      <origin rpy="0 0 0" xyz="1.0 0.0 -0.93"/>
+      <parent link="base"/>
+      <child link="camera_base"/>
+    </joint>
+  </xacro:if>
+
+
+</robot>
+
+
