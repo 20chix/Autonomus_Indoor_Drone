@@ -20,21 +20,15 @@ import xml.etree.ElementTree     as ElementTree
 from drone_loadWaypointsInGazebo import LoadWaypointsInGazebo
 from sensor_msgs.msg             import Joy
 from drone_systemDefinitions     import SYS_DEFS
+from drone_waypoints             import DroneWaypoint
 import math
 import os
+
 from geometry_msgs.msg import (
     PoseWithCovariance,
     Pose,
     Twist,
-    Point,
-    Quaternion,
 )
-
-
-
-
-
-
 
 navDataRotZ = 0
 navDataRotZ360 = 0
@@ -53,6 +47,7 @@ targetInMap           = Pose()
 lastSavedWaypoint     = Pose()
 estimatedPoseDR       = Pose()
 realPose              = PoseWithCovariance()
+droneWaypointsFromXML = DroneWaypoint()
 
 
 recordFlightPath      = False
@@ -81,12 +76,10 @@ lastSavedWaypoint.position.z = 0
 
 currentWaypointCounterForFlightPath = 0
 currentSavedWaypointPtr = 0
-angleAccuracy = 10
-waypointAccuracy = 0.50
-pointGain = 0.5
-angleGain = 0.5
 
 poseEstimationMethod = 1
+
+
 estimatedPoseDR.position.x = 0
 estimatedPoseDR.position.y = 0
 estimatedPoseDR.position.z = 0
@@ -109,15 +102,11 @@ batteryGoHomeThreshold = 50
 
 
 wayHomePtr = -1
+
+
 lastSavedWayHomePoint.position.x = 0
 lastSavedWayHomePoint.position.y = 0
 lastSavedWayHomePoint.position.z = 0.1
-
-
-
-
-
-
 
 # Setup a node 
 rospy.init_node('fyp', anonymous=False)
@@ -139,7 +128,7 @@ def init():
     drone linear and angular velocity
     and subscribe to /ardrone/navdata and /ground_truth/state
 
-    Keyword arguments:
+    :argument
 
     """
     global messageTwist, lastDroneData
@@ -157,15 +146,12 @@ def init():
     rospy.Subscriber("joy", Joy, JoystickCallBack)
     gazeboWaypoints = LoadWaypointsInGazebo()
     gazeboWaypoints.addWaypointsFromXMLToGazebo()
-
-
-
     run()
 
 def run():
     """Based on the received command, land,takeoff, go to a waypoint, pivot and go to waypoint or go to origin 
 
-    Keyword arguments:
+    :argument
 
     """
     global currentDroneData , actionCode, latchStartTime, latched, wayHomePtr, pub_cmd_vel, pub_takeoff, pub_land, pub_reset
@@ -191,7 +177,7 @@ def run():
 
             if rospy.get_rostime() < latchStartTime + latchTime:
                 pub_takeoff.publish(takeoff_msg)
-                rospy.loginfo("taking off")
+                rospy.loginfo("Taking off")
             else:
                 command(0, 0, 0, 0, 0, 0)
                 actionCode = 0
@@ -222,7 +208,7 @@ def run():
         # Go to Waypoint
         elif actionCode == 4:
             returnTargetInDrone(targetInMap)
-            if not wayPointReached(waypointAccuracy):
+            if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
 
                 gain = 0.3
                 xAct = (targetInDrone.position.x * gain)
@@ -268,12 +254,12 @@ def run():
         # Look and Go to waypoint
         elif actionCode == 7:
             returnTargetInDrone(targetInMap)
-            if not wayPointReached(waypointAccuracy):
-                if (wayPointFaced(angleAccuracy)):
-                    zRotAct = (targetInDrone.orientation.z * angleGain)
-                    xAct = (targetInDrone.position.x * pointGain)
-                    yAct = (targetInDrone.position.y * pointGain)
-                    zAct = (targetInDrone.position.z * pointGain)
+            if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+                if (wayPointFaced(SYS_DEFS.ANGLE_ACCURACY)):
+                    zRotAct = (targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN)
+                    xAct = (targetInDrone.position.x * SYS_DEFS.POINT_GAIN)
+                    yAct = (targetInDrone.position.y * SYS_DEFS.POINT_GAIN)
+                    zAct = (targetInDrone.position.z * SYS_DEFS.POINT_GAIN)
                     rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
                                   " Y: " + str(realPose.pose.position.y) +
                                   " Z: " + str(realPose.pose.position.z))
@@ -292,7 +278,7 @@ def run():
                     command(xAct, yAct, zAct, 0, 0, zRotAct)
                 else:
                     rospy.loginfo("fixing orientation")
-                    zRotAct = targetInDrone.orientation.z *  angleGain
+                    zRotAct = targetInDrone.orientation.z *  SYS_DEFS.ANGLE_GAIN
                     command(0, 0, 0, 0, 0, zRotAct)
             else:
                 rospy.loginfo("Waypoint Reached ")
@@ -303,19 +289,20 @@ def run():
         elif actionCode == 8:
 
             global currentWaypointCounterForFlightPath
-            if extractCoordinatesFromXML(currentWaypointCounterForFlightPath):
+            targetInMap = droneWaypointsFromXML.getWaypointsCoordinates()
+            if droneWaypointsFromXML.extractCoordinatesFromXML(currentWaypointCounterForFlightPath):
                 returnTargetInDrone(targetInMap)
-                if not wayPointReached(waypointAccuracy):
-                    if (wayPointFaced(angleAccuracy)):
-                        zRotAct = (targetInDrone.orientation.z * angleGain)
-                        xAct = (targetInDrone.position.x * pointGain)
-                        yAct = (targetInDrone.position.y * pointGain)
-                        zAct = (targetInDrone.position.z * pointGain)
+                if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+                    if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
+                        zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
+                        xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
+                        yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
+                        zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
                         command(xAct, yAct, zAct, 0, 0, zRotAct)
 
                     else:
                         rospy.loginfo("fixing orientation")
-                        zRotAct = targetInDrone.orientation.z * angleGain
+                        zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
                         command(0, 0, 0, 0, 0, zRotAct)
                 else:
                     rospy.loginfo("Waypoint Reached ")
@@ -337,15 +324,15 @@ def run():
         # Go Home
         elif actionCode == 9:
             returnTargetInDrone(targetInMap)
-            if (not wayPointReached(waypointAccuracy)):
-                if (wayPointReached(angleAccuracy)):
-                    zRotAct = targetInDrone.orientation.z * angleGain
-                    xAct = (targetInDrone.position.x * pointGain)
-                    yAct = (targetInDrone.position.y * pointGain)
-                    zAct = (targetInDrone.position.z * pointGain)
+            if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+                if wayPointReached(SYS_DEFS.ANGLE_ACCURACY):
+                    zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
+                    xAct = (targetInDrone.position.x * SYS_DEFS.POINT_GAIN)
+                    yAct = (targetInDrone.position.y * SYS_DEFS.POINT_GAIN)
+                    zAct = (targetInDrone.position.z * SYS_DEFS.POINT_GAIN)
                     command(xAct, yAct, zAct, 0, 0, zRotAct)
                 else:
-                    zRotAct = targetInDrone.orientation.z * angleGain
+                    zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
                     command(0, 0, 0, 0, 0, zRotAct)
             # Waypoint reached
             else:
@@ -363,6 +350,7 @@ def run():
                     rospy.loginfo("Home sweet home")
                     actionCode = 2  # Land
                     command(0, 0, 0, 0, 0, 0)
+
             rospy.spin()
 
         pub_cmd_vel.publish(messageTwist)
@@ -371,7 +359,7 @@ def run():
 def setUpTwist( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
     """Set up and return a message Twist.
 
-    Keyword arguments:
+    :argument
     xLinear -- Linear velocity x axis (default 0.0)
     yLinear -- Linear velocity y axis (default 0.0)
     zLinear -- Linear velocity z axis (default 0.0)
@@ -394,7 +382,7 @@ def setUpTwist( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
 def command( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
     """Form and assign message Twist.
 
-    Keyword arguments:
+    :argument
     xLinear -- Linear velocity x axis (default 0.0)
     yLinear -- Linear velocity y axis (default 0.0)
     zLinear -- Linear velocity z axis (default 0.0)
@@ -417,11 +405,11 @@ def realPoseCallBack(realPoseData):
 
     realPose = realPoseData.pose
 
-# Convert the coordinates of the target in the drone frame
+
 def returnTargetInDrone(target):
     """Convert the coordinates of the target in the drone frame
 
-    Keyword arguments:
+    :argument
     target -- Pose data from target in the Map
 
     """
@@ -446,24 +434,24 @@ def returnTargetInDrone(target):
     targetInDrone.orientation.y = 0
 
     # Angle from the Drone X - axis(Roll axis) to the point vector in the drone frame
-    if (targetInDrone.position.x is not 0):
+    if targetInDrone.position.x is not 0:
 
         # atan2() returns a value in all 4 quadrants given the x, y vectors
         targetInDrone.orientation.z = math.atan2(targetInDrone.position.y, targetInDrone.position.x)
 
     # Precaution not to devide by  zero
     else:
-        if (targetInDrone.position.y > 0):
+        if targetInDrone.position.y > 0:
             targetInDrone.orientation.z = math.pi / 2
 
-        elif (targetInDrone.position.y < 0):
+        elif targetInDrone.position.y < 0:
             targetInDrone.orientation.z = -(math.pi) / 2
 
 
 def navDataCallBack(nav_msg):
     """Read navdata from the arDrone
 
-    Keyword arguments:
+    :argument
     nav_msg -- NavData data from target in the Map
 
     """
@@ -521,20 +509,14 @@ def navDataCallBack(nav_msg):
             currentDroneData.y = estimatedPoseDR.pose.position.y  # meters[m]
             currentDroneData.z = estimatedPoseDR.pose.position.z  # meters[m]
 
-    # Motor  PWM
-    # values(not available in tum_simulator)
-    # currentDroneData.motor1 = nav_msg.motor1;
-    # currentDroneData.motor2 = nav_msg.motor2;
-    # currentDroneData.motor3 = nav_msg.motor3;
-    # currentDroneData.motor4 = nav_msg.motor4;
-
     firstTimeSamplingData = False
     lastDroneData = currentDroneData
+
 
 def estimatePoseDeadReckoning():
     """Estimate the Pose internaly using Dead Reckoning
 
-    Keyword arguments:
+     :argument
 
     """
 
@@ -549,6 +531,7 @@ def estimatePoseDeadReckoning():
     estimatedPoseDR.position.y = yd1 + (math.sin(zRot) * (xd2) + math.cos(zRot) * (yd2))
     estimatedPoseDR.position.z = estimatedPoseDR.position.z + currentDroneData.zVel * dt  # m
 
+
 def wayPointReached(tolerance):
     """Determine if the waypoint is reached with a tolerance level
 
@@ -556,11 +539,12 @@ def wayPointReached(tolerance):
     
     """
     global currentDroneData
-    if ((abs(targetInDrone.position.x)) < tolerance) :
-        if ((abs(targetInDrone.position.y)) < tolerance) :
-            if ((abs(targetInDrone.position.z)) < tolerance):
+    if abs(targetInDrone.position.x) < tolerance :
+        if abs(targetInDrone.position.y) < tolerance :
+            if abs(targetInDrone.position.z) < tolerance:
                 return True
     return False
+
 
 def wayPointFaced(tolerance):
     """Determine if the waypoint  is faced 
@@ -571,6 +555,7 @@ def wayPointFaced(tolerance):
     if ((abs(targetInDrone.orientation.z)) < tolerance):
         return True
     return False
+
 
 # Decide on what safety action to follow
 def decideSafetyAction():
@@ -601,58 +586,6 @@ def decideSafetyAction():
                     lastSavedWayHomePoint.position.x = 0
                     lastSavedWayHomePoint.position.y = 0
                     lastSavedWayHomePoint.position.z = 0.2
-
-
-
-
-def extractCoordinatesFromXML(waypointCounterReached):
-    """Get all the coordinate from XML file
-        and assign it into an array of tuples
-
-    :argument
-    waypointCounterReached -- requested waypoint
-
-    :return
-    waypointCoordinatesFromXML -- Pose format
-
-    """
-
-    global targetInMap, currentWaypointCounterForFlightPath, actionCode
-    dir_of_this_script = os.path.dirname(os.path.realpath(__file__))
-    gazebo_model_dir = os.path.join(dir_of_this_script, '', 'waypoints')
-    # Parse XML
-    treeFromXML = ElementTree.parse(str(gazebo_model_dir) + '/waypoints.xml')
-
-    # Get the root of XML
-    rootInXML = treeFromXML.getroot()
-
-
-    # Declare an empty array
-    waypointsCoordinatesArrayFromXML = []
-
-    # Loop trough each child in XML
-    for coordinateValueInXML in rootInXML.findall('waypoint'):
-        x = coordinateValueInXML.get('x')
-        y = coordinateValueInXML.get('y')
-        z = coordinateValueInXML.get('z')
-
-        # Create a tuple with x y z value from XML
-        tupleCoordinatesFromXML = (int(x), int(y), int(z))
-
-        # Append into array
-        waypointsCoordinatesArrayFromXML.append(tupleCoordinatesFromXML)
-
-    # Loop trough the array of tuple and get only the requested waypoint
-    for i in range(len(waypointsCoordinatesArrayFromXML)):
-
-        if waypointCounterReached == i:
-            targetInMap.position.x = waypointsCoordinatesArrayFromXML[i][0]
-            targetInMap.position.y = waypointsCoordinatesArrayFromXML[i][1]
-            targetInMap.position.z = waypointsCoordinatesArrayFromXML[i][2]
-            return True
-
-
-
 
 
 def JoystickCallBack(data):
@@ -690,25 +623,22 @@ def JoystickCallBack(data):
                 data.axes[SYS_DEFS.AXIS_Z] / SYS_DEFS.SCALE_Z ,
                 0,
                 0 ,
-                data.axes[SYS_DEFS.AXIS_YAW] / SYS_DEFS.SCALE_YAW
-                )
-
+                data.axes[SYS_DEFS.AXIS_YAW] / SYS_DEFS.SCALE_YAW)
 
         rospy.loginfo("pitch" + str(data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH) +
                       " roll " + str(data.axes[SYS_DEFS.AXIX_ROLL] / SYS_DEFS.SCALE_ROLL) +
-                      " yaw: " + str(data.axes[SYS_DEFS.AXIS_YAW] / SYS_DEFS.SCALE_YAW)
-                      )
+                      " yaw: " + str(data.axes[SYS_DEFS.AXIS_YAW] / SYS_DEFS.SCALE_YAW))
+
 
 def droneGUICallback( config, level):
     """Dynamic configuration to control waypoints 
 
-    Keyword arguments:
+    :argument
     config -- data passed from GUI
     
     """
 
     global actionCode, targetInMap
-    #actionCode = int(config["actionCode"])
 
     if config["land"] == True:
         actionCode = 2
@@ -785,22 +715,14 @@ def droneGUICallback( config, level):
     elif config["followFlightPath"] == True:
         config["followFlightPath"]= False
         actionCode = 8
-        #extractCoordinatesFromXML(0)
         rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
-
 
     return config
 
 
 if __name__ == '__main__':
 
-
     try:
-
-        # move_square.actionCode = 2
         init()
-        # time.sleep(3)
-        # move_square.actionCode = 2
-
     except rospy.ROSInterruptException:
         pass

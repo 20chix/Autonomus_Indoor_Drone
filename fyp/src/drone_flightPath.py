@@ -7,15 +7,8 @@ import xml.etree.ElementTree as ElementTree
 from operator import itemgetter
 import os
 
-
-
-
-
 dir_of_this_script = os.path.dirname(os.path.realpath(__file__))
-
 gazebo_model_dir = os.path.join(dir_of_this_script, '', 'waypoints')
-
-
 
 
 # Parse XML

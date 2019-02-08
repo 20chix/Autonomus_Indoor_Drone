@@ -45,11 +45,10 @@ gazebo_model_dir = os.path.join(dir_of_this_script, '', 'model')
 
 class LoadWaypointsInGazebo(object):
 
-    def load_gazebo_models(self, model_name, model_pose, model_type="sdf",
-                           model_reference_frame="base_link"):
+    def loadGazeboModels(self, model_name, model_pose, model_type="sdf",
+                         model_reference_frame="base_link"):
 
         global  counterForSDFModelToLoadSameSDFmultipleTimes
-
 
         model_path = gazebo_model_dir
 
@@ -92,20 +91,20 @@ class LoadWaypointsInGazebo(object):
         model_pose.position.y = y
         model_pose.position.z = z
 
-        self.load_gazebo_models(model_name = "box",
-                                model_pose = model_pose,
-                                model_type = "sdf",
-                                model_reference_frame = "base_link")
+        self.loadGazeboModels(model_name ="box",
+                              model_pose = model_pose,
+                              model_type = "sdf",
+                              model_reference_frame = "base_link")
 
 
     def addWaypointsFromXMLToGazebo(self):
 
         dir_of_this_script = os.path.dirname(os.path.realpath(__file__))
 
-        gazebo_model_dir = os.path.join(dir_of_this_script, '', 'waypoints')
+        gazeboModelDir = os.path.join(dir_of_this_script, '', 'waypoints')
 
         # Parse XML
-        treeFromXML = ElementTree.parse(str(gazebo_model_dir) + '/waypoints.xml')
+        treeFromXML = ElementTree.parse(str(gazeboModelDir) + '/waypoints.xml')
         # Get the root of XML
         rootInXML = treeFromXML.getroot()
 

@@ -8,6 +8,12 @@ __status__     = "Development"
 
 
 class SYS_DEFS:
+    POINT_GAIN = 0.5
+    ANGLE_GAIN = 0.5
+    ANGLE_ACCURACY = 10
+    WAYPOINT_ACCURACY = 0.50
+
+
     # define the default mapping between joystick buttons and their corresponding actions
     BUTTON_EMERGENCY            = 7
     BUTTON_EMERGENCY_BACKUP     = 6
