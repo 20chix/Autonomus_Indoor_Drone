@@ -10,25 +10,18 @@ __status__     = "Development"
 
 import rospy
 import time
-from std_msgs.msg               import Empty
-from fyp.cfg                    import droneGUIConfig
-from dynamic_reconfigure.server import Server
-from nav_msgs.msg               import Odometry
-from lastDroneData              import lastDroneDataClass
-from ardrone_autonomy.msg       import Navdata
-import xml.etree.ElementTree    as ElementTree
+from std_msgs.msg                import Empty
+from fyp.cfg                     import droneGUIConfig
+from dynamic_reconfigure.server  import Server
+from nav_msgs.msg                import Odometry
+from lastDroneData               import lastDroneDataClass
+from ardrone_autonomy.msg        import Navdata
+import xml.etree.ElementTree     as ElementTree
 from drone_loadWaypointsInGazebo import LoadWaypointsInGazebo
-
-
+from sensor_msgs.msg             import Joy
+from drone_systemDefinitions     import SYS_DEFS
 import math
 import os
-
-
-
-from gazebo_msgs.srv import (
-    SpawnModel,
-    DeleteModel,
-)
 from geometry_msgs.msg import (
     PoseWithCovariance,
     Pose,
@@ -161,10 +154,8 @@ def init():
     #Subscribe to these topics
     rospy.Subscriber('/ardrone/navdata', Navdata, navDataCallBack)
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
+    rospy.Subscriber("joy", Joy, JoystickCallBack)
     gazeboWaypoints = LoadWaypointsInGazebo()
-
-
-
     gazeboWaypoints.addWaypointsFromXMLToGazebo()
 
 
@@ -313,7 +304,6 @@ def run():
 
             global currentWaypointCounterForFlightPath
             if extractCoordinatesFromXML(currentWaypointCounterForFlightPath):
-                rospy.loginfo("waypoint counter: " + str(currentWaypointCounterForFlightPath))
                 returnTargetInDrone(targetInMap)
                 if not wayPointReached(waypointAccuracy):
                     if (wayPointFaced(angleAccuracy)):
@@ -346,8 +336,6 @@ def run():
 
         # Go Home
         elif actionCode == 9:
-
-            rospy.loginfo("inside state 9...")
             returnTargetInDrone(targetInMap)
             if (not wayPointReached(waypointAccuracy)):
                 if (wayPointReached(angleAccuracy)):
@@ -667,10 +655,49 @@ def extractCoordinatesFromXML(waypointCounterReached):
 
 
 
+def JoystickCallBack(data):
+
+    global actionCode
+
+    rospy.loginfo(data.axes[SYS_DEFS.AXIS_YAW])
+
+    if data.buttons[SYS_DEFS.BUTTON_EMERGENCY] == 1:
+        rospy.loginfo("Emergency Button Pressed: " + str(SYS_DEFS.BUTTON_EMERGENCY))
+
+    elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY_BACKUP] == 1:
+        rospy.loginfo("Emergency backup Button Pressed: " + str(SYS_DEFS.BUTTON_EMERGENCY_BACKUP))
+
+    elif data.buttons[SYS_DEFS.BUTTON_LAND] == 1:
+        rospy.loginfo("Land Button Pressed: " + str(SYS_DEFS.BUTTON_LAND))
+        actionCode = 2
+
+    elif data.buttons[SYS_DEFS.BUTTON_TAKEOFF] == 1:
+        rospy.loginfo("Take off Button Pressed: " + str(SYS_DEFS.BUTTON_TAKEOFF))
+        actionCode = 1
+
+    elif data.buttons[SYS_DEFS.BUTTON_HOVER] == 1:
+        rospy.loginfo("Hover Button Pressed: " + str(SYS_DEFS.BUTTON_HOVER))
+        actionCode = 0
+        command(0, 0, 0, 0, 0, 0)
+
+    elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH] == 1:
+        rospy.loginfo("Follow flight path pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH))
+        actionCode = 8
+
+    else:
+        command(data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH,
+                data.axes[SYS_DEFS.AXIX_ROLL] / SYS_DEFS.SCALE_ROLL,
+                data.axes[SYS_DEFS.AXIS_Z] / SYS_DEFS.SCALE_Z ,
+                0,
+                0 ,
+                data.axes[SYS_DEFS.AXIS_YAW] / SYS_DEFS.SCALE_YAW
+                )
 
 
-
-
+        rospy.loginfo("pitch" + str(data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH) +
+                      " roll " + str(data.axes[SYS_DEFS.AXIX_ROLL] / SYS_DEFS.SCALE_ROLL) +
+                      " yaw: " + str(data.axes[SYS_DEFS.AXIS_YAW] / SYS_DEFS.SCALE_YAW)
+                      )
 
 def droneGUICallback( config, level):
     """Dynamic configuration to control waypoints 

@@ -73,6 +73,9 @@ class BasicDroneController(object):
 		self.command.linear.z  = z_velocity
 		self.command.angular.z = yaw_velocity
 
+
+
+
 	def SendCommand(self,event):
 		# The previously set command is then sent out periodically if the drone is flying
 		if self.status == DroneStatus.Flying or self.status == DroneStatus.GotoHover or self.status == DroneStatus.Hovering:
