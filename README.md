@@ -4,17 +4,9 @@
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 [![HitCount](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001.svg)](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001)
 
-# FYP_Autonomus_Drone_DWM1001_ 
-
-Final year project that consist in autonomus drone, developed in ROS using UWB DWM1001 dev board
-
-# 4 DWM1001, 3 anchors and 1 tag
- The tag will be attached to a drone and  3 anchors will be placed on the ground, which will create a triangle.
- The goal is to make the ARDrone follow each anchor and one imaginary anchor which will be placed across coordinates 0,0.
-
 # Abstract 
 
-The aim of this project is to provide a solution for autonomous indoor drone (AID). AID involves localization, control, path planning and autonomous landing/take-off. A robust localization method was implemented using a GPS-like device called DWM1001 provided by Decawave. This device is especially useful for indoor applications as it a has a high accuracy and can only be used in confined spaces.
+The aim of this project is to provide a solution for autonomous indoor drone (AID). AID involves localization, control, path planning and autonomous landing/take-off. A robust localization method was used, using GPS-like device called DWM1001 provided by Decawave . This device is especially useful for indoor applications as it a has a high accuracy and can only be used in confined spaces.
 
 ### Prototype
 
