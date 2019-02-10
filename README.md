@@ -21,30 +21,25 @@ The aim of this project is to provide a solution for autonomous indoor drone (AI
 
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/DWMNetwor_with_description.png?raw=true)
 
-DWMNetwor_with_description
-
 ## DWM1001 dev-boards
 
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/decawave-dwm1001-dev-large.jpg?raw=true)
 
 # Packages
-## localizer_dwm1001
-This package is responsible on getting the network coordinates (tag and anchors) from dwm1001 dev board via USB.
-![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/FYP_Diagram_dev_board.png?raw=true)
+`localizer_dwm1001` This package is responsible on getting the network coordinates (tag and anchors) from dwm1001 dev board via USB, and pubblish in coordinates in topics.
+`fyp` This package is responsible on controlling the drone, reading waypoints from xml file, process joystick input, land and takeoff the drone
+`ardrone_simulator` This package is responsible on simulating the ardrone on gazebo7
+`joy` This package is responsible on interfacing joystick 
+`generate_map` This package is responsible on creating markers in Rviz
 
-## shortest_path 
-This package is responsible for calculating the shortest, using a* algorithm, from the tag to a anchor at the time, this package will publish a string of directions for example 777788888844444442222222111111. We will use these directions to control the drone.
-![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/Shortest_Path.png?raw=true)
+Other packages were made for testing(I will remove them once I get a working prototype on the real drone)
 
-## Dynamic reconfigure DWM1001
+
+## Dynamic reconfigure of DWM1001
 In this package we want to be able to change some variable from ground station, while the drone is flying.
 
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/dynamic_config.png?raw=true)
 
-## DWM1001 Network example with RVIZ
-In this package we visualize the DWM1001 network coordinates in RVIZ, using simple marker tutorial. 
-
-![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/Screenshot%20from%202018-10-07%2013-31-00.png?raw=true)
 
 
 ## ROS Topic monitor
