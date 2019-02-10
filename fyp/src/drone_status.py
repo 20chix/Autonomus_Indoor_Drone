@@ -3,7 +3,7 @@
 # An enumeration of drone statuses for the drone
 
 class DroneStatus(object):
-	Emergency = 0
+	EMERGENCY = 0
 	Inited    = 1
 	Landed    = 2
 	Flying    = 3
