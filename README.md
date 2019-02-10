@@ -19,7 +19,7 @@ The aim of this project is to provide a solution for autonomous indoor drone (AI
 
 ### Rviz visualization of DWM1001 network 
 
-![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resourc/DWMNetwor_with_description.png?raw=true)
+![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/DWMNetwor_with_description.png?raw=true)
 
 DWMNetwor_with_description
 
