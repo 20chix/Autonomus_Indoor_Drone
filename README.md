@@ -13,9 +13,15 @@ The aim of this project is to provide a solution for autonomous indoor drone (AI
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/FYP_Diagram.png?raw=true)
 
 
-### Prototype
+### Prototype in Gazebo 7
 
 ![](resources/AID_working_prototype.gif)
+
+### Rviz visualization of DWM1001 network 
+
+![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resourc/DWMNetwor_with_description.png?raw=true)
+
+DWMNetwor_with_description
 
 ## DWM1001 dev-boards
 
