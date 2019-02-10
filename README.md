@@ -13,6 +13,13 @@ Final year project that consist in autonomus drone, developed in ROS using UWB D
  The goal is to make the ARDrone follow each anchor and one imaginary anchor which will be placed across coordinates 0,0.
 
 # Abstract 
+
+The aim of this project is to provide a solution for autonomous indoor drone (AID). AID involves localization, control, path planning and autonomous landing/take-off. A robust localization method was implemented using a GPS-like device called DWM1001 provided by Decawave. This device is especially useful for indoor applications as it a has a high accuracy and can only be used in confined spaces.
+
+### Prototype
+
+![](resources/AID_working_prototype.gif)
+
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/FYP_Diagram.png?raw=true)
 
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/decawave-dwm1001-dev-large.jpg?raw=true)
