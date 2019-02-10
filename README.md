@@ -26,7 +26,7 @@ The aim of this project is to provide a solution for autonomous indoor drone (AI
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/decawave-dwm1001-dev-large.jpg?raw=true)
 
 # Packages
-`localizer_dwm1001` This package is responsible on getting the network coordinates (tag and anchors) from dwm1001 dev board via USB, and pubblish in coordinates in topics.
+**`localizer_dwm1001`** This package is responsible on getting the network coordinates (tag and anchors) from dwm1001 dev board via USB, and pubblish in coordinates in topics.
 
 `fyp` This package is responsible on controlling the drone, reading waypoints from xml file, process joystick input, land and takeoff the drone.
 
