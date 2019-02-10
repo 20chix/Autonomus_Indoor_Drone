@@ -27,10 +27,15 @@ The aim of this project is to provide a solution for autonomous indoor drone (AI
 
 # Packages
 `localizer_dwm1001` This package is responsible on getting the network coordinates (tag and anchors) from dwm1001 dev board via USB, and pubblish in coordinates in topics.
-`fyp` This package is responsible on controlling the drone, reading waypoints from xml file, process joystick input, land and takeoff the drone
-`ardrone_simulator` This package is responsible on simulating the ardrone on gazebo7
-`joy` This package is responsible on interfacing joystick 
-`generate_map` This package is responsible on creating markers in Rviz
+
+`fyp` This package is responsible on controlling the drone, reading waypoints from xml file, process joystick input, land and takeoff the drone.
+
+`ardrone_simulator` This package is responsible on simulating the ardrone on gazebo7.
+
+`joy` This package is responsible on interfacing joystick.
+
+`generate_map` This package is responsible on creating markers in Rviz.
+
 
 Other packages were made for testing(I will remove them once I get a working prototype on the real drone)
 
