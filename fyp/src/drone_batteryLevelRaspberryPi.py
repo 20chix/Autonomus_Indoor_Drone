@@ -30,8 +30,8 @@ state_charging = False;
 v_current = 0;
 v_old = 0;
 capacity = 0;
-publisherAidBatteryLevelRaspberryPi = rospy.Publisher('aid/batteryLevelRaspberryPi', int, queue_size=10)
-publisherAidVoltageLevelRaspberryPi = rospy.Publisher('aid/voltageLevelRaspberryPi', int, queue_size=10)
+publisherAidBatteryLevelRaspberryPi = rospy.Publisher('aid/batteryLevelRaspberryPi')
+publisherAidVoltageLevelRaspberryPi = rospy.Publisher('aid/voltageLevelRaspberryPi')
 rate = rospy.Rate(10)  # 10hz
 
 def readVoltage(bus):
