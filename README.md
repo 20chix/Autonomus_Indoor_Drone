@@ -4,44 +4,47 @@
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 [![HitCount](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001.svg)](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001)
 
-# FYP_Autonomus_Drone_DWM1001_ 
-
-Final year project that consist in autonomus drone, developed in ROS using UWB DWM1001 dev board
-
-# 4 DWM1001, 3 anchors and 1 tag
- The tag will be attached to a drone and  3 anchors will be placed on the ground, which will create a triangle.
- The goal is to make the ARDrone follow each anchor and one imaginary anchor which will be placed across coordinates 0,0.
-
 # Abstract 
 
-The aim of this project is to provide a solution for autonomous indoor drone (AID). AID involves localization, control, path planning and autonomous landing/take-off. A robust localization method was implemented using a GPS-like device called DWM1001 provided by Decawave. This device is especially useful for indoor applications as it a has a high accuracy and can only be used in confined spaces.
+The aim of this project is to provide a solution for autonomous indoor drone (AID). AID involves localization, control, path planning and autonomous landing/take-off. A robust localization method was used, using GPS-like device called DWM1001 provided by Decawave . This device is especially useful for indoor applications as it a has a high accuracy and can only be used in confined spaces.
 
-### Prototype
+### Aim
+
+![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/FYP_Diagram.png?raw=true)
+
+
+### Prototype in Gazebo 7
 
 ![](resources/AID_working_prototype.gif)
 
-![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/FYP_Diagram.png?raw=true)
+### Rviz visualization of DWM1001 network 
+
+![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/DWMNetwor_with_description.png?raw=true)
+
+## DWM1001 dev-boards
 
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/decawave-dwm1001-dev-large.jpg?raw=true)
 
 # Packages
-## localizer_dwm1001
-This package is responsible on getting the network coordinates (tag and anchors) from dwm1001 dev board via USB.
-![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/FYP_Diagram_dev_board.png?raw=true)
+**`localizer_dwm1001`** This package is responsible on getting the network coordinates (tag and anchors) from dwm1001 dev board via USB, and pubblish in coordinates in topics.
 
-## shortest_path 
-This package is responsible for calculating the shortest, using a* algorithm, from the tag to a anchor at the time, this package will publish a string of directions for example 777788888844444442222222111111. We will use these directions to control the drone.
-![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/Shortest_Path.png?raw=true)
+**`fyp`** This package is responsible on controlling the drone, reading waypoints from xml file, process joystick input, land and takeoff the drone.
 
-## Dynamic reconfigure DWM1001
+**`ardrone_simulator`** This package is responsible on simulating the ardrone on gazebo7.
+
+**`joy`** This package is responsible on interfacing joystick.
+
+**`generate_map`** This package is responsible on creating markers in Rviz.
+
+
+Other packages were made for testing(I will remove them once I get a working prototype on the real drone)
+
+
+## Dynamic reconfigure of DWM1001
 In this package we want to be able to change some variable from ground station, while the drone is flying.
 
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/dynamic_config.png?raw=true)
 
-## DWM1001 Network example with RVIZ
-In this package we visualize the DWM1001 network coordinates in RVIZ, using simple marker tutorial. 
-
-![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/Screenshot%20from%202018-10-07%2013-31-00.png?raw=true)
 
 
 ## ROS Topic monitor
