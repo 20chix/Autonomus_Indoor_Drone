@@ -23,6 +23,7 @@ import sys
 import time
 import os
 import rospy
+from std_msgs.msg import Int16
 
 state_charge = (3.622, 3.832, 4.043, 4.182, 4.21)
 state_discharge = (4.17, 3.74751, 3.501, 3.35, 2.756)
@@ -30,9 +31,13 @@ state_charging = False;
 v_current = 0;
 v_old = 0;
 capacity = 0;
-publisherAidBatteryLevelRaspberryPi = rospy.Publisher('aid/batteryLevelRaspberryPi')
-publisherAidVoltageLevelRaspberryPi = rospy.Publisher('aid/voltageLevelRaspberryPi')
+
+
+rospy.init_node('aid', anonymous=False)
 rate = rospy.Rate(10)  # 10hz
+publisherAidBatteryLevelRaspberryPi = rospy.Publisher('aid/batteryLevelRaspberryPi', Int16, queue_size=10 )
+publisherAidVoltageLevelRaspberryPi = rospy.Publisher('aid/voltageLevelRaspberryPi', Int16, queue_size=10 )
+
 
 def readVoltage(bus):
 
@@ -52,8 +57,6 @@ def readCapacity(bus):
     capacity = swapped / 256
     return capacity
 
-
-bus = smbus.SMBus(1)  # 0 = /dev/i2c-0 (port I2C0), 1 = /dev/i2c-1 (port I2C1)
 
 bus = smbus.SMBus(1)  # 0 = /dev/i2c-0 (port I2C0), 1 = /dev/i2c-1 (port I2C1)
 
@@ -81,17 +84,16 @@ while not rospy.is_shutdown():
     rospy.loginfo("Voltage:%5.2fV" % readVoltage(bus))
     rospy.loginfo("Battery:%5i%%" % capacity)
 
-    publisherAidBatteryLevelRaspberryPi.publish(raspiupshat.getsoc())
-    publisherAidVoltageLevelRaspberryPi.publish(raspiupshat.getv())
+    publisherAidBatteryLevelRaspberryPi.publish(capacity)
+    publisherAidVoltageLevelRaspberryPi.publish(readVoltage(bus))
 
-    if raspiupshat.getsoc() == 100:
+    if capacity == 100:
         rospy.loginfo("Battery FULL")
-    if raspiupshat.getsoc() < 20:
+    if capacity < 20:
         rospy.loginfo("Battery LOW")
-    while 1:
-        if raspiupshat.getsoc() < 5:
-            rospy.loginfo("System will shutdown now,bye!")
-            os.system("sudo shutdown")
+    if capacity < 5:
+    	rospy.loginfo("System will shutdown now,bye!")
+        os.system("sudo shutdown")
 
     rate.sleep()
 
