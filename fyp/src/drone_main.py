@@ -608,6 +608,14 @@ def JoystickCallBack(data):
         rospy.loginfo("Take off Button Pressed: " + str(SYS_DEFS.BUTTON_TAKEOFF))
         actionCode = 1
 
+    elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY] == 1:
+        rospy.loginfo("Emergency landing button pressed: " + str(SYS_DEFS.BUTTON_EMERGENCY))
+        pub_reset.publish(reset_msg)
+
+    elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY_BACKUP] == 1:
+        rospy.loginfo("Emergency landing backup pressed: " + str(SYS_DEFS.BUTTON_EMERGENCY_BACKUP))
+        pub_reset.publish(reset_msg)
+
     elif data.buttons[SYS_DEFS.BUTTON_HOVER] == 1:
         rospy.loginfo("Hover Button Pressed: " + str(SYS_DEFS.BUTTON_HOVER))
         actionCode = 0
