@@ -154,7 +154,7 @@ def run():
     :argument
 
     """
-    global currentDroneData , actionCode, latchStartTime, latched, wayHomePtr, pub_cmd_vel, pub_takeoff, pub_land, pub_reset
+    global currentDroneData , actionCode, targetInMap, latchStartTime, latched, wayHomePtr, pub_cmd_vel, pub_takeoff, pub_land, pub_reset
     latchTime = rospy.Duration(5.0)
     rospy.loginfo("Waiting for a command")
 
