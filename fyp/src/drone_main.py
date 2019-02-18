@@ -154,7 +154,7 @@ def run():
     :argument
 
     """
-    global currentDroneData , actionCode, latchStartTime, latched, wayHomePtr, pub_cmd_vel, pub_takeoff, pub_land, pub_reset
+    global currentDroneData , actionCode, targetInMap, latchStartTime, latched, wayHomePtr, pub_cmd_vel, pub_takeoff, pub_land, pub_reset
     latchTime = rospy.Duration(5.0)
     rospy.loginfo("Waiting for a command")
 
@@ -607,6 +607,14 @@ def JoystickCallBack(data):
     elif data.buttons[SYS_DEFS.BUTTON_TAKEOFF] == 1:
         rospy.loginfo("Take off Button Pressed: " + str(SYS_DEFS.BUTTON_TAKEOFF))
         actionCode = 1
+
+    elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY] == 1:
+        rospy.loginfo("Emergency landing button pressed: " + str(SYS_DEFS.BUTTON_EMERGENCY))
+        pub_reset.publish(reset_msg)
+
+    elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY_BACKUP] == 1:
+        rospy.loginfo("Emergency landing backup pressed: " + str(SYS_DEFS.BUTTON_EMERGENCY_BACKUP))
+        pub_reset.publish(reset_msg)
 
     elif data.buttons[SYS_DEFS.BUTTON_HOVER] == 1:
         rospy.loginfo("Hover Button Pressed: " + str(SYS_DEFS.BUTTON_HOVER))
