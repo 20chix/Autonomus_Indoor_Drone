@@ -1,6 +1,31 @@
 <launch>
 
-    <include file="/home/hadi/catkin_ws/src/generate_map/launch/generate_map.launch" />
-    <node pkg="fyp" type="main.py" name="fyp"/>
+
+
+    <!-- Run gazebo with ardrone-->
+    <include file ="$(find cvg_sim_gazebo)/launch/ardrone_testworld.launch"/>
+
+
+    <!--Run fyp package after 5 seconds, as we need to load waypoints into ghazebo after is loaded-->
+    <node pkg="fyp" type="aid_launch.sh" args="5 fyp aid_main.py "
+        name="fyp" output="screen">
+    </node>
+
+    <!--Run Joystick package with usb params-->
+   	<node name="joy_node" pkg="joy" type="joy_node" clear_params="true">
+		<param name="dev" type="str" value="/dev/input/js0"/>
+	</node>
+
+    <!--Plot linear and angular velocity-->
+    <node pkg='rqt_plot' name='rqt_plot' type='rqt_plot' args='/cmd_vel/linear /cmd_vel/angular'/>
+
+    <!-- ground station with rwt-->
+    <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"/>
+
+
+
+
+
+
 
 </launch>

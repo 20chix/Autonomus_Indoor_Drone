@@ -1,0 +1,8 @@
+<launch>
+
+
+    <!-- <node name="talker"  pkg="beginner_tutorials" type="talker.py" />  -->
+    <test test-name="test_talker" pkg="beginner_tutorials" type="test_talker.py"  />
+
+
+</launch>

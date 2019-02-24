@@ -1,17 +1,9 @@
 <?xml version="1.0"?>
 <data>
-<<<<<<< HEAD
     <waypoint number="1" x="5" y="0" z="3" />
     <waypoint number="2" x="5" y="5" z="3" />
     <waypoint number="3" x="0" y="5" z="3" />
     <waypoint number="5" x="-1" y="0" z="3" />
 	<waypoint number="5" x="-10" y="0" z="3" />
-=======
-    <waypoint number="1" x="4" y="0" z="2" />
-    <waypoint number="2" x="1" y="1" z="2" />
-    <waypoint number="3" x="0" y="1" z="2" />
-    <waypoint number="5" x="-1" y="0" z="2" />
->>>>>>> 0d2e92a3643d9b1ab2c4499634b325ba7b2c9501
-
 
 </data>
