@@ -1,0 +1,8 @@
+<launch>
+    <node name="ORB_mono" pkg="ardrone_orb" type="ros_orb_node" output="screen" args="$(find ardrone_orb)/ORBvoc.txt  $(find ardrone_orb)/settings.yaml">
+		<remap from="/camera/image_raw" to="/ardrone/front/image_raw" />
+    </node>  
+
+	<!--<node pkg="rviz" type="rviz" name="my_rviz" -->
+    	<!--args="./rviz/rviz_config.rviz"/>-->
+</launch>

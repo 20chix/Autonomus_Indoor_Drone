@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package>
+  <name>ardrone_planner_utils</name>
+  <version>0.0.0</version>
+  <description>AR-Drone motion planning package</description>
+
+  <maintainer email="bapaden@mit.edu">brian</maintainer>
+  <license>All rights reserved</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <build_depend>roslib</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>tf</build_depend>  
+  <build_depend>std_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  
+  <run_depend>roscpp</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  
+  
+  <export>
+      
+  </export>
+</package>

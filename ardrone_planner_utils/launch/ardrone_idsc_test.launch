@@ -1,0 +1,18 @@
+<launch>
+
+<!-- This launcher is only intended to be used with artificial or pre-recorded data! If you want to use the idsc package on the ardrone, use the ardrone_idsc_live launcher -->
+
+<!-- launch orb -->
+  <node name="ORB_mono" pkg="ardrone_orb" type="ros_orb_node" output="screen" args="$(find ardrone_orb)/ORBvoc.txt  $(find ardrone_orb)/settings.yaml">
+  <remap from="/camera/image_raw" to="/ardrone/front/image_raw" />
+  </node>
+
+<!-- launch scale estimator-->
+  <node name="scale_estimation_node" pkg="ardrone_orb" type="scale_estimation_node" output="screen" />
+
+<!-- launch rviz -->
+  <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find ardrone_orb)/../rviz/master_config_visiualization.rviz" />
+
+</launch>
+
+
