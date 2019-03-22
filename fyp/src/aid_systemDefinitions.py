@@ -8,10 +8,20 @@ __status__     = "Development"
 
 
 class SYS_DEFS:
-    POINT_GAIN = 0.5
-    ANGLE_GAIN = 0.5
-    ANGLE_ACCURACY = 10
-    WAYPOINT_ACCURACY = 0.50
+
+    AUTHOR          = "Hadi Elmekawi"
+    VERSION         = "1.0"
+    MAINTAINER      = "Hadi Elmekawi"
+    EMAIL           = "w1530819@my.westminster.ac.uk"
+    STATUS          = "Development"
+
+
+    POINT_GAIN          = 0.5
+    ANGLE_GAIN          = 0.5
+    ANGLE_ACCURACY      = 10
+    WAYPOINT_ACCURACY   = 0.50
+    LINEAR_ACCELLERATION_M_PER_SEC = 9.81
+    LINEAR_VELOCITY_KPS = 1000
 
 
     # define the default mapping between joystick buttons and their corresponding actions

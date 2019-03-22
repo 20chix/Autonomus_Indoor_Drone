@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <data>
-    <waypoint number="1" x="5" y="0" z="3" />
-    <waypoint number="2" x="5" y="5" z="3" />
-    <waypoint number="3" x="0" y="5" z="3" />
-    <waypoint number="5" x="-1" y="0" z="3" />
-	<waypoint number="5" x="-10" y="0" z="3" />
+    <waypoint number="1" x="5" y="0" z="1" />
+    <waypoint number="2" x="5" y="5" z="1" />
+    <waypoint number="3" x="0" y="5" z="1" />
+    <waypoint number="5" x="-1" y="0" z="1" />
+	<waypoint number="6" x="-10" y="0" z="1" />
 
 </data>

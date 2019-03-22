@@ -15,7 +15,12 @@
 #
 
 
-
+from aid_systemDefinitions       import SYS_DEFS
+__author__     = SYS_DEFS.AUTHOR
+__version__    = SYS_DEFS.VERSION
+__maintainer__ = SYS_DEFS.MAINTAINER
+__email__      = SYS_DEFS.EMAIL
+__status__     = SYS_DEFS.STATUS
 
 import struct
 import smbus

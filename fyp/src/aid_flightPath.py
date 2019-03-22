@@ -1,4 +1,12 @@
 #!/usr/bin/env python
+from aid_systemDefinitions       import SYS_DEFS
+__author__     = SYS_DEFS.AUTHOR
+__version__    = SYS_DEFS.VERSION
+__maintainer__ = SYS_DEFS.MAINTAINER
+__email__      = SYS_DEFS.EMAIL
+__status__     = SYS_DEFS.STATUS
+
+
 import rospy
 from xml.dom.minidom import parse
 from geometry_msgs.msg          import Pose

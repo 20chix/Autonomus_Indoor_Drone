@@ -1,20 +1,14 @@
 #!/usr/bin/env python
 
-
-__author__     = "Hadi Elmekawi"
-__version__    = "1.0"
-__maintainer__ = "Hadi Elmekawi"
-__email__      = "w1530819@my.westminster.ac.uk"
-__status__     = "Development"
+from aid_systemDefinitions       import SYS_DEFS
+__author__     = SYS_DEFS.AUTHOR
+__version__    = SYS_DEFS.VERSION
+__maintainer__ = SYS_DEFS.MAINTAINER
+__email__      = SYS_DEFS.EMAIL
+__status__     = SYS_DEFS.STATUS
 
 
 import rospy
-import time
-from std_msgs.msg               import Empty
-from fyp.cfg                    import droneGUIConfig
-from dynamic_reconfigure.server import Server
-from nav_msgs.msg               import Odometry
-from ardrone_autonomy.msg       import Navdata
 import xml.etree.ElementTree    as ElementTree
 
 

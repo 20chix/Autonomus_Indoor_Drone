@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
-
-__author__     = "Hadi Elmekawi"
-__version__    = "1.0"
-__maintainer__ = "Hadi Elmekawi"
-__email__      = "w1530819@my.westminster.ac.uk"
-__status__     = "Development"
-
+from aid_systemDefinitions       import SYS_DEFS
+__author__     = SYS_DEFS.AUTHOR
+__version__    = SYS_DEFS.VERSION
+__maintainer__ = SYS_DEFS.MAINTAINER
+__email__      = SYS_DEFS.EMAIL
+__status__     = SYS_DEFS.STATUS
 
 import rospy
 import time
@@ -19,11 +18,8 @@ from ardrone_autonomy.msg        import Navdata
 import xml.etree.ElementTree     as ElementTree
 from aid_loadWaypointsInGazebo   import LoadWaypointsInGazebo
 from sensor_msgs.msg             import Joy
-from aid_systemDefinitions       import SYS_DEFS
 from aid_waypoints               import DroneWaypoint
 import math
-import os
-
 from geometry_msgs.msg import (
     PoseWithCovariance,
     Pose,
@@ -71,10 +67,6 @@ lastSavedWaypoint.position.x = 0
 lastSavedWaypoint.position.y = 0
 lastSavedWaypoint.position.z = 0
 
-lastSavedWaypoint.position.x = 0
-lastSavedWaypoint.position.y = 0
-lastSavedWaypoint.position.z = 0
-
 currentWaypointCounterForFlightPath = 0
 currentSavedWaypointPtr = 0
 
@@ -115,10 +107,10 @@ lastDataSampleTime = rospy.Time()
 rate = rospy.Rate(50)
 
 # Define publishers and messages that will be used
-pub_cmd_vel = rospy.Publisher('/cmd_vel'        , Twist, queue_size=1)
-pub_takeoff = rospy.Publisher('/ardrone/takeoff', Empty, queue_size=1)
-pub_land    = rospy.Publisher('/ardrone/land'   , Empty, queue_size=1)
-pub_reset   = rospy.Publisher("ardrone/reset"   , Empty, queue_size=1)
+pub_cmd_vel  = rospy.Publisher('/cmd_vel'             , Twist, queue_size=1)
+pub_takeoff  = rospy.Publisher('/ardrone/takeoff'     , Empty, queue_size=1)
+pub_land     = rospy.Publisher('/ardrone/land'        , Empty, queue_size=1)
+pub_reset    = rospy.Publisher("ardrone/reset"        , Empty, queue_size=1)
 
 
 
@@ -148,8 +140,6 @@ def init():
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
     rospy.Subscriber("joy", Joy, JoystickCallBack)
 
-
-
     gazeboWaypoints = LoadWaypointsInGazebo()
     gazeboWaypoints.addWaypointsFromXMLToGazebo()
 
@@ -169,13 +159,10 @@ def run():
     rospy.loginfo("Waiting for a command")
 
 
-    # Decide Saftey Action if Saftey-Loops are enables
-    # if (safeFlight):
-    #    decideSafetyAction()
-
     while not rospy.is_shutdown():
 
         publishWaypoints()
+        publishArdronePos()
 
         # Reset the latch  time
         if actionCode == 0:
@@ -195,7 +182,7 @@ def run():
                 actionCode = 0
         # Land
         elif actionCode == 2:
-            if currentDroneData.z <= 0.5:
+            if currentDroneData.z <=  0.5:
 
                 if (not latched):
                     latchStartTime = rospy.get_rostime()
@@ -247,6 +234,9 @@ def run():
                 rospy.loginfo("Waypoint Reached ")
                 command(0, 0, 0, 0, 0, 0)
                 actionCode = 0
+
+
+                #hello
 
 
         # Look at waypoint
@@ -317,11 +307,12 @@ def run():
                         zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
                         command(0, 0, 0, 0, 0, zRotAct)
                 else:
-                    rospy.loginfo("Waypoint Reached ")
                     rospy.loginfo("Target DD X: " + str(targetInMap.position.x) +
                                   " Y: " + str(targetInMap.position.y) +
                                   " Z: " + str(targetInMap.position.z))
                     currentWaypointCounterForFlightPath +=  1
+                    rospy.loginfo("Waypoint Reached " + str(currentWaypointCounterForFlightPath))
+
             else:
                 rospy.loginfo("XML waypoints finished")
                 currentWaypointCounterForFlightPath = 0
@@ -409,7 +400,7 @@ def command( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
 def realPoseCallBack(realPoseData):
     """Get real position from /ground_truth/state topic
 
-    Keyword arguments:
+    :argument
     realPoseData -- Pose data from topic
 
     """
@@ -482,28 +473,32 @@ def navDataCallBack(nav_msg):
         navDataRotZ360 = nav_msg.rotZ
 
     # Linear Velocities
-    currentDroneData.xVel = nav_msg.vx/1000  # [m / sec]
-    currentDroneData.yVel = nav_msg.vy/1000  # [m / sec]
-    currentDroneData.zVel = nav_msg.vz/1000  # [m / sec]
+    # 1 km/s is 1000 metres per second which is 1000 [m / sec]
+    currentDroneData.xVel = nav_msg.vx /SYS_DEFS.LINEAR_VELOCITY_KPS
+    currentDroneData.yVel = nav_msg.vy /SYS_DEFS.LINEAR_VELOCITY_KPS
+    currentDroneData.zVel = nav_msg.vz /SYS_DEFS.LINEAR_VELOCITY_KPS
 
     # Linear Accelerations
-    currentDroneData.xAcc = nav_msg.ax * 9.81  # [m / s ^ 2]
-    currentDroneData.yAcc = nav_msg.ay * 9.81  # [m / s ^ 2]
-    currentDroneData.zAcc = nav_msg.az * 9.81  # [m / s ^ 2]
+    # The metre per second squared is the unit of acceleration in the International System of Units (SI)
+    # https://en.wikipedia.org/wiki/Metre_per_second_squared [m / s ^ 2]
+    # 1 g0 	980.665 	32.1740 	9.80665 	1
+    currentDroneData.xAcc = nav_msg.ax * SYS_DEFS.LINEAR_ACCELLERATION_M_PER_SEC
+    currentDroneData.yAcc = nav_msg.ay * SYS_DEFS.LINEAR_ACCELLERATION_M_PER_SEC
+    currentDroneData.zAcc = nav_msg.az * SYS_DEFS.LINEAR_ACCELLERATION_M_PER_SEC
 
-    # Angular Rotations
-    currentDroneData.xRot = nav_msg.rotX  # Degrees
-    currentDroneData.yRot = nav_msg.rotY  # Degrees
-    currentDroneData.zRot = nav_msg.rotZ  # Degrees
+    # Angular Rotations in Degrees
+    currentDroneData.xRot = nav_msg.rotX
+    currentDroneData.yRot = nav_msg.rotY
+    currentDroneData.zRot = nav_msg.rotZ
 
     if not firstTimeSamplingData:
 
-        dt = (currentDroneData.timeStamp - lastDroneData.timeStamp).to_sec()
-        dt = dt + 0.02
+        differenceTIme = (currentDroneData.timeStamp - lastDroneData.timeStamp).to_sec()
+        differenceTIme = differenceTIme + 0.02
 
-        currentDroneData.xRotVel = (currentDroneData.xRot - lastDroneData.xRot)/dt  # Degrees / Sec
-        currentDroneData.yRotVel = (currentDroneData.yRot - lastDroneData.yRot)/dt  # Degrees / sec
-        currentDroneData.zRotVel = (currentDroneData.zRot - lastDroneData.zRot)/dt  # Degrees / sec
+        currentDroneData.xRotVel = (currentDroneData.xRot - lastDroneData.xRot)/differenceTIme  # Degrees / Sec
+        currentDroneData.yRotVel = (currentDroneData.yRot - lastDroneData.yRot)/differenceTIme  # Degrees / sec
+        currentDroneData.zRotVel = (currentDroneData.zRot - lastDroneData.zRot)/differenceTIme  # Degrees / sec
 
         if poseEstimationMethod == 1:
             currentDroneData.x = realPose.pose.position.x  # meters[m]
@@ -515,33 +510,9 @@ def navDataCallBack(nav_msg):
             currentDroneData.y = externalEstimatedPose.pose.position.y  # meters[m]
             currentDroneData.z = externalEstimatedPose.pose.position.z  # meters[m]
 
-        elif poseEstimationMethod == 3:
-            estimatePoseDeadReckoning()
-            currentDroneData.x = estimatedPoseDR.pose.position.x  # meters[m]
-            currentDroneData.y = estimatedPoseDR.pose.position.y  # meters[m]
-            currentDroneData.z = estimatedPoseDR.pose.position.z  # meters[m]
-
     firstTimeSamplingData = False
     lastDroneData = currentDroneData
 
-
-def estimatePoseDeadReckoning():
-    """Estimate the Pose internaly using Dead Reckoning
-
-     :argument
-
-    """
-
-    zRot = navDataRotZ360 * math.pi / 180
-    dt = (currentDroneData.timeStamp - lastDroneData.timeStamp).toSec()
-    xd1 = estimatedPoseDR.position.x
-    xd2 = currentDroneData.xVel * dt
-    yd1 = estimatedPoseDR.position.y
-    yd2 = currentDroneData.yVel * dt
-
-    estimatedPoseDR.position.x = xd1 + (math.cos(zRot) * (xd2) - math.sin(zRot) * (yd2))
-    estimatedPoseDR.position.y = yd1 + (math.sin(zRot) * (xd2) + math.cos(zRot) * (yd2))
-    estimatedPoseDR.position.z = estimatedPoseDR.position.z + currentDroneData.zVel * dt  # m
 
 
 def wayPointReached(tolerance):
@@ -561,7 +532,8 @@ def wayPointReached(tolerance):
 def wayPointFaced(tolerance):
     """Determine if the waypoint  is faced 
 
-    Keyword arguments:
+    :arguments
+    tolerance -- tolerance of the waypoint faced
     
     """
     if ((abs(targetInDrone.orientation.z)) < tolerance):
@@ -598,6 +570,17 @@ def decideSafetyAction():
                     lastSavedWayHomePoint.position.x = 0
                     lastSavedWayHomePoint.position.y = 0
                     lastSavedWayHomePoint.position.z = 0.2
+
+
+
+
+def publishArdronePos():
+
+    global realPose
+
+    dronePos = realPose.pose  # meters[m]
+    pub_ardrone_get_pose = rospy.Publisher('/aid/ardrone/get_pos/', Pose, queue_size=1)
+    pub_ardrone_get_pose.publish(dronePos)
 
 
 def publishWaypoints():
