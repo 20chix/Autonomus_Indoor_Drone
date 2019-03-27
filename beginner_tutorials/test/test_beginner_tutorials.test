@@ -1,8 +1,9 @@
 <launch>
 
-
-    <!-- <node name="talker"  pkg="beginner_tutorials" type="talker.py" />  -->
-    <test test-name="test_talker" pkg="beginner_tutorials" type="test_talker.py"  />
+  <!--<node pkg="localizer_dwm1001" type="mynode" name="mynode" />-->
+<!--<test test-name="test_fyp" pkg="fyp" type="test_code.py" />-->
+<!--<test test-name="test_anchor_0" pkg="localizer_dwm1001" type="test_Anchor_0.py" />-->
+    <test test-name="test_talker" pkg="beginner_tutorials" type="test_talker.py" />
 
 
 </launch>
