@@ -9,13 +9,16 @@ __email__      = "w1530819@my.westminster.ac.uk"
 __status__     = "Development"
 
 
-import rospy, sys, time, serial
+import rospy, sys, time, serial, os
 from std_msgs.msg               import String
+from geometry_msgs.msg          import Pose
 from dwm1001_serialPort         import SERIAL_PORT_DETAILS
 from dwm1001_apiCommands        import DWM1001_API_COMMANDS
 from dwm1001_sys_defs           import SYS_DEFS
 from dynamic_reconfigure.server import Server
 from localizer_dwm1001.cfg      import DWM1001_Tune_SerialConfig
+from localizer_dwm1001.msg      import Anchor
+from localizer_dwm1001.msg      import Tag
 
 # initialize the node
 rospy.init_node('Localizer_DWM1001', anonymous=False)
@@ -30,6 +33,10 @@ dynamicConfig_SERIAL_PORT = {"serial_port": ""}
 # initialize ros rate 10hz
 rate = rospy.Rate(200)
 
+# allow serial port to be detected by user
+os.popen("sudo chmod 777 /dev/ttyACM0", "w")
+
+
 # initialize serial port connections
 serialPortDWM1001 = serial.Serial(
     port     = SERIAL_PORT_DETAILS.name,
@@ -41,12 +48,12 @@ serialPortDWM1001 = serial.Serial(
 
 # initialize topics
 # TODO change this Pose message, String is to messy 
-pubblisher_Network  = rospy.Publisher('DWM1001_Network',          String, queue_size=10)
-pubblisher_Anchor_0 = rospy.Publisher('DWM1001_Network_Anchor_0', String, queue_size=10)
-pubblisher_Anchor_1 = rospy.Publisher('DWM1001_Network_Anchor_1', String, queue_size=10)
-pubblisher_Anchor_2 = rospy.Publisher('DWM1001_Network_Anchor_2', String, queue_size=10)
-pubblisher_Anchor_3 = rospy.Publisher('DWM1001_Network_Anchor_3', String, queue_size=10)
-pubblisher_Tag      = rospy.Publisher('DWM1001_Network_Tag',      String, queue_size=10)
+#pubblisher_Network  = rospy.Publisher('DWM1001_Network',          String, queue_size=10)
+#pubblisher_Anchor_0 = rospy.Publisher('DWM1001_Network_Anchor_0', String, queue_size=10)
+#pubblisher_Anchor_1 = rospy.Publisher('DWM1001_Network_Anchor_1', String, queue_size=10)
+#pubblisher_Anchor_2 = rospy.Publisher('DWM1001_Network_Anchor_2', String, queue_size=10)
+#pubblisher_Anchor_3 = rospy.Publisher('DWM1001_Network_Anchor_3', String, queue_size=10)
+#pubblisher_Tag      = rospy.Publisher('DWM1001_Network_Tag',      String, queue_size=10)
 
 
 
@@ -94,7 +101,7 @@ def main():
             except IndexError:
                 rospy.loginfo("Found index error in the network array!DO SOMETHING!")
             # print coordinates and info of the network
-            rospy.loginfo(networkDataArray)
+            #rospy.loginfo(networkDataArray)
 
 
     except KeyboardInterrupt:
@@ -115,45 +122,52 @@ def main():
 
 
 def pubblishCoordinatesIntoTopics(networkDataArray):
-    tempNetworkArray = networkDataArray
+    # loop trough the array given by the serial port
+    for network in networkDataArray:
 
+        # check if there is any entry starting with AN, which means there is an anchor
+        if 'AN' in network:
+            # get the number after'AN' which we will use to pubblish topics, example /dwm1001/anchor1
+            temp_anchor_number = networkDataArray[networkDataArray.index(network)]
+            # construct the object for anchor(s)
+            anchor = Anchor(str(networkDataArray[networkDataArray.index(network)   + 1]),
+                            float(networkDataArray[networkDataArray.index(network) + 2]),
+                            float(networkDataArray[networkDataArray.index(network) + 3]),
+                            float(networkDataArray[networkDataArray.index(network) + 4]),
+                            float(networkDataArray[networkDataArray.index(network) + 5]))
 
+            # publish each anchor, add anchor number to the topic, so we can pubblish multiple anchors
+            # example /dwm1001/anchor0, the last digit is taken from AN0 and so on
+            pub_anchor = rospy.Publisher('/dwm1001/anchor'+str(temp_anchor_number[-1]), Anchor)
+            pub_anchor.publish(anchor)
+            rospy.loginfo("Anchor: "
+                          + str(anchor.id)
+                          + " x: "
+                          + str(anchor.x)
+                          + " y: "
+                          + str(anchor.y)
+                          + " z: "
+                          + str(anchor.z))
 
+        elif 'POS' in network:
 
-    #Number of indexes that should be received
-    if(len(tempNetworkArray) == 31):
+            # construct the object for the tag
+            tag = Tag(float(networkDataArray[networkDataArray.index(network) + 1]),
+                      float(networkDataArray[networkDataArray.index(network) + 2]),
+                      float(networkDataArray[networkDataArray.index(network) + 3]),)
 
+            # publish tag
+            pub_anchor = rospy.Publisher('/dwm1001/tag', Tag)
+            pub_anchor.publish(tag)
 
-        # Get numbers of anchors
-        # DWM1001_NETWORK.anchors = networkDataArray[1]
-        # TODO delete this after debugging
-        rospy.loginfo("Number(s) of Anchors: " + networkDataArray[1])
-        # TODO delete this after debugging
-        rospy.loginfo("Length of array: " + str(len(networkDataArray)))
+            rospy.loginfo("Tag: "
+                          + " x: "
+                          + str(tag.x)
+                          + " y: "
+                          + str(tag.y)
+                          + " z: "
+                          + str(tag.z))
 
-        # publish coordinates and info of the network
-        pubblisher_Network.publish(str(networkDataArray))
-
-        # pubblish coordinates for first anchor
-        pubblisher_Anchor_0.publish(str(networkDataArray[SYS_DEFS.INDEX_22] + " "
-                                        + networkDataArray[SYS_DEFS.INDEX_23] + " "
-                                        + networkDataArray[SYS_DEFS.INDEX_24]))
-        # publish coordinates for second anchor
-        pubblisher_Anchor_1.publish(str(networkDataArray[SYS_DEFS.INDEX_16] + " "
-                                        + networkDataArray[SYS_DEFS.INDEX_17] + " "
-                                        + networkDataArray[SYS_DEFS.INDEX_18]))
-        # publish coordinates for third anchor
-        pubblisher_Anchor_2.publish(str(networkDataArray[SYS_DEFS.INDEX_4] + " "
-                                        + networkDataArray[SYS_DEFS.INDEX_5] + " "
-                                        + networkDataArray[SYS_DEFS.INDEX_6]))
-        # publish coordinates for fourth anchor
-        pubblisher_Anchor_3.publish(str(networkDataArray[SYS_DEFS.INDEX_10] + " "
-                                        + networkDataArray[SYS_DEFS.INDEX_11] + " "
-                                        + networkDataArray[SYS_DEFS.INDEX_12]))
-    # publish coordinates for tag
-    pubblisher_Tag.publish(str(networkDataArray[SYS_DEFS.INDEX_27] + " "
-                               + networkDataArray[SYS_DEFS.INDEX_28] + " "
-                               + networkDataArray[SYS_DEFS.INDEX_29]))
 
 
 
