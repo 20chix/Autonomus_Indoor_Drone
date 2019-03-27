@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
-__author__     = "Hadi Elmekawi"
-__version__    = "1.0"
-__maintainer__ = "Hadi Elmekawi"
-__email__      = "w1530819@my.westminster.ac.uk"
-__status__     = "Development"
+from dwm1001_sys_defs           import SYS_DEFS
+
+__author__     = SYS_DEFS.AUTHOR
+__version__    = SYS_DEFS.VERSION
+__maintainer__ = SYS_DEFS.MAINTAINER
+__email__      = SYS_DEFS.EMAIL
+__status__     = SYS_DEFS.STATUS
 
 
 import serial

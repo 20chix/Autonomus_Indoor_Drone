@@ -8,6 +8,14 @@ __status__     = "Development"
 
 
 class SYS_DEFS:
+
+    AUTHOR          = "Hadi Elmekawi"
+    VERSION         = "1.0"
+    MAINTAINER      = "Hadi Elmekawi"
+    EMAIL           = "w1530819@my.westminster.ac.uk"
+    STATUS          = "Development"
+
+
     INDEX_0     = 0
     INDEX_1     = 1
     INDEX_2     = 2

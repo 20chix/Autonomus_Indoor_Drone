@@ -2,11 +2,12 @@
 """ For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
 """
 
-__author__     = "Hadi Elmekawi"
-__version__    = "1.0"
-__maintainer__ = "Hadi Elmekawi"
-__email__      = "w1530819@my.westminster.ac.uk"
-__status__     = "Development"
+from dwm1001_sys_defs           import SYS_DEFS
+__author__     = SYS_DEFS.AUTHOR
+__version__    = SYS_DEFS.VERSION
+__maintainer__ = SYS_DEFS.MAINTAINER
+__email__      = SYS_DEFS.EMAIL
+__status__     = SYS_DEFS.STATUS
 
 
 import rospy, sys, time, serial, os
@@ -14,7 +15,6 @@ from std_msgs.msg               import String
 from geometry_msgs.msg          import Pose
 from dwm1001_serialPort         import SERIAL_PORT_DETAILS
 from dwm1001_apiCommands        import DWM1001_API_COMMANDS
-from dwm1001_sys_defs           import SYS_DEFS
 from dynamic_reconfigure.server import Server
 from localizer_dwm1001.cfg      import DWM1001_Tune_SerialConfig
 from localizer_dwm1001.msg      import Anchor
@@ -23,9 +23,7 @@ from localizer_dwm1001.msg      import Tag
 # initialize the node
 rospy.init_node('Localizer_DWM1001', anonymous=False)
 
-# TODO decide what to do with joystick button in the furture
-startButton = False
-
+serialReadLine = ""
 dynamicConfig_OPEN_PORT   = {"open_port": False}
 dynamicConfig_CLOSE_PORT  = {"close_port": False}
 dynamicConfig_SERIAL_PORT = {"serial_port": ""}
@@ -46,26 +44,16 @@ serialPortDWM1001 = serial.Serial(
     bytesize = SERIAL_PORT_DETAILS.bytesize
 )
 
-# initialize topics
-# TODO change this Pose message, String is to messy 
-#pubblisher_Network  = rospy.Publisher('DWM1001_Network',          String, queue_size=10)
-#pubblisher_Anchor_0 = rospy.Publisher('DWM1001_Network_Anchor_0', String, queue_size=10)
-#pubblisher_Anchor_1 = rospy.Publisher('DWM1001_Network_Anchor_1', String, queue_size=10)
-#pubblisher_Anchor_2 = rospy.Publisher('DWM1001_Network_Anchor_2', String, queue_size=10)
-#pubblisher_Anchor_3 = rospy.Publisher('DWM1001_Network_Anchor_3', String, queue_size=10)
-#pubblisher_Tag      = rospy.Publisher('DWM1001_Network_Tag',      String, queue_size=10)
-
-
 
 def main():
+    global serialReadLine
 
-    #update dynamic configuratio
-    updateDynamicConfiguration_SERIALPORT()
+    #TODO implemnt functionality dynamic configuration
+    #updateDynamicConfiguration_SERIALPORT()
     # close the serial port in case the previous run didn't closed it properly
     serialPortDWM1001.close()
     # sleep for one sec
     time.sleep(1)
-    #TODO Allow permission of serial port from code
     # open serial port
     serialPortDWM1001.open()
 
@@ -91,8 +79,8 @@ def main():
             # sleep for 10Hz - because why not
             rate.sleep()
 
-            """" Declare array that will hold network data such us coordinates of anchor and tag
-                 split serial port message by comma ',' """
+            #Declare array that will hold network data such us coordinates of anchor and tag
+            # split serial port message by comma ','
             networkDataArray = [ x.strip() for x in serialReadLine.strip().split(',') ]
 
             try:
@@ -100,8 +88,7 @@ def main():
 
             except IndexError:
                 rospy.loginfo("Found index error in the network array!DO SOMETHING!")
-            # print coordinates and info of the network
-            #rospy.loginfo(networkDataArray)
+
 
 
     except KeyboardInterrupt:
@@ -138,7 +125,7 @@ def pubblishCoordinatesIntoTopics(networkDataArray):
 
             # publish each anchor, add anchor number to the topic, so we can pubblish multiple anchors
             # example /dwm1001/anchor0, the last digit is taken from AN0 and so on
-            pub_anchor = rospy.Publisher('/dwm1001/anchor'+str(temp_anchor_number[-1]), Anchor)
+            pub_anchor = rospy.Publisher('/dwm1001/anchor'+str(temp_anchor_number[-1]), Anchor, queue_size=1)
             pub_anchor.publish(anchor)
             rospy.loginfo("Anchor: "
                           + str(anchor.id)
@@ -157,7 +144,7 @@ def pubblishCoordinatesIntoTopics(networkDataArray):
                       float(networkDataArray[networkDataArray.index(network) + 3]),)
 
             # publish tag
-            pub_anchor = rospy.Publisher('/dwm1001/tag', Tag)
+            pub_anchor = rospy.Publisher('/dwm1001/tag', Tag , queue_size=1)
             pub_anchor.publish(tag)
 
             rospy.loginfo("Tag: "
@@ -167,7 +154,6 @@ def pubblishCoordinatesIntoTopics(networkDataArray):
                           + str(tag.y)
                           + " z: "
                           + str(tag.z))
-
 
 
 
@@ -209,42 +195,22 @@ def initializeDWM1001API():
     serialPortDWM1001.write(DWM1001_API_COMMANDS.SINGLE_ENTER)
 
 
-
-""" TODO use this for future maintanance, when you want to control DWM from joy
-    Receives joystick messages (subscribed to Joy topic) """
-def JoyCallback(data):
-    global startButton
-
-    #That's the select button
-    if(data.buttons[11] == 1):
-        startButton = True
-    else:
-        startButton = False
-
-
-
-
-
 def callbackDynamicConfig(config, leve):
-    global serialPortDWM1001
-    rospy.loginfo("""Reconfigure Request: {dwm1001_network_info}, {open_port},\ 
-          {serial_port}, {close_port}""".format(**config))
+    global serialReadLine
+    #rospy.loginfo("""Reconfigure Request: {dwm1001_network_info}, {open_port},\
+    #      {serial_port}, {close_port}""".format(**config))
 
     if config["quit_dwm1001_api"]:
-        rospy.loginfo("Trying to quit from dynamic config!!")
-        serialPortDWM1001.write(DWM1001_API_COMMANDS.Quit)
+        rospy.loginfo("Not implement it yet")
         config["quit_dwm1001_api"] = False
 
     if config["close_port"]:
-        rospy.loginfo("Closing port!!")
-        serialPortDWM1001.close()
+        rospy.loginfo("Close port not implement it yet")
         config["close_port"] = False
 
     if config["exit"]:
-        rospy.loginfo("System exit!!")
+        rospy.loginfo("Not implement it yet")
         config["exit"] = False
-        sys.exit()
-
 
     return config
 
