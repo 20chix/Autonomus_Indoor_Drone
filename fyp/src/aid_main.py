@@ -17,8 +17,13 @@ from nav_msgs.msg                import Odometry
 from aid_lastDroneData           import lastDroneDataClass
 from ardrone_autonomy.msg        import Navdata
 from aid_loadWaypointsInGazebo   import LoadWaypointsInGazebo
-from sensor_msgs.msg             import Joy
+from aid_loadDwm1001InGazebo     import LoadDwm1001InGazebo
 from aid_waypoints               import DroneWaypoint
+from sensor_msgs.msg             import Joy
+from localizer_dwm1001.msg       import Anchor
+from localizer_dwm1001.msg       import Tag
+
+
 import math
 from geometry_msgs.msg import (
     PoseWithCovariance,
@@ -139,14 +144,27 @@ def init():
     rospy.Subscriber('/ardrone/navdata', Navdata, navDataCallBack)
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
     rospy.Subscriber("joy", Joy, JoystickCallBack)
+    rospy.Subscriber("/dwm1001/anchor0", Anchor, Anchor0callback)
+    # rospy.Subscriber("/dwm1001/anchor1", Anchor, Anchor1callback)
+    # rospy.Subscriber("/dwm1001/anchor2", Anchor, Anchor2callback)
+    # rospy.Subscriber("/dwm1001/anchor3", Anchor, Anchor3callback)
+    # rospy.Subscriber("/dwm1001/tag",     Tag, TagCallback)
 
-    gazeboWaypoints = LoadWaypointsInGazebo()
-    gazeboWaypoints.addWaypointsFromXMLToGazebo()
+    #gazeboWaypoints = LoadWaypointsInGazebo()
+    #gazeboWaypoints.addWaypointsFromXMLToGazebo()
 
 
 
 
     run()
+
+
+
+def Anchor0callback(data):
+    gazeboDwm1001 = LoadDwm1001InGazebo()
+    gazeboDwm1001.addWaypointsFromXMLToGazebo(data.x, data.y, data.z)
+
+
 
 # TODO delete this, Here for reference
 # # Porportional Controller

@@ -68,7 +68,6 @@ class DroneWaypoint(object):
 
         """
 
-
         # Declare an empty array
         dummyWaypointsCoordinatesArrayFromXML = []
 

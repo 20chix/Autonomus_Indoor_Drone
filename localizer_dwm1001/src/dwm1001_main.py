@@ -17,6 +17,7 @@ from dynamic_reconfigure.server     import Server
 from localizer_dwm1001.cfg          import DWM1001_Tune_SerialConfig
 from localizer_dwm1001.msg          import Anchor
 from localizer_dwm1001.msg          import Tag
+from localizer_dwm1001.srv         import Anchor_0
 
 
 
@@ -88,7 +89,6 @@ class dwm1001_localizer:
         try:
 
             while not rospy.is_shutdown():
-
                 # just read everything from serial port
                 serialReadLine = serialPortDWM1001.read_until()
 
@@ -174,7 +174,7 @@ class dwm1001_localizer:
                           float(networkDataArray[networkDataArray.index(network) + 3]),)
 
                 # publish tag
-                pub_anchor = rospy.Publisher('/dwm1001/tag', Tag , queue_size=1)
+                pub_anchor = rospy.Publisher('/dwm1001/tag', Tag, queue_size=1)
                 pub_anchor.publish(tag)
 
                 rospy.loginfo("Tag: "
@@ -184,6 +184,7 @@ class dwm1001_localizer:
                               + str(tag.y)
                               + " z: "
                               + str(tag.z))
+
 
 
 
@@ -274,6 +275,7 @@ class dwm1001_localizer:
 def start():
     dwm1001 = dwm1001_localizer()
     dwm1001.main()
+
 
 if __name__ == '__main__':
     try:
