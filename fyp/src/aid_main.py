@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from aid_systemDefinitions       import SYS_DEFS
+
 __author__     = SYS_DEFS.AUTHOR
 __version__    = SYS_DEFS.VERSION
 __maintainer__ = SYS_DEFS.MAINTAINER
@@ -15,7 +16,6 @@ from dynamic_reconfigure.server  import Server
 from nav_msgs.msg                import Odometry
 from aid_lastDroneData           import lastDroneDataClass
 from ardrone_autonomy.msg        import Navdata
-import xml.etree.ElementTree     as ElementTree
 from aid_loadWaypointsInGazebo   import LoadWaypointsInGazebo
 from sensor_msgs.msg             import Joy
 from aid_waypoints               import DroneWaypoint

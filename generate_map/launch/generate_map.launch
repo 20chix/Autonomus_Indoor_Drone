@@ -1,3 +1,0 @@
-<launch>
-    <node pkg="generate_map" type="basic_controls.py" name="generate_map" />
-</launch>

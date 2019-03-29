@@ -5,9 +5,11 @@
     <!-- Run gazebo with ardrone-->
     <include file ="$(find cvg_sim_gazebo)/launch/ardrone_testworld.launch"/>
 
+     <!-- Run dwm1001-->
+    <!--<include file ="$(find localizer_dwm1001)/launch/dwm1001.launch"/>-->
 
     <!--Run fyp package after 5 seconds, as we need to load waypoints into ghazebo after is loaded-->
-    <node pkg="fyp" type="aid_launch.sh" args="5 fyp aid_main.py "
+    <node pkg="fyp" type="aid_launch.sh" args="10 fyp aid_main.py "
         name="fyp" output="screen">
     </node>
 
@@ -18,9 +20,6 @@
 
     <!--Plot linear and angular velocity-->
     <node pkg='rqt_plot' name='rqt_plot' type='rqt_plot' args='/cmd_vel/linear /cmd_vel/angular'/>
-
-    <!-- ground station with rwt-->
-    <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"/>
 
 
 

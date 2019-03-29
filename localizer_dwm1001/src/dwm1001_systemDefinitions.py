@@ -5,7 +5,7 @@ __version__    = "1.0"
 __maintainer__ = "Hadi Elmekawi"
 __email__      = "w1530819@my.westminster.ac.uk"
 __status__     = "Development"
-
+import serial
 
 class SYS_DEFS:
 
@@ -15,6 +15,12 @@ class SYS_DEFS:
     EMAIL           = "w1530819@my.westminster.ac.uk"
     STATUS          = "Development"
 
+
+
+    baudRate = 115200
+    parity = serial.PARITY_ODD
+    stopbits = serial.STOPBITS_TWO
+    bytesize = serial.SEVENBITS
 
     INDEX_0     = 0
     INDEX_1     = 1

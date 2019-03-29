@@ -204,5 +204,4 @@ include_directories(
 #catkin_add_nosetests(test/test_Anchor_0_Publisher.py)
 
 find_package(rostest REQUIRED)
-add_rostest(launch/test_dwm1001.test)
 
