@@ -148,6 +148,21 @@ def init():
 
     run()
 
+# TODO delete this, Here for reference
+# # Porportional Controller
+# # linear velocity in the x-axis:
+# vel_msg.linear.x = 1.5 * sqrt(pow((goal_pose.x - self.pose.x), 2) + pow((goal_pose.y - self.pose.y), 2))
+# vel_msg.linear.y = 0
+# vel_msg.linear.z = 0
+#
+# # angular velocity in the z-axis:
+# vel_msg.angular.x = 0
+# vel_msg.angular.y = 0
+# vel_msg.angular.z = 4 * (atan2(goal_pose.y - self.pose.y, goal_pose.x - self.pose.x) - self.pose.theta)
+
+
+
+
 def run():
     """
     Based on the received command, land,takeoff, go to a waypoint, pivot and go to waypoint or go to origin
