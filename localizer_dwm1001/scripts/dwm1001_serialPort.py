@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from dwm1001_sys_defs           import SYS_DEFS
+from dwm1001_systemDefinitions           import SYS_DEFS
 
 __author__     = SYS_DEFS.AUTHOR
 __version__    = SYS_DEFS.VERSION

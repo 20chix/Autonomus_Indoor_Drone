@@ -2,7 +2,7 @@
 """ For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
 """
 
-from dwm1001_sys_defs           import SYS_DEFS
+from dwm1001_systemDefinitions           import SYS_DEFS
 __author__     = SYS_DEFS.AUTHOR
 __version__    = SYS_DEFS.VERSION
 __maintainer__ = SYS_DEFS.MAINTAINER

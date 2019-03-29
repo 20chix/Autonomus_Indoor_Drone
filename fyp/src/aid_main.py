@@ -149,9 +149,8 @@ def init():
     run()
 
 def run():
-    """Based on the received command, land,takeoff, go to a waypoint, pivot and go to waypoint or go to origin 
-
-    :argument
+    """
+    Based on the received command, land,takeoff, go to a waypoint, pivot and go to waypoint or go to origin
 
     """
     global currentDroneData , actionCode, targetInMap, latchStartTime, latched, wayHomePtr, pub_cmd_vel, pub_takeoff, pub_land, pub_reset
@@ -234,9 +233,6 @@ def run():
                 rospy.loginfo("Waypoint Reached ")
                 command(0, 0, 0, 0, 0, 0)
                 actionCode = 0
-
-
-                #hello
 
 
         # Look at waypoint
@@ -360,15 +356,17 @@ def run():
         rate.sleep()
 
 def setUpTwist( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
-    """Set up and return a message Twist.
+    """
+    Set up and return a message Twist.
 
-    :argument
-    xLinear -- Linear velocity x axis (default 0.0)
-    yLinear -- Linear velocity y axis (default 0.0)
-    zLinear -- Linear velocity z axis (default 0.0)
-    xAngular -- Angular velocity x axis (default 0.0)
-    yAngular -- Angular velocity y axis (default 0.0)
-    zAngular -- Angular velocity z axis (default 0.0)
+    :param xLinear:  Linear velocity x axis (default 0.0)
+    :param yLinear:  Linear velocity y axis (default 0.0)
+    :param zLinear:  Linear velocity z axis (default 0.0)
+    :param xAngular: Angular velocity x axis (default 0.0)
+    :param yAngular: Angular velocity y axis (default 0.0)
+    :param zAngular: Angular velocity z axis (default 0.0)
+
+    :returns: none
 
     """
 

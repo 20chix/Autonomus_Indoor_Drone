@@ -2,7 +2,7 @@
 """ For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
 """
 
-from dwm1001_sys_defs           import SYS_DEFS
+from dwm1001_systemDefinitions      import SYS_DEFS
 __author__     = SYS_DEFS.AUTHOR
 __version__    = SYS_DEFS.VERSION
 __maintainer__ = SYS_DEFS.MAINTAINER
@@ -46,6 +46,15 @@ serialPortDWM1001 = serial.Serial(
 
 
 def main():
+    """
+    Initialize port and dwm1001 api
+
+    :param:
+
+    :returns: none
+
+    """
+
     global serialReadLine
 
     #TODO implemnt functionality dynamic configuration
@@ -76,15 +85,12 @@ def main():
         while not rospy.is_shutdown():
             # just read everything from serial port
             serialReadLine = serialPortDWM1001.read_until()
-            # sleep for 10Hz - because why not
+
+            # sleep for 10Hz
             rate.sleep()
 
-            #Declare array that will hold network data such us coordinates of anchor and tag
-            # split serial port message by comma ','
-            networkDataArray = [ x.strip() for x in serialReadLine.strip().split(',') ]
-
             try:
-                pubblishCoordinatesIntoTopics(networkDataArray)
+                pubblishCoordinatesIntoTopics(splitByComma(serialReadLine))
 
             except IndexError:
                 rospy.loginfo("Found index error in the network array!DO SOMETHING!")
@@ -106,9 +112,32 @@ def main():
             rospy.loginfo("succesfully closed ")
             serialPortDWM1001.close()
 
+def splitByComma(dataFromUSB):
+    """
+    Split network data such us coordinates of anchor and tag, by comma ','
 
+    :param dataFromUSB:  Array from serial port containing all informations, tag xyz and anchor xyz
+
+    :returns: arrayFromUSBFormatted
+
+    """
+
+    arrayFromUSBFormatted = [x.strip() for x in dataFromUSB.strip().split(',')]
+
+    return arrayFromUSBFormatted
 
 def pubblishCoordinatesIntoTopics(networkDataArray):
+    """
+    Publish anchors and tag in topics using Tag and Anchor Object
+
+    :param networkDataArray:  Array from serial port containing all informations, tag xyz and anchor xyz
+
+    :returns: none
+
+    """
+
+    rate.sleep()
+
     # loop trough the array given by the serial port
     for network in networkDataArray:
 
@@ -158,6 +187,16 @@ def pubblishCoordinatesIntoTopics(networkDataArray):
 
 
 def updateDynamicConfiguration_SERIALPORT():
+
+    """
+    Update dynamic configuration of ROS
+
+    :param:
+
+    :returns: none
+
+    """
+
     global dynamicConfig_SERIAL_PORT
 
     # intialize dynamic configuration
@@ -182,6 +221,15 @@ def updateDynamicConfiguration_SERIALPORT():
     dynamicConfigServer.update_configuration(dynamicConfig_SERIAL_PORT)
 
 def initializeDWM1001API():
+    """
+    Initialize dwm1001 api, by sending sending bytes
+
+    :param:
+
+    :returns: none
+
+    """
+
     # reset incase previuos run didn't close properly
     serialPortDWM1001.write(DWM1001_API_COMMANDS.RESET)
     # send ENTER two times in order to access api
@@ -196,6 +244,14 @@ def initializeDWM1001API():
 
 
 def callbackDynamicConfig(config, leve):
+    """
+    Map each button from dynamic configuration gui with specific action
+
+    :param config:  array contains value of the gui
+
+    :returns: config
+
+    """
     global serialReadLine
     #rospy.loginfo("""Reconfigure Request: {dwm1001_network_info}, {open_port},\
     #      {serial_port}, {close_port}""".format(**config))
