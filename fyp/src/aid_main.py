@@ -22,6 +22,8 @@ from aid_waypoints               import DroneWaypoint
 from sensor_msgs.msg             import Joy
 from localizer_dwm1001.msg       import Anchor
 from localizer_dwm1001.msg       import Tag
+from std_srvs.srv                import Trigger, TriggerRequest
+from localizer_dwm1001.srv       import Anchor_0
 
 
 import math
@@ -106,6 +108,12 @@ lastSavedWayHomePoint.position.x = 0
 lastSavedWayHomePoint.position.y = 0
 lastSavedWayHomePoint.position.z = 0.1
 
+
+
+
+gazeboDwm1001 = LoadDwm1001InGazebo()
+
+
 # Setup a node 
 rospy.init_node('fyp', anonymous=False)
 lastDataSampleTime = rospy.Time()
@@ -144,25 +152,18 @@ def init():
     rospy.Subscriber('/ardrone/navdata', Navdata, navDataCallBack)
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
     rospy.Subscriber("joy", Joy, JoystickCallBack)
-    rospy.Subscriber("/dwm1001/anchor0", Anchor, Anchor0callback)
-    # rospy.Subscriber("/dwm1001/anchor1", Anchor, Anchor1callback)
-    # rospy.Subscriber("/dwm1001/anchor2", Anchor, Anchor2callback)
-    # rospy.Subscriber("/dwm1001/anchor3", Anchor, Anchor3callback)
-    # rospy.Subscriber("/dwm1001/tag",     Tag, TagCallback)
 
+    # load waypoints from xml
     #gazeboWaypoints = LoadWaypointsInGazebo()
     #gazeboWaypoints.addWaypointsFromXMLToGazebo()
+
+    #load dwm1001 anchors
+    gazeboDwm1001.execute()
 
 
 
 
     run()
-
-
-
-def Anchor0callback(data):
-    gazeboDwm1001 = LoadDwm1001InGazebo()
-    gazeboDwm1001.addWaypointsFromXMLToGazebo(data.x, data.y, data.z)
 
 
 
@@ -317,7 +318,7 @@ def run():
                 actionCode = 0
 
         # Follow Flightpath
-        elif actionCode == 8:
+        elif actionCode == 12:
 
             global currentWaypointCounterForFlightPath
             targetInMap = droneWaypointsFromXML.getWaypointsCoordinates()
@@ -349,9 +350,38 @@ def run():
                 actionCode = 0
 
 
+        # Follow Flightpath for DWM1001
+        elif actionCode == 8:
 
+            global currentWaypointCounterForFlightPath
+            targetInMap = gazeboDwm1001.getAnchorCoordinates()
+            if gazeboDwm1001.anchorsReached(currentWaypointCounterForFlightPath):
+                returnTargetInDrone(targetInMap)
+                if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+                    if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
+                        zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
+                        xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
+                        yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
+                        zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
+                        command(xAct, yAct, zAct, 0, 0, zRotAct)
 
+                    else:
+                        rospy.loginfo("fixing orientation")
+                        zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
+                        command(0, 0, 0, 0, 0, zRotAct)
+                else:
+                    rospy.loginfo("Target DD X: " + str(targetInMap.position.x) +
+                                  " Y: " + str(targetInMap.position.y) +
+                                  " Z: " + str(targetInMap.position.z))
+                    currentWaypointCounterForFlightPath +=  1
+                    rospy.loginfo("Waypoint Reached " + str(currentWaypointCounterForFlightPath))
 
+            else:
+                rospy.loginfo("XML waypoints finished")
+                currentWaypointCounterForFlightPath = 0
+                command(0, 0, 0, 0, 0, 0)
+                actionCode = 0
+        #anchorsExist
 
         # Go Home
         elif actionCode == 9:

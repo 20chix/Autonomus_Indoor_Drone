@@ -11,6 +11,13 @@ __status__     = SYS_DEFS.STATUS
 import rospy
 import xml.etree.ElementTree    as ElementTree
 
+from localizer_dwm1001.msg       import Anchor
+from localizer_dwm1001.msg       import Tag
+from std_srvs.srv                import Trigger, TriggerRequest
+from localizer_dwm1001.srv       import Anchor_0
+from localizer_dwm1001.srv       import Anchor_1
+from localizer_dwm1001.srv       import Anchor_2
+from localizer_dwm1001.srv       import Anchor_3
 
 import math
 import os
@@ -37,6 +44,8 @@ gazebo_model_dir = os.path.join(dir_of_this_script, '', 'model')
 
 
 class LoadDwm1001InGazebo(object):
+    waypointsCoordinatesArrayFromDwm1001 = []
+    anchorInMap = Pose()
 
     def loadGazeboModels(self, model_name, model_pose, model_type="sdf",
                          model_reference_frame="base_link"):
@@ -109,6 +118,70 @@ class LoadDwm1001InGazebo(object):
                               model_pose = model_pose,
                               model_type = "sdf",
                               model_reference_frame = "base_link")
+
+
+
+    def anchorsReached(self, waypointCounterDidReached):
+        """Check for existence of waypoint and return true if there is one
+
+        :argument
+        waypointCounterDidReached -- requested waypoint
+
+        :return
+        True -- True only if there is a coordinate in the xml file
+
+        """
+
+        # Loop trough the array of tuple and get only the requested waypoint
+        for i in range(len(self.waypointsCoordinatesArrayFromDwm1001)):
+
+            if waypointCounterDidReached == i:
+                self.anchorInMap.position.x = self.waypointsCoordinatesArrayFromDwm1001[i][0]
+                self.anchorInMap.position.y = self.waypointsCoordinatesArrayFromDwm1001[i][1]
+                self.anchorInMap.position.z = self.waypointsCoordinatesArrayFromDwm1001[i][2] + 1
+
+                return True
+
+
+
+    def getAnchorCoordinates(self):
+
+        return self.anchorInMap
+
+    def execute(self):
+
+        # Wait for the service
+        rospy.wait_for_service('/Anchor_0')
+        # Create the connection to the service. Remeber it's a Trigger service
+        anchor_0_service = rospy.ServiceProxy('/Anchor_0', Anchor_0)
+        self.populateWaypointsInGazebo( anchor_0_service().x, anchor_0_service().y, anchor_0_service().z)
+        tupleCoordinatesFromXML = (int(anchor_0_service().x), int(anchor_0_service().y), int(anchor_0_service().z))
+        self.waypointsCoordinatesArrayFromDwm1001.append(tupleCoordinatesFromXML)
+
+        # Wait for the service
+        rospy.wait_for_service('/Anchor_1')
+        # Create the connection to the service. Remeber it's a Trigger service
+        anchor_1_service = rospy.ServiceProxy('/Anchor_1', Anchor_1)
+        self.populateWaypointsInGazebo( anchor_1_service().x, anchor_1_service().y, anchor_1_service().z)
+        tupleCoordinatesFromXML = (int(anchor_1_service().x), int(anchor_1_service().y), int(anchor_1_service().z))
+        self.waypointsCoordinatesArrayFromDwm1001.append(tupleCoordinatesFromXML)
+
+        # Wait for the service
+        rospy.wait_for_service('/Anchor_2')
+        # Create the connection to the service. Remeber it's a Trigger service
+        anchor_2_service = rospy.ServiceProxy('/Anchor_2', Anchor_2)
+        self.populateWaypointsInGazebo( anchor_2_service().x, anchor_2_service().y, anchor_2_service().z)
+        tupleCoordinatesFromXML = (int(anchor_2_service().x), int(anchor_2_service().y), int(anchor_2_service().z))
+        self.waypointsCoordinatesArrayFromDwm1001.append(tupleCoordinatesFromXML)
+
+        # Wait for the service
+        rospy.wait_for_service('/Anchor_3')
+        # Create the connection to the service. Remeber it's a Trigger service
+        anchor_3_service = rospy.ServiceProxy('/Anchor_3', Anchor_3)
+        self.populateWaypointsInGazebo( anchor_3_service().x, anchor_3_service().y, anchor_3_service().z)
+        tupleCoordinatesFromXML = (int(anchor_2_service().x), int(anchor_2_service().y), int(anchor_2_service().z))
+        self.waypointsCoordinatesArrayFromDwm1001.append(tupleCoordinatesFromXML)
+
 
 
     def addWaypointsFromXMLToGazebo(self, x, y, z):
