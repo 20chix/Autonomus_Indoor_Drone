@@ -8,6 +8,8 @@
 
     </node>
 
+    <node pkg="localizer_dwm1001" type="dwm1001_anchorService.py" name="dwm1001_Service" />
+
     <!-- Display topics of anchors and tag into markers so we can view them into Rviz-->
     <node pkg="localizer_dwm1001" type="dwm1001_displayMap.py" name="display_dwm1001" />
     <!-- Run rviz with the saved rviz file-->

@@ -75,6 +75,7 @@ lastSavedWaypoint.position.y = 0
 lastSavedWaypoint.position.z = 0
 
 currentWaypointCounterForFlightPath = 0
+currentWaypointCounterForFlightPathDWM1001 = 0
 currentSavedWaypointPtr = 0
 
 poseEstimationMethod = 1
@@ -153,15 +154,12 @@ def init():
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
     rospy.Subscriber("joy", Joy, JoystickCallBack)
 
-    # load waypoints from xml
-    #gazeboWaypoints = LoadWaypointsInGazebo()
-    #gazeboWaypoints.addWaypointsFromXMLToGazebo()
-
-    #load dwm1001 anchors
-    gazeboDwm1001.execute()
-
-
-
+    # gazeboWaypoints = LoadWaypointsInGazebo()
+    # gazeboWaypoints.addWaypointsFromXMLToGazebo()
+    
+    
+    # gazeboDwm1001 = LoadDwm1001InGazebo()
+    # gazeboDwm1001.execute()
 
     run()
 
@@ -318,7 +316,7 @@ def run():
                 actionCode = 0
 
         # Follow Flightpath
-        elif actionCode == 12:
+        elif actionCode == 8:
 
             global currentWaypointCounterForFlightPath
             targetInMap = droneWaypointsFromXML.getWaypointsCoordinates()
@@ -351,11 +349,11 @@ def run():
 
 
         # Follow Flightpath for DWM1001
-        elif actionCode == 8:
+        elif actionCode == 9:
 
-            global currentWaypointCounterForFlightPath
+            global currentWaypointCounterForFlightPathDWM1001
             targetInMap = gazeboDwm1001.getAnchorCoordinates()
-            if gazeboDwm1001.anchorsReached(currentWaypointCounterForFlightPath):
+            if gazeboDwm1001.anchorsReached(currentWaypointCounterForFlightPathDWM1001):
                 returnTargetInDrone(targetInMap)
                 if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
                     if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
@@ -373,18 +371,18 @@ def run():
                     rospy.loginfo("Target DD X: " + str(targetInMap.position.x) +
                                   " Y: " + str(targetInMap.position.y) +
                                   " Z: " + str(targetInMap.position.z))
-                    currentWaypointCounterForFlightPath +=  1
-                    rospy.loginfo("Waypoint Reached " + str(currentWaypointCounterForFlightPath))
+                    currentWaypointCounterForFlightPathDWM1001 +=  1
+                    rospy.loginfo("Waypoint Reached " + str(currentWaypointCounterForFlightPathDWM1001))
 
             else:
                 rospy.loginfo("XML waypoints finished")
-                currentWaypointCounterForFlightPath = 0
+                currentWaypointCounterForFlightPathDWM1001 = 0
                 command(0, 0, 0, 0, 0, 0)
                 actionCode = 0
         #anchorsExist
 
         # Go Home
-        elif actionCode == 9:
+        elif actionCode == 10:
             returnTargetInDrone(targetInMap)
             if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
                 if wayPointReached(SYS_DEFS.ANGLE_ACCURACY):
@@ -663,15 +661,7 @@ def JoystickCallBack(data):
 
     global actionCode
 
-    rospy.loginfo(data.axes[SYS_DEFS.AXIS_YAW])
-
-    if data.buttons[SYS_DEFS.BUTTON_EMERGENCY] == 1:
-        rospy.loginfo("Emergency Button Pressed: " + str(SYS_DEFS.BUTTON_EMERGENCY))
-
-    elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY_BACKUP] == 1:
-        rospy.loginfo("Emergency backup Button Pressed: " + str(SYS_DEFS.BUTTON_EMERGENCY_BACKUP))
-
-    elif data.buttons[SYS_DEFS.BUTTON_LAND] == 1:
+    if data.buttons[SYS_DEFS.BUTTON_LAND] == 1:
         rospy.loginfo("Land Button Pressed: " + str(SYS_DEFS.BUTTON_LAND))
         actionCode = 2
 
@@ -680,21 +670,29 @@ def JoystickCallBack(data):
         actionCode = 1
 
     elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY] == 1:
-        rospy.loginfo("Emergency landing button pressed: " + str(SYS_DEFS.BUTTON_EMERGENCY))
-        pub_reset.publish(reset_msg)
+        rospy.loginfo("Loading waypoints from XML file: " + str(SYS_DEFS.BUTTON_EMERGENCY))
+        # load waypoints from xml
+        gazeboWaypoints = LoadWaypointsInGazebo()
+        gazeboWaypoints.addWaypointsFromXMLToGazebo()
+
 
     elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY_BACKUP] == 1:
-        rospy.loginfo("Emergency landing backup pressed: " + str(SYS_DEFS.BUTTON_EMERGENCY_BACKUP))
-        pub_reset.publish(reset_msg)
+        rospy.loginfo("loading waypoint from dwm1001: " + str(SYS_DEFS.BUTTON_EMERGENCY_BACKUP))
+        # load dwm1001 anchors
+        gazeboDwm1001.execute()
 
     elif data.buttons[SYS_DEFS.BUTTON_HOVER] == 1:
         rospy.loginfo("Hover Button Pressed: " + str(SYS_DEFS.BUTTON_HOVER))
         actionCode = 0
         command(0, 0, 0, 0, 0, 0)
 
-    elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH] == 1:
-        rospy.loginfo("Follow flight path pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH))
+    elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_XML] == 1:
+        rospy.loginfo("Follow flight path pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_XML))
         actionCode = 8
+
+    elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_DWM1001] == 1:
+        rospy.loginfo("Follow flight path  from dwm1001 pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_DWM1001))
+        actionCode = 9
 
     else:
         command(data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH,
@@ -704,8 +702,8 @@ def JoystickCallBack(data):
                 0 ,
                 data.axes[SYS_DEFS.AXIS_YAW] / SYS_DEFS.SCALE_YAW)
 
-        rospy.loginfo("pitch" + str(data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH) +
-                      " roll " + str(data.axes[SYS_DEFS.AXIX_ROLL] / SYS_DEFS.SCALE_ROLL) +
+        rospy.loginfo("pitch: " + str(data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH) +
+                      " roll: " + str(data.axes[SYS_DEFS.AXIX_ROLL] / SYS_DEFS.SCALE_ROLL) +
                       " yaw: " + str(data.axes[SYS_DEFS.AXIS_YAW] / SYS_DEFS.SCALE_YAW))
 
 
