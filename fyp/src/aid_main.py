@@ -153,12 +153,10 @@ def init():
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
     rospy.Subscriber("joy", Joy, JoystickCallBack)
 
-    # load waypoints from xml
-    #gazeboWaypoints = LoadWaypointsInGazebo()
-    #gazeboWaypoints.addWaypointsFromXMLToGazebo()
+
 
     #load dwm1001 anchors
-    gazeboDwm1001.execute()
+    # gazeboDwm1001.execute()
 
 
 
@@ -722,30 +720,30 @@ def droneGUICallback( config, level):
     if config["land"] == True:
         actionCode = 2
         config["land"] = False
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {land}""".format(**config))
 
     elif config["take_off"] == True:
         actionCode = 1
         config["take_off"] = False
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {take_off}""".format(**config))
 
     elif config["forward"] == True:
         config["forward"] = False
         actionCode = 0
         command(1, 0, 0, 0, 0, 0)
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {forward}""".format(**config))
 
     elif config["backward"] == True:
         config["backward"] = False
         actionCode = 0
         command(-1, 0, 0, 0, 0, 0)
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {backward}""".format(**config))
 
     elif config["left"] == True:
         config["left"] = False
         actionCode = 0
         command(0, 0.5, 0, 0, 0, 0)
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {left}""".format(**config))
 
     elif config["right"] == True:
         config["right"] = False
@@ -757,7 +755,7 @@ def droneGUICallback( config, level):
         config["hover"] = False
         actionCode = 0
         command(0, 0, 0, 0, 0, 0)
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {hover}""".format(**config))
 
     elif config["look_at_waypoint"] == True:
         config["look_at_waypoint"] = False
@@ -765,7 +763,7 @@ def droneGUICallback( config, level):
         targetInMap.position.y = config["targetInMapY"]
         targetInMap.position.z = config["targetInMapZ"]
         actionCode = 5
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {look_at_waypoint}""".format(**config))
 
     elif config["go_to_waypoint"] == True:
         config["go_to_waypoint"] = False
@@ -773,7 +771,7 @@ def droneGUICallback( config, level):
         targetInMap.position.y = config["targetInMapY"]
         targetInMap.position.z = config["targetInMapZ"]
         actionCode = 4
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {go_to_waypoint}""".format(**config))
 
     elif config["look_and_go"] == True:
         config["look_and_go"] = False
@@ -781,15 +779,24 @@ def droneGUICallback( config, level):
         targetInMap.position.y = config["targetInMapY"]
         targetInMap.position.z = config["targetInMapZ"]
         actionCode = 7
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {look_and_go}""".format(**config))
 
-    elif config["get_waypoint"] == True:
-        config["get_waypoint"] = False
-        targetInMap.position.x = config["targetInMapX"]
-        targetInMap.position.y = config["targetInMapY"]
-        targetInMap.position.z = config["targetInMapZ"]
-        actionCode = 6
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+
+    elif config["load_waypoint_gazebo"] == True:
+        config["load_waypoint_gazebo"] = False
+        # load waypoints from xml
+        gazeboWaypoints = LoadWaypointsInGazebo()
+        gazeboWaypoints.addWaypointsFromXMLToGazebo()
+        rospy.loginfo("""Reconfigure Request : {load_waypoint_gazebo}""".format(**config))
+
+    elif config["load_waypoint_dwm1001"] == True:
+        config["load_waypoint_dwm1001"] = False
+        # load waypoints from xml
+        gazeboWaypoints = LoadWaypointsInGazebo()
+        gazeboWaypoints.addWaypointsFromXMLToGazebo()
+        rospy.loginfo("""Reconfigure Request : {load_waypoint_dwm1001}""".format(**config))
+
+
 
     elif config["followFlightPath"] == True:
         config["followFlightPath"]= False
