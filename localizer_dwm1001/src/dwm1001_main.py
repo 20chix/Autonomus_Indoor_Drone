@@ -38,9 +38,11 @@ dynamicConfig_SERIAL_PORT = {"serial_port": ""}
 
 # initialize serial port connections
 serialPortDWM1001 = serial.Serial(
-
-    port       = str(rospy.get_param('~serial_port_name')),
-    baudrate   = int(rospy.get_param('~serial_baud_rate')),
+    
+    # port       = str(rospy.get_param('~serial_port_name')),
+    # baudrate   = int(rospy.get_param('~serial_baud_rate')),
+    port = "/dev/ttyACM0",
+    baudrate = 115200,
     parity=SYS_DEFS.parity,
     stopbits=SYS_DEFS.stopbits,
     bytesize=SYS_DEFS.bytesize
