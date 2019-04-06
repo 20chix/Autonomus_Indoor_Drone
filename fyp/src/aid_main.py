@@ -499,7 +499,9 @@ def returnTargetInDrone(target):
     # Angle from the Drone X - axis(Roll axis) to the point vector in the drone frame
     if targetInDrone.position.x is not 0:
 
-        # atan2() returns a value in all 4 quadrants given the x, y vectors
+        # atan2(y,x) is defined as the angle in the Euclidean plane, given 
+        # in radians, between the positive x-axis and the ray to the point (x,y) ≠ (0,0).
+        # atan2(y,x) returns a single value θ such that −π < θ ≤ π and, for some r > 0,
         targetInDrone.orientation.z = math.atan2(targetInDrone.position.y, targetInDrone.position.x)
 
     # Precaution not to devide by  zero
@@ -599,39 +601,6 @@ def wayPointFaced(tolerance):
     if ((abs(targetInDrone.orientation.z)) < tolerance):
         return True
     return False
-
-
-# Decide on what safety action to follow
-def decideSafetyAction():
-    global actionCode, wasGoingBack, battery, testBatteryBellowLand, testBatteryBellowGoHome, testNoWifi, noWifi
-    # Emergency Land
-    if (battery <= batteryLandThreshold | testBatteryBellowLand):
-        actionCode = 2
-    else:
-        if (battery <= batteryGoHomeThreshold | testBatteryBellowGoHome):
-            wasGoingBack = True
-        elif (noWifi | testNoWifi):
-            wasGoingBack = True
-        else:
-            if wasGoingBack:
-                wasGoingBack = False
-                actionCode = 0
-                command(0, 0, 0, 0, 0, 0)
-
-            if ((abs(currentDroneData.x - lastSavedWayHomePoint.position.x) >= 0.5) |
-                    (abs(currentDroneData.x - lastSavedWayHomePoint.position.y) >= 0.5) |
-                    (abs(currentDroneData.x - lastSavedWayHomePoint.position.z) >= 0.5)):
-
-                if wayHomePtr >= 0:
-                    lastSavedWayHomePoint.position.x = currentDroneData.x
-                    lastSavedWayHomePoint.position.y = currentDroneData.y
-                    lastSavedWayHomePoint.position.z = currentDroneData.z
-                else:
-                    lastSavedWayHomePoint.position.x = 0
-                    lastSavedWayHomePoint.position.y = 0
-                    lastSavedWayHomePoint.position.z = 0.2
-
-
 
 
 def publishArdronePos():
