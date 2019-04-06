@@ -98,7 +98,7 @@ class dwm1001_localizer:
                     self.pubblishCoordinatesIntoTopics(self.splitByComma(serialReadLine))
 
                 except IndexError:
-                    rospy.loginfo("Found index error in the network array!DO SOMETHING!")
+                    rospy.logwarn("Found index out of bound")
 
 
 
