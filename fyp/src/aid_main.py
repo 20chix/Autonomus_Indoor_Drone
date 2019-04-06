@@ -50,9 +50,6 @@ targetInMap           = Pose()
 lastSavedWaypoint     = Pose()
 realPose              = PoseWithCovariance()
 droneWaypointsFromXML = DroneWaypoint()
-
-
-firstTimeSamplingData = True
 latched               = False
 
 
@@ -139,29 +136,8 @@ def init():
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
     rospy.Subscriber("joy", Joy, JoystickCallBack)
 
-
-    # gazeboWaypoints = LoadWaypointsInGazebo()
-    # gazeboWaypoints.addWaypointsFromXMLToGazebo()
-    
-    
-    # gazeboDwm1001 = LoadDwm1001InGazebo()
-    # gazeboDwm1001.execute()
-
     run()
 
-
-
-# TODO delete this, Here for reference
-# # Porportional Controller
-# # linear velocity in the x-axis:
-# vel_msg.linear.x = 1.5 * sqrt(pow((goal_pose.x - self.pose.x), 2) + pow((goal_pose.y - self.pose.y), 2))
-# vel_msg.linear.y = 0
-# vel_msg.linear.z = 0
-#
-# # angular velocity in the z-axis:
-# vel_msg.angular.x = 0
-# vel_msg.angular.y = 0
-# vel_msg.angular.z = 4 * (atan2(goal_pose.y - self.pose.y, goal_pose.x - self.pose.x) - self.pose.theta)
 
 
 
@@ -221,7 +197,7 @@ def run():
             pub_reset.publish(reset_msg)
             actionCode = 0
 
-        # Go to Waypoint
+        # Go to the waypoint without looking
         elif actionCode == 4:
             returnTargetInDrone(targetInMap)
             if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
@@ -253,7 +229,7 @@ def run():
                 actionCode = 0
 
 
-        # Look at waypoint
+        # Look at the waypoint
         elif actionCode == 5:
             rospy.loginfo("inside state 5...")
             returnTargetInDrone(targetInMap)
@@ -261,13 +237,7 @@ def run():
             zRotAct = targetInDrone.orientation.z * gain
             command(0, 0, 0, 0, 0, zRotAct)
 
-        # Get Waypoint
-        elif actionCode == 6:
-            rospy.loginfo("inside state 6...")
-            returnTargetInDrone(targetInMap)
-            rospy.loginfo("" + str(targetInMap))
-
-        # Look and Go to waypoint
+        # Look and Go to the waypoint
         elif actionCode == 7:
             returnTargetInDrone(targetInMap)
             if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
@@ -473,7 +443,7 @@ def navDataCallBack(nav_msg):
 
     """
     
-    global firstTimeSamplingData, navDataRotZ360, droneState, battery, navDataRotZ, lastDroneData, realPose
+    global navDataRotZ360, droneState, battery, navDataRotZ, lastDroneData, realPose
 
     #  Get the time stamp of drone
     currentDroneData.timeStamp = nav_msg.header.stamp
@@ -508,28 +478,19 @@ def navDataCallBack(nav_msg):
     currentDroneData.yRot = nav_msg.rotY
     currentDroneData.zRot = nav_msg.rotZ
 
-    # TODO remove this if statement, only here for testing
-    if not firstTimeSamplingData:
+    differenceTIme = (currentDroneData.timeStamp - lastDroneData.timeStamp).to_sec()
+    # Add 0.02 incase the time is the same
+    differenceTIme = differenceTIme + 0.02
 
-        differenceTIme = (currentDroneData.timeStamp - lastDroneData.timeStamp).to_sec()
-        # Add 0.02 incase the time is the same
-        differenceTIme = differenceTIme + 0.02
+    currentDroneData.xRotVel = (currentDroneData.xRot - lastDroneData.xRot)/differenceTIme  # Degrees / Sec
+    currentDroneData.yRotVel = (currentDroneData.yRot - lastDroneData.yRot)/differenceTIme  # Degrees / sec
+    currentDroneData.zRotVel = (currentDroneData.zRot - lastDroneData.zRot)/differenceTIme  # Degrees / sec
 
-        currentDroneData.xRotVel = (currentDroneData.xRot - lastDroneData.xRot)/differenceTIme  # Degrees / Sec
-        currentDroneData.yRotVel = (currentDroneData.yRot - lastDroneData.yRot)/differenceTIme  # Degrees / sec
-        currentDroneData.zRotVel = (currentDroneData.zRot - lastDroneData.zRot)/differenceTIme  # Degrees / sec
+    if poseEstimationMethod == 1:
+        currentDroneData.x = realPose.pose.position.x  # meters[m]
+        currentDroneData.y = realPose.pose.position.y  # meters[m]
+        currentDroneData.z = realPose.pose.position.z  # meters[m]
 
-        if poseEstimationMethod == 1:
-            currentDroneData.x = realPose.pose.position.x  # meters[m]
-            currentDroneData.y = realPose.pose.position.y  # meters[m]
-            currentDroneData.z = realPose.pose.position.z  # meters[m]
-
-        elif poseEstimationMethod == 2:
-            currentDroneData.x = externalEstimatedPose.pose.position.x  # meters[m]
-            currentDroneData.y = externalEstimatedPose.pose.position.y  # meters[m]
-            currentDroneData.z = externalEstimatedPose.pose.position.z  # meters[m]
-
-    firstTimeSamplingData = False
     # Assign the currentDroneData to lastDroneData
     lastDroneData = currentDroneData
 
@@ -719,7 +680,6 @@ def droneGUICallback( config, level):
         actionCode = 7
         rospy.loginfo("""Reconfigure Request Action code: {look_and_go}""".format(**config))
 
-
     elif config["load_waypoint_gazebo"] == True:
         config["load_waypoint_gazebo"] = False
         # load waypoints from xml
@@ -733,8 +693,6 @@ def droneGUICallback( config, level):
         gazeboWaypoints = LoadWaypointsInGazebo()
         gazeboWaypoints.addWaypointsFromXMLToGazebo()
         rospy.loginfo("""Reconfigure Request : {load_waypoint_dwm1001}""".format(**config))
-
-
 
     elif config["followFlightPath"] == True:
         config["followFlightPath"]= False
