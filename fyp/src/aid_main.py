@@ -33,9 +33,9 @@ from geometry_msgs.msg import (
     Twist,
 )
 
-navDataRotZ = 0
+navDataRotZ    = 0
 navDataRotZ360 = 0
-actionCode = 0
+actionCode     = 0
 
 latchStartTime        = rospy.Duration(5.0)
 externalEstimatedPose = PoseWithCovariance()
@@ -48,19 +48,12 @@ messageTwist          = Twist()
 targetInDrone         = Pose()
 targetInMap           = Pose()
 lastSavedWaypoint     = Pose()
-estimatedPoseDR       = Pose()
 realPose              = PoseWithCovariance()
 droneWaypointsFromXML = DroneWaypoint()
 
 
-
-recordFlightPath      = False
-recordData            = False
-recordImages          = False
 firstTimeSamplingData = True
 latched               = False
-samplingFrontCamera   = False
-wasGoingBack          = False
 
 
 targetInMap.position.x = 0
@@ -80,26 +73,18 @@ currentSavedWaypointPtr = 0
 
 poseEstimationMethod = 1
 
-
-estimatedPoseDR.position.x = 0
-estimatedPoseDR.position.y = 0
-estimatedPoseDR.position.z = 0
 externalEstimatedPose.pose.position.x = 0
 externalEstimatedPose.pose.position.y = 0
 externalEstimatedPose.pose.position.z = 0
 
 #Create two instances of lastDroneDataClass
-lastDroneData = lastDroneDataClass()
+lastDroneData    = lastDroneDataClass()
 currentDroneData = lastDroneDataClass()
 
 
 lastDroneData.xRot = 0
 lastDroneData.yRot = 0
 lastDroneData.zRot = 0
-
-# Safety - Loop Defines
-batteryLandThreshold = 5
-batteryGoHomeThreshold = 50
 
 
 wayHomePtr = -1
@@ -381,38 +366,6 @@ def run():
                 command(0, 0, 0, 0, 0, 0)
                 actionCode = 0
         #anchorsExist
-
-        # Go Home
-        elif actionCode == 10:
-            returnTargetInDrone(targetInMap)
-            if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
-                if wayPointReached(SYS_DEFS.ANGLE_ACCURACY):
-                    zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
-                    xAct = (targetInDrone.position.x * SYS_DEFS.POINT_GAIN)
-                    yAct = (targetInDrone.position.y * SYS_DEFS.POINT_GAIN)
-                    zAct = (targetInDrone.position.z * SYS_DEFS.POINT_GAIN)
-                    command(xAct, yAct, zAct, 0, 0, zRotAct)
-                else:
-                    zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
-                    command(0, 0, 0, 0, 0, zRotAct)
-            # Waypoint reached
-            else:
-                if (wayHomePtr - 1 >= 0):
-                    rospy.loginfo("Waypoint" + str(currentWaypointCounterForFlightPath) +
-                                  " Reached : X " + str(realPose.pose.position.x) +
-                                  " Y: " + str(realPose.pose.position.y) +
-                                  " X: " + str(realPose.pose.position.z))
-
-
-                    wayHomePtr -= 1
-                    command(0, 0, 0, 0, 0, 0)
-
-                else:
-                    rospy.loginfo("Home sweet home")
-                    actionCode = 2  # Land
-                    command(0, 0, 0, 0, 0, 0)
-
-            rospy.spin()
 
         pub_cmd_vel.publish(messageTwist)
         rate.sleep()
