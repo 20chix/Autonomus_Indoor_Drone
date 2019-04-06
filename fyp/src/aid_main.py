@@ -516,19 +516,21 @@ def returnTargetInDrone(target):
 def navDataCallBack(nav_msg):
     """Read navdata from the arDrone
 
-    :argument
-    nav_msg -- NavData data from target in the Map
+    :argument nav_msg: NavData data from drone in the gazebo
 
     """
     
     global firstTimeSamplingData, navDataRotZ360, droneState, battery, navDataRotZ, lastDroneData, realPose
 
+    #  Get the time stamp of drone
     currentDroneData.timeStamp = nav_msg.header.stamp
 
     droneState = nav_msg.state
+    # For future reference get the battery level of the drone
     battery = nav_msg.batteryPercent
     navDataRotZ = nav_msg.rotZ
 
+    # Check if Z rotation is below 0, if it is add 360 degrees to it
     if nav_msg.rotZ < 0:
         navDataRotZ360 = nav_msg.rotZ + 360
     else:
@@ -553,9 +555,11 @@ def navDataCallBack(nav_msg):
     currentDroneData.yRot = nav_msg.rotY
     currentDroneData.zRot = nav_msg.rotZ
 
+    # TODO remove this if statement, only here for testing
     if not firstTimeSamplingData:
 
         differenceTIme = (currentDroneData.timeStamp - lastDroneData.timeStamp).to_sec()
+        # Add 0.02 incase the time is the same
         differenceTIme = differenceTIme + 0.02
 
         currentDroneData.xRotVel = (currentDroneData.xRot - lastDroneData.xRot)/differenceTIme  # Degrees / Sec
@@ -573,6 +577,7 @@ def navDataCallBack(nav_msg):
             currentDroneData.z = externalEstimatedPose.pose.position.z  # meters[m]
 
     firstTimeSamplingData = False
+    # Assign the currentDroneData to lastDroneData
     lastDroneData = currentDroneData
 
 
@@ -592,7 +597,7 @@ def wayPointReached(tolerance):
 
 
 def wayPointFaced(tolerance):
-    """Determine if the waypoint  is faced 
+    """Determine if the waypoint  is faced with absolute value and tolerance
 
     :arguments
     tolerance -- tolerance of the waypoint faced
@@ -604,7 +609,9 @@ def wayPointFaced(tolerance):
 
 
 def publishArdronePos():
-
+    """Publish ARDrone position
+    
+    """
     global realPose
 
     dronePos = realPose.pose  # meters[m]
@@ -613,7 +620,9 @@ def publishArdronePos():
 
 
 def publishWaypoints():
+    """Publish waypoints from xml file 
 
+    """
 
     waypointPoseFromXML = Pose()
     counter = 0
@@ -628,7 +637,13 @@ def publishWaypoints():
         pub_waypoint.publish(waypointPoseFromXML)
 
 def JoystickCallBack(data):
+    """
+    Callback for everytime we use the joystick
 
+    :param data: button values from joystick
+
+
+    """
     global actionCode
 
     if data.buttons[SYS_DEFS.BUTTON_LAND] == 1:
@@ -665,6 +680,7 @@ def JoystickCallBack(data):
         actionCode = 9
 
     else:
+        # controle axes, pitch, roll and yaw
         command(data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH,
                 data.axes[SYS_DEFS.AXIX_ROLL] / SYS_DEFS.SCALE_ROLL,
                 data.axes[SYS_DEFS.AXIS_Z] / SYS_DEFS.SCALE_Z ,
@@ -680,8 +696,7 @@ def JoystickCallBack(data):
 def droneGUICallback( config, level):
     """Dynamic configuration to control waypoints 
 
-    :argument
-    config -- data passed from GUI
+    :argument config: data passed from GUI
     
     """
 
