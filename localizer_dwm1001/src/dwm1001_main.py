@@ -257,20 +257,32 @@ class dwm1001_localizer:
 
         """
         global serialReadLine
-        #rospy.loginfo("""Reconfigure Request: {dwm1001_network_info}, {open_port},\
-        #      {serial_port}, {close_port}""".format(**config))
+
 
         if config["quit_dwm1001_api"]:
-            rospy.loginfo("Not implement it yet")
+            rospy.loginfo("Quitting api")
+            # reset api
+            serialPortDWM1001.write(DWM1001_API_COMMANDS.QUIT)
             config["quit_dwm1001_api"] = False
 
         if config["close_port"]:
-            rospy.loginfo("Close port not implement it yet")
+            rospy.loginfo("Closing port")
+            serialPortDWM1001.close()
             config["close_port"] = False
+        
+        if config["open_port"]:
+            rospy.loginfo("Opening port")
+            serialPortDWM1001.open()
+            config["open_port"] = False
 
         if config["exit"]:
             rospy.loginfo("Not implement it yet")
             config["exit"] = False
+
+        if config["serial_port"]:
+            rospy.loginfo("Not implement it yet")
+            config["serial_port"] = serialPortDWM1001.name
+            
 
         return config
 
