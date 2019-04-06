@@ -100,8 +100,6 @@ class dwm1001_localizer:
                 except IndexError:
                     rospy.logwarn("Found index out of bound")
 
-
-
         except KeyboardInterrupt:
             rospy.loginfo("Quitting DWM1001 Shell Mode and closing port, allow 1 second for UWB recovery")
             serialPortDWM1001.write(DWM1001_API_COMMANDS.RESET)
