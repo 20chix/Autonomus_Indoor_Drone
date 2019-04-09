@@ -1,7 +1,5 @@
 <launch>
 
-
-
     <!-- Run gazebo with ardrone-->
     <include file ="$(find cvg_sim_gazebo)/launch/ardrone_testworld.launch"/>
 
@@ -20,11 +18,5 @@
 
     <!--Plot linear and angular velocity-->
     <node pkg='rqt_plot' name='rqt_plot' type='rqt_plot' args='/cmd_vel/linear /cmd_vel/angular'/>
-
-
-
-
-
-
 
 </launch>
