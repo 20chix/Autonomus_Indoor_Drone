@@ -415,9 +415,8 @@ else if (!global.CBOR)
  * Copyright (c) 2013 hij1nx
  * Licensed under the MIT license.
  */
-;!function(undefined) {
-
-  var isArray = Array.isArray ? Array.isArray : function _isArray(obj) {
+    !function (undefined) {
+        var isArray = Array.isArray ? Array.isArray : function _isArray(obj) {
     return Object.prototype.toString.call(obj) === "[object Array]";
   };
   var defaultMaxListeners = 10;
@@ -678,11 +677,11 @@ else if (!global.CBOR)
 
   EventEmitter.prototype.many = function(event, ttl, fn) {
     return this._many(event, ttl, fn, false);
-  }
+  };
 
   EventEmitter.prototype.prependMany = function(event, ttl, fn) {
     return this._many(event, ttl, fn, true);
-  }
+  };
 
   EventEmitter.prototype._many = function(event, ttl, fn, prepend) {
     var self = this;
@@ -943,7 +942,7 @@ else if (!global.CBOR)
     }
 
     return this;
-  }
+  };
 
   EventEmitter.prototype._on = function(type, listener, prepend) {
     if (typeof type === 'function') {
@@ -994,7 +993,7 @@ else if (!global.CBOR)
     }
 
     return this;
-  }
+  };
 
   EventEmitter.prototype.off = function(type, listener) {
     if (typeof listener !== 'function') {
@@ -1153,7 +1152,7 @@ else if (!global.CBOR)
 
   EventEmitter.prototype.eventNames = function(){
     return Object.keys(this._events);
-  }
+  };
 
   EventEmitter.prototype.listenerCount = function(type) {
     return this.listeners(type).length;
@@ -1216,7 +1215,7 @@ function shouldUseNative() {
 		// Detect buggy property enumeration order in older V8 versions.
 
 		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		var test1 = String('abc');  // eslint-disable-line no-new-wrappers
 		test1[5] = 'de';
 		if (Object.getOwnPropertyNames(test1)[0] === '5') {
 			return false;
@@ -1315,7 +1314,7 @@ function defaultClearTimeout () {
     } catch (e) {
         cachedClearTimeout = defaultClearTimeout;
     }
-} ())
+} ());
 function runTimeout(fun) {
     if (cachedSetTimeout === setTimeout) {
         //normal enviroments in sane situations
@@ -1452,7 +1451,7 @@ process.emit = noop;
 process.prependListener = noop;
 process.prependOnceListener = noop;
 
-process.listeners = function (name) { return [] }
+process.listeners = function (name) { return [] };
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
