@@ -1,4 +1,4 @@
-[![Build Status](http://90.211.148.158:8080/buildStatus/icon?job=testing)](http://94.2.115.49:8080/job/testing/)
+[![Build Status](http://http://90.198.211.77:8080/buildStatus/icon?job=testing)](http://94.2.115.49:8080/job/testing/)
 ![HitCount](https://img.shields.io/badge/ROS%20version-kinetic-blue.svg)
 ![HitCount](https://img.shields.io/badge/Supported%20OS-Ubuntu%2016.04-orange.svg)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
