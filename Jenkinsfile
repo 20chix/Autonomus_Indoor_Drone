@@ -1,36 +1,8 @@
 pipeline {
   agent any
-    environment {
-    PACKAGE_NAME = 'localizer_dwm1001'
-    ROS_WORKSPACE = "catkin_ws"
-    LEDDAR_LIB_DIR = '/usr/lib/leddar'
-}
-  stages {
-    stage('Build') {
-      steps {
-        dir(path: "/home/hadi/catkin_ws") {
-          sh '''
-          . /opt/ros/kinetic/setup.bash
-          catkin_make
-
-          '''
-        }
-
-      }
-
-    }
-  }
-  }
-
-
-
-
-pipeline {
-  agent any
   environment {
     PACKAGE_NAME = 'dummy_jenkins'
     ROS_WORKSPACE = "${WORKSPACE}_ws"
-    LEDDAR_LIB_DIR = '/home/hadi/Desktop'
   }
   stages {
     stage('Setup') {
