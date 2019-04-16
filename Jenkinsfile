@@ -1,9 +1,9 @@
 pipeline {
-  agent any
-  environment {
-    PACKAGE_NAME = 'dummy_jenkins'
-    ROS_WORKSPACE = "${WORKSPACE}_ws"
-  }
+      agent any
+      environment {
+        PACKAGE_NAME = 'dummy_jenkins'
+        ROS_WORKSPACE = "${WORKSPACE}_ws"
+      }
   stages {
     stage('Setup') {
       steps {
@@ -24,7 +24,7 @@ pipeline {
         }
 
       }
-}
+    }
 
     stage('Test') {
       steps {
@@ -37,8 +37,6 @@ pipeline {
           '''
         }
       }
-}
-
-}
-
+    }
+  }
 }

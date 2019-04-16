@@ -40,7 +40,7 @@ import HelloWorld from './HelloWorld'
     },
     methods: {
       next () {
-        const active = parseInt(this.active)
+        const active = parseInt(this.active);
         this.active = (active < 2 ? active + 1 : 0)
       }
     },
