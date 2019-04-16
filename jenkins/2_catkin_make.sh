@@ -1,4 +1,4 @@
 #!/bin/bash
- cd /home/hadi/catkin_ws/
- sleep 5
- catkin_make
+
+. /opt/hadi/kinetic/setup.bash
+catkin_make

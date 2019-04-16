@@ -84,9 +84,6 @@ def triggerResponseTag(request):
     """    
     return (tag.x, tag.y, tag.z)
 
-
-
-
 def Anchor0callback(data):
     """
     Callback for anchor 0

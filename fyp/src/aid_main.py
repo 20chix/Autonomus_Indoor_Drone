@@ -24,6 +24,7 @@ from localizer_dwm1001.msg       import Anchor
 from localizer_dwm1001.msg       import Tag
 from std_srvs.srv                import Trigger, TriggerRequest
 from localizer_dwm1001.srv       import Anchor_0
+from gazebo_msgs.srv             import DeleteModel # For deleting models from the environment
 
 
 import math
@@ -92,8 +93,6 @@ lastSavedWayHomePoint.position.y = 0
 lastSavedWayHomePoint.position.z = 0.1
 
 
-
-
 gazeboDwm1001 = LoadDwm1001InGazebo()
 
 
@@ -139,7 +138,21 @@ def init():
     run()
 
 
+def deleteModelFromGazebo( modelName ):
+    """ Remove the model with 'modelName' from the Gazebo scene """
+    del_model_prox = rospy.ServiceProxy('gazebo/delete_model', DeleteModel) # model spawner
+    del_model_prox(modelName)
+    # Remove from Gazebo
 
+
+def deleteAllWaypointsFromGazebo():
+
+    temp_model_name = "box"
+    i = 0
+    while i < 50:
+        deleteModelFromGazebo(temp_model_name + str(i))
+        i = i + 1
+    rospy.loginfo("Model used as waypoints delete it")
 
 
 def run():
@@ -149,8 +162,8 @@ def run():
     """
     global currentDroneData , actionState, targetInMap, latchStartTime, latched, wayHomePtr, pub_cmd_vel, pub_takeoff, pub_land, pub_reset
     latchTime = rospy.Duration(5.0)
-    rospy.loginfo("Waiting for a command")
 
+    rospy.loginfo("Waiting for a command")
 
     while not rospy.is_shutdown():
 
@@ -309,6 +322,9 @@ def run():
 
             global currentWaypointCounterForFlightPathDWM1001
             targetInMap = gazeboDwm1001.getAnchorCoordinates()
+            rospy.loginfo("Anchor X: " + str(targetInMap.position.x) +
+                          " Y: " + str(targetInMap.position.y) +
+                          " Z: " + str(targetInMap.position.z))
             if gazeboDwm1001.anchorsReached(currentWaypointCounterForFlightPathDWM1001):
                 returnTargetInDrone(targetInMap)
                 if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
@@ -328,10 +344,10 @@ def run():
                                   " Y: " + str(targetInMap.position.y) +
                                   " Z: " + str(targetInMap.position.z))
                     currentWaypointCounterForFlightPathDWM1001 +=  1
-                    rospy.loginfo("Waypoint Reached " + str(currentWaypointCounterForFlightPathDWM1001))
+                    rospy.loginfo("Anchor Reached " + str(currentWaypointCounterForFlightPathDWM1001))
 
             else:
-                rospy.loginfo("XML waypoints finished")
+                rospy.loginfo("Anchors finished")
                 currentWaypointCounterForFlightPathDWM1001 = 0
                 command(0, 0, 0, 0, 0, 0)
                 actionState = 0
@@ -425,8 +441,8 @@ def returnTargetInDrone(target):
     if targetInDrone.position.x is not 0:
 
         # atan2(y,x) is defined as the angle in the Euclidean plane, given 
-        # in radians, between the positive x-axis and the ray to the point (x,y) ≠ (0,0).
-        # atan2(y,x) returns a single value θ such that −π < θ ≤ π and, for some r > 0,
+        # in radians, between the positive x-axis and the ray to the point (x,y) != (0,0).
+        # atan2(y,x) returns a single value theta such that -pi < theta =< pi and, for some r > 0,
         targetInDrone.orientation.z = math.atan2(targetInDrone.position.y, targetInDrone.position.x)
 
     # Precaution not to devide by  zero
@@ -560,7 +576,7 @@ def JoystickCallBack(data):
 
 
     """
-    global actionState
+    global actionState, gazeboDwm1001
 
     if data.buttons[SYS_DEFS.BUTTON_LAND] == 1:
         rospy.loginfo("Land Button Pressed: " + str(SYS_DEFS.BUTTON_LAND))
@@ -577,7 +593,7 @@ def JoystickCallBack(data):
         gazeboWaypoints.addWaypointsFromXMLToGazebo()
 
 
-    elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY_BACKUP] == 1:
+    elif data.buttons[SYS_DEFS.BUTTON_LOAD_DWM1001] == 1:
         rospy.loginfo("loading waypoint from dwm1001: " + str(SYS_DEFS.BUTTON_EMERGENCY_BACKUP))
         # load dwm1001 anchors
         gazeboDwm1001.execute()
@@ -616,7 +632,7 @@ def droneGUICallback( config, level):
     
     """
 
-    global actionState, targetInMap
+    global actionState, targetInMap, gazeboDwm1001
 
     if config["land"] == True:
         actionState = 2
@@ -650,7 +666,12 @@ def droneGUICallback( config, level):
         config["right"] = False
         actionState = 0
         command(0, -0.5, 0, 0, 0, 0)
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {right}""".format(**config))
+
+    elif config["deleteWaypoints"] == True:
+        config["deleteWaypoints"] = False
+        deleteAllWaypointsFromGazebo()
+        rospy.loginfo("""Reconfigure Request Action code: {deleteWaypoints}""".format(**config))
 
     elif config["hover"] == True:
         config["hover"] = False
@@ -691,15 +712,20 @@ def droneGUICallback( config, level):
 
     elif config["load_waypoint_dwm1001"] == True:
         config["load_waypoint_dwm1001"] = False
-        # load waypoints from xml
-        gazeboWaypoints = LoadWaypointsInGazebo()
-        gazeboWaypoints.addWaypointsFromXMLToGazebo()
+        # load dwm1001 anchors
+        gazeboDwm1001.execute()
         rospy.loginfo("""Reconfigure Request : {load_waypoint_dwm1001}""".format(**config))
 
-    elif config["followFlightPath"] == True:
-        config["followFlightPath"]= False
+    elif config["followFlightPathWaypoints"] == True:
+        config["followFlightPathWaypoints"]= False
         actionState = 8
-        rospy.loginfo("""Reconfigure Request Action code: {actionCode}""".format(**config))
+        rospy.loginfo("""Reconfigure Request Action code: {followFlightPathWaypoints}""".format(**config))
+
+    elif config["followFlightPathDwm1001"] == True:
+        config["followFlightPathDwm1001"]= False
+        actionState = 9
+        rospy.loginfo("""Reconfigure Request Action code: {followFlightPathDwm1001}""".format(**config))
+
 
     return config
 

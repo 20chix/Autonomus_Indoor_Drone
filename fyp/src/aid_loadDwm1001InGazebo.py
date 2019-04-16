@@ -37,8 +37,11 @@ from geometry_msgs.msg import (
 )
 
 
-counterForSDFModelToLoadSameSDFmultipleTimes = 0
+numberAnchor = 0
 
+
+
+counterForSDFModelToLoadSameSDFmultipleTimes = 0
 dir_of_this_script = os.path.dirname(os.path.realpath(__file__))
 gazebo_model_dir = os.path.join(dir_of_this_script, '', 'model')
 
@@ -83,30 +86,6 @@ class LoadDwm1001InGazebo(object):
                 return False
             return True
 
-        # Go though every urdf file in the path
-        elif model_type == "urdf":
-            with open(os.path.join(model_path, model_name) + ".urdf", "r") as _file:
-                _xml = _file.read().replace('\n', '')
-
-
-                # Check if gazebo is running, if not skip the loading waypoints part
-                try:
-                    rospy.wait_for_service('/gazebo/spawn_sdf_model', 2)
-
-                except (rospy.ServiceException, rospy.ROSException) as e:
-                    rospy.loginfo("Service call failed:" + str(e) + ", skipping loading waitpoints")
-                    return 1
-
-
-            # Load waypoints into Gazebo using box urdf, this model will be used multiple times since we will have multiple waypoints
-            try:
-                spawn_urdf = rospy.ServiceProxy('/gazebo/spawn_urdf_model', SpawnModel)
-                resp_urdf = spawn_urdf(model_name, _xml, "/", model_pose, model_reference_frame)
-                rospy.loginfo("loading %s succesfully", model_name)
-            except:
-                rospy.logerr("Spawn URDF service call failed: {0}")
-                return False
-            return True
         else:
             rospy.logerr("format is not match")
 
@@ -117,7 +96,9 @@ class LoadDwm1001InGazebo(object):
         model_pose.position.y = y
         model_pose.position.z = z
 
-
+        rospy.loginfo("model X: " + str(model_pose.position.x) +
+                      " Y: " + str(model_pose.position.y) +
+                      " Z: " + str(model_pose.position.z))
 
         self.loadGazeboModels(model_name ="box",
                               model_pose = model_pose,
@@ -144,10 +125,6 @@ class LoadDwm1001InGazebo(object):
                 self.anchorInMap.position.x = self.waypointsCoordinatesArrayFromDwm1001[i][0]
                 self.anchorInMap.position.y = self.waypointsCoordinatesArrayFromDwm1001[i][1]
                 self.anchorInMap.position.z = self.waypointsCoordinatesArrayFromDwm1001[i][2] +1
-                rospy.loginfo("Anchor X: " + str(self.anchorInMap.position.x) +
-                              " Y: " + str(self.anchorInMap.position.y) +
-                              " Z: " + str(self.anchorInMap.position.z))
-
                 return True
 
 
@@ -157,6 +134,7 @@ class LoadDwm1001InGazebo(object):
         return self.anchorInMap
 
     def execute(self):
+
 
         # Wait for the service
         rospy.wait_for_service('/Anchor_0')

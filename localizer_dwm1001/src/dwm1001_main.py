@@ -17,12 +17,14 @@ from dynamic_reconfigure.server     import Server
 from localizer_dwm1001.cfg          import DWM1001_Tune_SerialConfig
 from localizer_dwm1001.msg          import Anchor
 from localizer_dwm1001.msg          import Tag
-from localizer_dwm1001.srv         import Anchor_0
+from localizer_dwm1001.srv          import Anchor_0
+from std_msgs.msg                   import Int32
 
 
 
 # initialize the node
 rospy.init_node('Localizer_DWM1001', anonymous=False)
+pub_numbers_of_anchors = rospy.Publisher('/dwm1001/number/anchors', Int32, queue_size=1)
 
 # allow serial port to be detected by user
 os.popen("sudo chmod 777 /dev/ttyACM0", "w")
@@ -94,6 +96,7 @@ class dwm1001_localizer:
                 # just read everything from serial port
                 serialReadLine = serialPortDWM1001.read_until()
 
+
                 try:
                     self.pubblishCoordinatesIntoTopics(self.splitByComma(serialReadLine))
 
@@ -129,6 +132,14 @@ class dwm1001_localizer:
 
         return arrayFromUSBFormatted
 
+    # def getAnchorId(self, networkDataArray):
+    #
+    #     # loop trough the array given by the serial port
+    #     for network in networkDataArray:
+    #         # check if there is any entry starting with AN, which means there is an anchor
+    #         if 'AN' in network:
+
+
     def pubblishCoordinatesIntoTopics(self, networkDataArray):
         """
         Publish anchors and tag in topics using Tag and Anchor Object
@@ -139,39 +150,15 @@ class dwm1001_localizer:
 
         """
 
+
         # loop trough the array given by the serial port
         for network in networkDataArray:
 
-            # check if there is any entry starting with AN, which means there is an anchor
-            if 'AN' in network:
-                # get the number after'AN' which we will use to pubblish topics, example /dwm1001/anchor1
-                temp_anchor_number = networkDataArray[networkDataArray.index(network)]
-                # construct the object for anchor(s)
-                anchor = Anchor(  str(networkDataArray[networkDataArray.index(network) + 1]),
-                                float(networkDataArray[networkDataArray.index(network) + 2]),
-                                float(networkDataArray[networkDataArray.index(network) + 3]),
-                                float(networkDataArray[networkDataArray.index(network) + 4]),
-                                float(networkDataArray[networkDataArray.index(network) + 5]))
-
-                # publish each anchor, add anchor number to the topic, so we can pubblish multiple anchors
-                # example /dwm1001/anchor0, the last digit is taken from AN0 and so on
-                pub_anchor = rospy.Publisher('/dwm1001/anchor'+str(temp_anchor_number[-1]), Anchor, queue_size=1)
-                pub_anchor.publish(anchor)
-                rospy.loginfo("Anchor: "
-                              + str(anchor.id)
-                              + " x: "
-                              + str(anchor.x)
-                              + " y: "
-                              + str(anchor.y)
-                              + " z: "
-                              + str(anchor.z))
-
-            elif 'POS' in network:
-
+            if 'POS' in network:
                 # construct the object for the tag
                 tag = Tag(float(networkDataArray[networkDataArray.index(network) + 1]),
                           float(networkDataArray[networkDataArray.index(network) + 2]),
-                          float(networkDataArray[networkDataArray.index(network) + 3]),)
+                          float(networkDataArray[networkDataArray.index(network) + 3]), )
 
                 # publish tag
                 pub_anchor = rospy.Publisher('/dwm1001/tag', Tag, queue_size=1)
@@ -184,6 +171,36 @@ class dwm1001_localizer:
                               + str(tag.y)
                               + " z: "
                               + str(tag.z))
+
+
+            # Get the number of Anchors in the network
+            pub_numbers_of_anchors.publish(int(networkDataArray[1]))
+
+            # Publish only if we have 4 anchors
+            if int(networkDataArray[1]) == 4:
+                # check if there is any entry starting with AN, which means there is an anchor
+                if 'AN' in network:
+                    # get the number after'AN' which we will use to pubblish topics, example /dwm1001/anchor1
+                    temp_anchor_number = networkDataArray[networkDataArray.index(network)]
+                    # construct the object for anchor(s)
+                    anchor = Anchor(  str(networkDataArray[networkDataArray.index(network) + 1]),
+                                    float(networkDataArray[networkDataArray.index(network) + 2]),
+                                    float(networkDataArray[networkDataArray.index(network) + 3]),
+                                    float(networkDataArray[networkDataArray.index(network) + 4]),
+                                    float(networkDataArray[networkDataArray.index(network) + 5]))
+                    # publish each anchor, add anchor number to the topic, so we can pubblish multiple anchors
+                    # example /dwm1001/anchor0, the last digit is taken from AN0 and so on
+                    pub_anchor = rospy.Publisher('/dwm1001/anchor'+str(temp_anchor_number[-1]), Anchor, queue_size=1)
+                    pub_anchor.publish(anchor)
+                    rospy.loginfo("Anchor: "
+                                  + str(anchor.id)
+                                  + " x: "
+                                  + str(anchor.x)
+                                  + " y: "
+                                  + str(anchor.y)
+                                  + " z: "
+                                  + str(anchor.z))
+
 
 
 

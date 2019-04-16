@@ -28,7 +28,7 @@ class DisplayInRviz:
 
         """
         p = feedback.pose.position
-        rospy.loginfo(feedback.marker_name + " is pluginsnow at " + str(p.x) + ", " + str(p.y) + ", " + str(p.z))
+        rospy.loginfo(feedback.marker_name + " is plugins now at " + str(p.x) + ", " + str(p.y) + ", " + str(p.z))
 
 
     def makeBoxControlTag(self,msg):

@@ -26,7 +26,7 @@ class SYS_DEFS:
 
     # define the default mapping between joystick buttons and their corresponding actions
     BUTTON_EMERGENCY                    = 7
-    BUTTON_EMERGENCY_BACKUP             = 6
+    BUTTON_LOAD_DWM1001                 = 6
     BUTTON_LAND                         = 1
     BUTTON_TAKEOFF                      = 0
     BUTTON_HOVER                        = 4

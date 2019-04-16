@@ -1,54 +1,72 @@
 pipeline {
-    agent any
-    stages {
-        stage('Source_Into_ROS') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    sh '/home/hadi/catkin_ws/src/jenkins/source.sh'
-                }
-            }
+  agent any
+    environment {
+    PACKAGE_NAME = 'localizer_dwm1001'
+    ROS_WORKSPACE = "catkin_ws"
+    LEDDAR_LIB_DIR = '/usr/lib/leddar'
+}
+  stages {
+    stage('Build') {
+      steps {
+        dir(path: "/home/hadi/catkin_ws") {
+          sh '''
+          . /opt/ros/kinetic/setup.bash
+          catkin_make
+
+          '''
         }
-        stage('Compile') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    sh '/home/hadi/catkin_ws/src/jenkins/1_source.sh'
-                }
-            }
-        }
-        stage('Compile') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    sh '/home/hadi/catkin_ws/src/jenkins/2_catkin_make.sh'
-                }
-            }
-        }
-        stage('Run_dwm1001') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    sh '/home/hadi/catkin_ws/src/jenkins/3_launch_dwm1001.sh'
-                }
-            }
-        }
-        stage('Run_joy') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    sh '/home/hadi/catkin_ws/src/jenkins/4_launch_joy.sh'
-                }
-            }
-        }
-        stage('Run_gazebo') {
-            steps {
-                timeout(time: 3, unit: 'MINUTES') {
-                    sh '/home/hadi/catkin_ws/src/jenkins/5_launch_tum_simulator.sh'
-                }
-            }
-        }
-        stage('Run_unittest') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    sh '/home/hadi/catkin_ws/src/localizer_dwm1001/run_tests.sh'
-                }
-            }
-        }
+
+      }
+
     }
+  }
+  }
+
+
+
+
+pipeline {
+  agent any
+  environment {
+    PACKAGE_NAME = 'dummy_jenkins'
+    ROS_WORKSPACE = "${WORKSPACE}_ws"
+    LEDDAR_LIB_DIR = '/home/hadi/Desktop'
+  }
+  stages {
+    stage('Setup') {
+      steps {
+        sh 'printenv'
+        sh """
+          mkdir -p ${ROS_WORKSPACE}/src
+          cp -R . ${ROS_WORKSPACE}/src/${PACKAGE_NAME}
+        """
+      }
+    }
+    stage('Build') {
+      steps {
+        dir(path: "${ROS_WORKSPACE}") {
+          sh '''
+            . /opt/ros/kinetic/setup.sh
+            catkin_make
+          '''
+        }
+
+      }
+}
+
+    stage('Test') {
+      steps {
+        dir(path: "${ROS_WORKSPACE}") {
+          sh '''
+            . /opt/ros/kinetic/setup.sh
+            . /home/hadi/catkin_ws/devel/setup.sh
+            cd /home/hadi/catkin_ws/src/localizer_dwm1001/test/
+            ./run_tests.sh
+          '''
+        }
+      }
+}
+
+}
+
 }
