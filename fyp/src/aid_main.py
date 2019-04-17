@@ -159,11 +159,11 @@ def run():
         publishArdronePos()
 
         # Reset the latch  time
-        if actionState == 0:
+        if actionState == SYS_DEFS.RESET_LATCH_TIME_ACTION_STATE:
             latched = False
 
         # Take off
-        elif actionState == 1:
+        elif actionState == SYS_DEFS.TAKE_OFF_ACTION_STATE:
             # Check if the drone is not latched
             if not latched:
                 latchStartTime = rospy.get_rostime()
@@ -178,7 +178,7 @@ def run():
                 command(0, 0, 0, 0, 0, 0)
                 actionState = 0
         # Land
-        elif actionState == 2:
+        elif actionState == SYS_DEFS.LAND_ACTION_STATE:
             # Decrease the altitude of the drone, until it reaches 0.5
             if currentDroneData.z <=  0.5:
                 # Check if the drone is not latched
@@ -201,7 +201,7 @@ def run():
                 actionState = 2
 
         # Reset
-        elif actionState == 3:
+        elif actionState == SYS_DEFS.RESET_DRONE_ACTION_STATE:
             rospy.loginfo("Resetting")
             # Publish reset message
             pub_reset.publish(reset_msg)
@@ -209,7 +209,7 @@ def run():
             actionState = 0
 
         # Go to the waypoint without looking
-        elif actionState == 4:
+        elif actionState == SYS_DEFS.GO_TO_WAYPOINT_WITHOUT_LOOKING_ACTION_STATE:
             # Convert drone coordinates into drone frames
             returnTargetInDrone(targetInMap)
             # Keep going if the waypoint is not reached
@@ -238,7 +238,7 @@ def run():
 
 
         # Look at the waypoint
-        elif actionState == 5:
+        elif actionState == SYS_DEFS.LOOK_AT_WAYPOINT_ACTION_STATE:
             rospy.loginfo("Looking at the waypoint")
             # Convert drone coordinates into drone frames
             returnTargetInDrone(targetInMap)
@@ -247,7 +247,7 @@ def run():
             command(0, 0, 0, 0, 0, zRotAct)
 
         # Look and Go to the waypoint
-        elif actionState == 7:
+        elif actionState == SYS_DEFS.LOOK_AND_GO_TO_WAYPOINT_ACTION_STATE:
             # Convert drone coordinates into drone frames
             returnTargetInDrone(targetInMap)
             # Keep going if the waypoint is not reached
@@ -287,7 +287,7 @@ def run():
                 actionState = 0
 
         # Follow Flightpath
-        elif actionState == 8:
+        elif actionState == SYS_DEFS.FOLLOW_FLIGHT_PATH_WAYPOINTS_ACTION_STATE:
             # Get the global counter
             global currentWaypointCounterForFlightPath
             # Get a coordinate from the xml file and assign it to targetInMap
@@ -333,7 +333,7 @@ def run():
 
 
         # Follow Flightpath for DWM1001
-        elif actionState == 9:
+        elif actionState == SYS_DEFS.FOLLOW_FLIGHT_PATH_DWM1001_ACTION_STATE:
             # Get the global counter
             global currentWaypointCounterForFlightPathDWM1001
             # Get a coordinate from anchors and assign it to targetInMap

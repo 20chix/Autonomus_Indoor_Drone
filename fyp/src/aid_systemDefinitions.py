@@ -15,13 +15,23 @@ class SYS_DEFS:
     EMAIL           = "w1530819@my.westminster.ac.uk"
     STATUS          = "Development"
 
+    # Action states
+    RESET_LATCH_TIME_ACTION_STATE                = 0
+    TAKE_OFF_ACTION_STATE                        = 1
+    LAND_ACTION_STATE                            = 2
+    RESET_DRONE_ACTION_STATE                     = 3
+    GO_TO_WAYPOINT_WITHOUT_LOOKING_ACTION_STATE  = 4
+    LOOK_AT_WAYPOINT_ACTION_STATE                = 5
+    LOOK_AND_GO_TO_WAYPOINT_ACTION_STATE         = 7
+    FOLLOW_FLIGHT_PATH_WAYPOINTS_ACTION_STATE    = 8
+    FOLLOW_FLIGHT_PATH_DWM1001_ACTION_STATE      = 9
 
-    POINT_GAIN          = 0.5
-    ANGLE_GAIN          = 0.5
-    ANGLE_ACCURACY      = 10
-    WAYPOINT_ACCURACY   = 0.50
-    LINEAR_ACCELLERATION_M_PER_SEC = 9.81
-    LINEAR_VELOCITY_KPS = 1000
+    POINT_GAIN                      = 0.5
+    ANGLE_GAIN                      = 0.5
+    ANGLE_ACCURACY                  = 10
+    WAYPOINT_ACCURACY               = 0.50
+    LINEAR_ACCELLERATION_M_PER_SEC  = 9.81
+    LINEAR_VELOCITY_KPS             = 1000
 
 
     # define the default mapping between joystick buttons and their corresponding actions
