@@ -11,18 +11,23 @@ The aim of this project is to provide a solution for autonomous indoor drone (AI
 ### Simulation results in Gazebo
 Small white boxes rapresents the DWM1001 waypoints, these were placed around my lounge creating a "square" like shape.
 
-
 ![alt text](https://github.com/20chix/Autonomus_Indoor_Drone/blob/master/resources/8_60Angleaccuracy20anglegain.gif)
-
 
 
 # Installation
 This project currently works for **Kinetic**.
 
 ## Install ROS Kinetic
-Install ROS from this link into your PC http://wiki.ros.org/kinetic/Installation/Ubuntu
+Install ROS from this link into your PC http://wiki.ros.org/kinetic/Installation/Ubuntu and all the dependencies 
 
 **NOTE:** if you install kinetic you need have ubuntu 16.04, if you want to install the latest ROS which is Meldic then you need to have uybuntu 18.04.
+
+## Download current GitHub project
+Navigate to your workspace and run
+
+'''
+git clone https://github.com/20chix/Autonomus_Indoor_Drone.git
+'''
 
 ## Create a ROS workspace
 Follow this short tutorial to create a ROS workspace http://wiki.ros.org/catkin/Tutorials/create_a_workspace
