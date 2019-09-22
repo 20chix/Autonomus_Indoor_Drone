@@ -25,7 +25,8 @@ We have created an interface between DWM1001 and ROS, which allowed us to visual
 
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/DWMNetwor_with_description.png?raw=true)
 
-## DWM1001 dev-boards
+## DWM1001 dev-boards used as waypoints
+In this project we used 4 of those as anchor(waypoint) and one as the master(tag), which will be attached into the drone 
 
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/decawave-dwm1001-dev-large.jpg?raw=true)
 
