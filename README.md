@@ -18,7 +18,8 @@ The aim of this project is to provide a solution for autonomous indoor drone (AI
 ![alt text](https://github.com/20chix/Autonomus_Indoor_Drone/blob/master/resources/8_60Angleaccuracy20anglegain.gif)
 
 
-### Rviz visualization of DWM1001 network 
+### DWM1001 network Rviz visualization
+We have created an interface between DWM1001 and ROS, which allowed us to visualize all the waypoints from Rviz.
 
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/DWMNetwor_with_description.png?raw=true)
 
