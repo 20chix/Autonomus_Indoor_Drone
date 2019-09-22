@@ -4,7 +4,7 @@
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 [![HitCount](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001.svg)](http://hits.dwyl.io/20chix/https://github.com/20chix/FYP_Autonomus_Drone_DWM1001)
 
-# Abstract 
+# Intro
 
 The aim of this project is to provide a solution for autonomous indoor drone (AID). AID involves localization, control, path planning and autonomous landing/take-off. A robust localization method was used, using GPS-like device called DWM1001 provided by Decawave . This device is especially useful for indoor applications as it a has a high accuracy and can only be used in confined spaces.
 
@@ -13,13 +13,10 @@ The aim of this project is to provide a solution for autonomous indoor drone (AI
 ![alt text](https://github.com/20chix/FYP_Autonomus_Drone_DWM1001/blob/master/resources/FYP_Diagram.png?raw=true)
 
 
-### Simulation results
+### Simulation results in Gazebo
 
 ![alt text](https://github.com/20chix/Autonomus_Indoor_Drone/blob/master/resources/8_60Angleaccuracy20anglegain.gif)
 
-### Prototype in Gazebo 7
-
-![](resources/AID_working_prototype.gif)
 
 ### Rviz visualization of DWM1001 network 
 
