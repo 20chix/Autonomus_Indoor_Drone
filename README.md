@@ -22,16 +22,21 @@ Install ROS from this link into your PC http://wiki.ros.org/kinetic/Installation
 
 **NOTE:** if you install kinetic you need have ubuntu 16.04, if you want to install the latest ROS which is Meldic then you need to have uybuntu 18.04.
 
+## Create a ROS workspace
+Follow this short tutorial to create a ROS workspace http://wiki.ros.org/catkin/Tutorials/create_a_workspace
+
 ## Download current GitHub project
-Navigate to your workspace and run:
+Navigate to your workspace ``` ~/catkin_ws/src/``` and run:
 
 ```
 git clone https://github.com/20chix/Autonomus_Indoor_Drone.git
 ```
+## Build the workspace
+Navigate to your workspace ``` ~/catkin_ws/```  and run:
 
-## Create a ROS workspace
-Follow this short tutorial to create a ROS workspace http://wiki.ros.org/catkin/Tutorials/create_a_workspace
-
+```
+catkin_make
+```
 
 ### DWM1001 network Rviz visualization
 We have created an interface between DWM1001 and ROS, which allowed us to visualize all the waypoints from Rviz.
