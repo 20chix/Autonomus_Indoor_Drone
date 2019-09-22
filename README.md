@@ -67,10 +67,23 @@ In this package we want to be able to change some variable from ground station, 
 - [x] Display Tag in RViz
 - [x] Calculate shortest path from Tag to a Anchor using A* Algorithm
 - [x] Display shortest path in RViz
-- [ ] Display actual path in RViz
+- [x] Display actual path in RViz
 - [x] Dynamic configuration for DWM1001 dev board
-- [ ] Dynamic configuration for drone
-- [ ] Joystick controls for emergency takeoff and land
+- [x] Dynamic configuration for drone
+- [x] Joystick controls for emergency takeoff and land
+- [ ] Setup continuos integration for simulation
 - [ ] Neural Network/AI that will manage flight controller after couple of laps
 - [ ] Statistics for each lap
 - [ ] Statistics for Neural Network/AI
+- [ ] BOM for hardware components
+- [ ] Get all hardware components
+- [ ] Document or video wiring 
+- [ ] First test flight
+- [ ] Rework from test flight
+- [ ] Setup continuos integration for hardware
+- [ ] Cloud statics for continuos improvment
+
+
+
+
+
