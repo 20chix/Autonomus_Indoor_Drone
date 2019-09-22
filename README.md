@@ -14,7 +14,7 @@ The aim of this project is to provide a solution for autonomous indoor drone (AI
 
 
 ### Simulation results in Gazebo
-
+Small white boxes rapresents the DWM1001 waypoints, these were placed around my lounge creating a "square" like shape.
 ![alt text](https://github.com/20chix/Autonomus_Indoor_Drone/blob/master/resources/8_60Angleaccuracy20anglegain.gif)
 
 
