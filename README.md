@@ -23,16 +23,14 @@ Install ROS from this link into your PC http://wiki.ros.org/kinetic/Installation
 **NOTE:** if you install kinetic you need have ubuntu 16.04, if you want to install the latest ROS which is Meldic then you need to have uybuntu 18.04.
 
 ## Download current GitHub project
-Navigate to your workspace and run
+Navigate to your workspace and run:
 
-'''
+```
 git clone https://github.com/20chix/Autonomus_Indoor_Drone.git
-'''
+```
 
 ## Create a ROS workspace
 Follow this short tutorial to create a ROS workspace http://wiki.ros.org/catkin/Tutorials/create_a_workspace
-
-Clone this github project 
 
 
 ### DWM1001 network Rviz visualization
