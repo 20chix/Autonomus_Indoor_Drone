@@ -26,11 +26,12 @@ Install ROS from this link into your PC http://wiki.ros.org/kinetic/Installation
 Follow this short tutorial to create a ROS workspace http://wiki.ros.org/catkin/Tutorials/create_a_workspace
 
 ## Download current GitHub project
-Navigate to your workspace ``` ~/catkin_ws/src/``` and run:
+Navigate to your workspace ``` ~/catkin_ws/``` and run:
 
 ```
 git clone https://github.com/20chix/Autonomus_Indoor_Drone.git
 ```
+Delete the src folder when you created the workspace and rename Autonomus_Indoor_Drone to src
 ## Build the workspace
 Navigate to your workspace ``` ~/catkin_ws/```  and run:
 
