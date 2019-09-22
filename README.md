@@ -17,12 +17,12 @@ Small white boxes rapresents the DWM1001 waypoints, these were placed around my 
 
 
 # Installation
-This project currently works for Kinetic.
+This project currently works for **Kinetic**.
 
 ## Install ROS Kinetic
 Install ROS from this link into your PC http://wiki.ros.org/kinetic/Installation/Ubuntu
 
-NOTE: if you install kinetic you need have ubuntu 16.04, if you want to install the latest ROS which is Meldic then you need to have uybuntu 18.04.
+**NOTE:** if you install kinetic you need have ubuntu 16.04, if you want to install the latest ROS which is Meldic then you need to have uybuntu 18.04.
 
 ## Create a ROS workspace
 Follow this short tutorial to create a ROS workspace http://wiki.ros.org/catkin/Tutorials/create_a_workspace
