@@ -15,7 +15,7 @@ from fyp.cfg                     import droneGUIConfig
 from dynamic_reconfigure.server  import Server
 from nav_msgs.msg                import Odometry
 from aid_lastDroneData           import lastDroneDataClass
-from ardrone_autonomy.msg        import Navdata
+#from ardrone_autonomy.msg        import Navdata
 from aid_loadWaypointsInGazebo   import LoadWaypointsInGazebo
 from aid_loadDwm1001InGazebo     import LoadDwm1001InGazebo
 from aid_waypoints               import DroneWaypoint
@@ -25,7 +25,10 @@ from localizer_dwm1001.msg       import Tag
 from std_srvs.srv                import Trigger, TriggerRequest
 from localizer_dwm1001.srv       import Anchor_0
 from gazebo_msgs.srv             import DeleteModel # For deleting models from the environment
-
+import mavros_msgs
+from geometry_msgs.msg import PoseStamped, TwistStamped
+from mavros_msgs import srv
+from mavros_msgs.msg import State
 
 import math
 from geometry_msgs.msg import (
@@ -112,7 +115,7 @@ def init():
     Server(droneGUIConfig, droneGUICallback)
 
     #Subscribe to these topics
-    rospy.Subscriber('/ardrone/navdata', Navdata, navDataCallBack)
+    #rospy.Subscriber('/ardrone/navdata', Navdata, navDataCallBack)
     rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
     rospy.Subscriber("joy", Joy, JoystickCallBack)
 
@@ -179,26 +182,36 @@ def run():
                 actionState = 0
         # Land
         elif actionState == SYS_DEFS.LAND_ACTION_STATE:
-            # Decrease the altitude of the drone, until it reaches 0.5
-            if currentDroneData.z <=  0.5:
-                # Check if the drone is not latched
-                if not latched:
-                    # assign ros time
-                    latchStartTime = rospy.get_rostime()
-                    latched = True
-                # Check if ros time is less than start time + latch time
-                if rospy.get_rostime() < latchStartTime + latchTime:
-                    # Land the drone
-                    pub_land.publish(land_msg)
-                    rospy.loginfo("Landing...")
-                else:
-                    actionState = 0
+            rospy.wait_for_service('/mavros/cmd/land')
+            try:
+                landService = rospy.ServiceProxy('/mavros/cmd/land', mavros_msgs.srv.CommandTOL)
+                #http://wiki.ros.org/mavros/CustomModes for custom modes
+                isLanding = landService(altitude = 0, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
+            except rospy.ServiceException, e:
+                print "service land call failed: %s. The vehicle cannot land "%e
 
-            else:
-                # Decrease the altitude
-                command(0, 0, -1, 0, 0, 0)
-                # Go trough the landing state again
-                actionState = 2
+
+
+            # # Decrease the altitude of the drone, until it reaches 0.5
+            # if currentDroneData.z <=  0.5:
+            #     # Check if the drone is not latched
+            #     if not latched:
+            #         # assign ros time
+            #         latchStartTime = rospy.get_rostime()
+            #         latched = True
+            #     # Check if ros time is less than start time + latch time
+            #     if rospy.get_rostime() < latchStartTime + latchTime:
+            #         # Land the drone
+            #         pub_land.publish(land_msg)
+            #         rospy.loginfo("Landing...")
+            #     else:
+            #         actionState = 0
+
+            # else:
+            #     # Decrease the altitude
+            #     command(0, 0, -1, 0, 0, 0)
+            #     # Go trough the landing state again
+            #     actionState = 2
 
         # Reset
         elif actionState == SYS_DEFS.RESET_DRONE_ACTION_STATE:
