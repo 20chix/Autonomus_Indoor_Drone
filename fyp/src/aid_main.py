@@ -167,21 +167,19 @@ def run():
 
         # Take off
         elif actionState == SYS_DEFS.TAKE_OFF_ACTION_STATE:
-            # Check if the drone is not latched
-            if not latched:
-                latchStartTime = rospy.get_rostime()
-                latched = True
-
-            # Check if ros time is less than start time + latch time
-            if rospy.get_rostime() < latchStartTime + latchTime:
-                pub_takeoff.publish(takeoff_msg)
-                rospy.loginfo("Taking off")
-            else:
-                # Hover and reset action state
-                command(0, 0, 0, 0, 0, 0)
-                actionState = 0
+            # Set GUIDED Mode 
+            setGuidedMode('GUIDED')
+            rate.sleep()
+            # Arm drone
+            setArm()
+            rate.sleep()
+            # Takeoff
+            setTakeoffMode(2)
+            #Reset action state 
+            actionState = 0
         # Land
         elif actionState == SYS_DEFS.LAND_ACTION_STATE:
+            # Call service to land the drone
             rospy.wait_for_service('/mavros/cmd/land')
             try:
                 landService = rospy.ServiceProxy('/mavros/cmd/land', mavros_msgs.srv.CommandTOL)
@@ -189,29 +187,6 @@ def run():
                 isLanding = landService(altitude = 0, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
             except rospy.ServiceException, e:
                 print "service land call failed: %s. The vehicle cannot land "%e
-
-
-
-            # # Decrease the altitude of the drone, until it reaches 0.5
-            # if currentDroneData.z <=  0.5:
-            #     # Check if the drone is not latched
-            #     if not latched:
-            #         # assign ros time
-            #         latchStartTime = rospy.get_rostime()
-            #         latched = True
-            #     # Check if ros time is less than start time + latch time
-            #     if rospy.get_rostime() < latchStartTime + latchTime:
-            #         # Land the drone
-            #         pub_land.publish(land_msg)
-            #         rospy.loginfo("Landing...")
-            #     else:
-            #         actionState = 0
-
-            # else:
-            #     # Decrease the altitude
-            #     command(0, 0, -1, 0, 0, 0)
-            #     # Go trough the landing state again
-            #     actionState = 2
 
         # Reset
         elif actionState == SYS_DEFS.RESET_DRONE_ACTION_STATE:
@@ -675,12 +650,12 @@ def droneGUICallback( config, level):
     if config["land"] == True:
         actionState = 2
         config["land"] = False
-        rospy.loginfo("""Reconfigure Request Action code: {land}""".format(**config))
+        rospy.loginfo("Reconfigure Request to LAND")
 
     elif config["take_off"] == True:
         actionState = 1
         config["take_off"] = False
-        rospy.loginfo("""Reconfigure Request Action code: {take_off}""".format(**config))
+        rospy.loginfo("Reconfigure Request to TAKEOFF")
 
     elif config["forward"] == True:
         config["forward"] = False
@@ -767,6 +742,41 @@ def droneGUICallback( config, level):
 
     return config
 
+#Arm the drone
+def setArm():
+    rospy.loginfo("Arming drone ")
+    rospy.wait_for_service('/mavros/cmd/arming')
+    try:
+        armService = rospy.ServiceProxy('/mavros/cmd/arming', mavros_msgs.srv.CommandBool)
+        armService(True)
+    except rospy.ServiceException, e:
+        rospy.logerr("Service arm call failed: %s"%e)
+
+# Set mode to passed variable 
+def setGuidedMode(droneMode):
+    rospy.loginfo("Changing MODE to: "+ str(droneMode))
+    rospy.wait_for_service('/mavros/set_mode')
+    try:
+        flightModeService = rospy.ServiceProxy('/mavros/set_mode', mavros_msgs.srv.SetMode)
+        #http://wiki.ros.org/mavros/CustomModes for custom modes
+        isModeChanged = flightModeService(custom_mode= droneMode) #return true or false
+        if isModeChanged:
+            rospy.loginfo("MODE changed to: "+ str(droneMode))
+        else:
+            rospy.logwarn("MODE changed to: "+ str(droneMode))
+
+    except rospy.ServiceException, e:
+        rospy.logerr("service set_mode call failed: %s. GUIDED Mode could not be set. Check that GPS is enabled"%e)
+
+# Takeoff drone
+def setTakeoffMode(altitudePassed):
+    rospy.loginfo("Taking off.... ")
+    rospy.wait_for_service('/mavros/cmd/takeoff')
+    try:
+        takeoffService = rospy.ServiceProxy('/mavros/cmd/takeoff', mavros_msgs.srv.CommandTOL) 
+        takeoffService(altitude = altitudePassed, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
+    except rospy.ServiceException, e:
+        rospy.logerr("Service takeoff call failed: %s"%e)
 
 if __name__ == '__main__':
 
