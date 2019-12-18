@@ -27,6 +27,9 @@ from localizer_dwm1001.srv       import Anchor_0
 from gazebo_msgs.srv             import DeleteModel # For deleting models from the environment
 import mavros_msgs
 from geometry_msgs.msg import PoseStamped, TwistStamped
+
+
+import mavros_msgs
 from mavros_msgs import srv
 from mavros_msgs.msg import State
 
@@ -35,6 +38,7 @@ from geometry_msgs.msg import (
     PoseWithCovariance,
     Pose,
     Twist,
+    TwistStamped
 )
 
 navDataRotZ    = 0
@@ -49,6 +53,7 @@ land_msg              = Empty()
 takeoff_msg           = Empty()
 reset_msg             = Empty()
 messageTwist          = Twist()
+messageTwistStamped   = TwistStamped()
 targetInDrone         = Pose()
 targetInMap           = Pose()
 lastSavedWaypoint     = Pose()
@@ -85,12 +90,15 @@ gazeboDwm1001                              = LoadDwm1001InGazebo()
 # Setup a node 
 rospy.init_node('fyp', anonymous=False)
 lastDataSampleTime                         = rospy.Time()
-rate                                       = rospy.Rate(50)
+rate                                       = rospy.Rate(10)
 # Define publishers and messages that will be used
 pub_cmd_vel                                = rospy.Publisher('/cmd_vel'             , Twist, queue_size=1)
 pub_takeoff                                = rospy.Publisher('/ardrone/takeoff'     , Empty, queue_size=1)
 pub_land                                   = rospy.Publisher('/ardrone/land'        , Empty, queue_size=1)
 pub_reset                                  = rospy.Publisher("ardrone/reset"        , Empty, queue_size=1)
+
+
+pub_cmd_velocity                      = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size = 10)
 
 
 
@@ -148,7 +156,7 @@ def run():
     Based on the received command, land,takeoff, go to a waypoint, pivot and go to waypoint or go to origin
 
     """
-    global currentDroneData , actionState, targetInMap, latchStartTime, latched, wayHomePtr, pub_cmd_vel, pub_takeoff, pub_land, pub_reset
+    global currentDroneData , actionState, targetInMap, latchStartTime, latched, wayHomePtr, pub_cmd_velocity, pub_takeoff, pub_land, pub_reset
     latchTime = rospy.Duration(5.0)
 
     rospy.loginfo("Waiting for a command")
@@ -156,17 +164,17 @@ def run():
     # Loop until ros is shutdown
     while not rospy.is_shutdown():
 
-        # Keep publish waypoints to ros
-        publishWaypoints()
-        # Keep publish ardrone position to ros
-        publishArdronePos()
+        # # Keep publish waypoints to ros
+        # publishWaypoints()
+        # # Keep publish ardrone position to ros
+        # publishArdronePos()
 
         # Reset the latch  time
-        if actionState == SYS_DEFS.RESET_LATCH_TIME_ACTION_STATE:
-            latched = False
+        # if actionState == SYS_DEFS.RESET_LATCH_TIME_ACTION_STATE:
+        #     latched = False
 
         # Take off
-        elif actionState == SYS_DEFS.TAKE_OFF_ACTION_STATE:
+        if actionState == SYS_DEFS.TAKE_OFF_ACTION_STATE:
             # Set GUIDED Mode 
             setGuidedMode('GUIDED')
             rate.sleep()
@@ -187,186 +195,190 @@ def run():
                 isLanding = landService(altitude = 0, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
             except rospy.ServiceException, e:
                 print "service land call failed: %s. The vehicle cannot land "%e
+        # elif (actionState is not SYS_DEFS.LAND_ACTION_STATE) and (actionState is not SYS_DEFS.TAKE_OFF_ACTION_STATE):
+        #     rospy.loginfo("In here")
+        #     pub_cmd_velocity.publish(messageTwistStamped)
+
 
         # Reset
-        elif actionState == SYS_DEFS.RESET_DRONE_ACTION_STATE:
-            rospy.loginfo("Resetting")
-            # Publish reset message
-            pub_reset.publish(reset_msg)
-            # Set action state to 0
-            actionState = 0
+        # elif actionState == SYS_DEFS.RESET_DRONE_ACTION_STATE:
+        #     rospy.loginfo("Resetting")
+        #     # Publish reset message
+        #     pub_reset.publish(reset_msg)
+        #     # Set action state to 0
+        #     actionState = 0
 
         # Go to the waypoint without looking
-        elif actionState == SYS_DEFS.GO_TO_WAYPOINT_WITHOUT_LOOKING_ACTION_STATE:
-            # Convert drone coordinates into drone frames
-            returnTargetInDrone(targetInMap)
-            # Keep going if the waypoint is not reached
-            if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
-                xAct = (targetInDrone.position.x * SYS_DEFS.POINT_GAIN)
-                yAct = (targetInDrone.position.y * SYS_DEFS.POINT_GAIN)
-                zAct = (targetInDrone.position.z * SYS_DEFS.POINT_GAIN)
+        # elif actionState == SYS_DEFS.GO_TO_WAYPOINT_WITHOUT_LOOKING_ACTION_STATE:
+        #     # Convert drone coordinates into drone frames
+        #     returnTargetInDrone(targetInMap)
+        #     # Keep going if the waypoint is not reached
+        #     if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+        #         xAct = (targetInDrone.position.x * SYS_DEFS.POINT_GAIN)
+        #         yAct = (targetInDrone.position.y * SYS_DEFS.POINT_GAIN)
+        #         zAct = (targetInDrone.position.z * SYS_DEFS.POINT_GAIN)
 
-                rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
-                              " Y: " + str(realPose.pose.position.y) +
-                              " Z: " + str(realPose.pose.position.z))
-                rospy.loginfo("Acceleration X: " + str(xAct) +
-                              " Y: " + str(yAct) +
-                              " Z: " + str(zAct))
-                rospy.loginfo("Current DD X: " + str(currentDroneData.x) +
-                              " Y: " + str(currentDroneData.y) +
-                              " Z: " + str(currentDroneData.z))
-                rospy.loginfo("Target DD X: " + str(targetInDrone.position.x) +
-                              " Y: " + str(targetInDrone.position.y) +
-                              " Z: " + str(targetInDrone.position.z))
-                command(xAct, yAct, zAct, 0, 0, 0)
-            else:
-                rospy.loginfo("Waypoint Reached ")
-                command(0, 0, 0, 0, 0, 0)
-                actionState = 0
+        #         rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
+        #                       " Y: " + str(realPose.pose.position.y) +
+        #                       " Z: " + str(realPose.pose.position.z))
+        #         rospy.loginfo("Acceleration X: " + str(xAct) +
+        #                       " Y: " + str(yAct) +
+        #                       " Z: " + str(zAct))
+        #         rospy.loginfo("Current DD X: " + str(currentDroneData.x) +
+        #                       " Y: " + str(currentDroneData.y) +
+        #                       " Z: " + str(currentDroneData.z))
+        #         rospy.loginfo("Target DD X: " + str(targetInDrone.position.x) +
+        #                       " Y: " + str(targetInDrone.position.y) +
+        #                       " Z: " + str(targetInDrone.position.z))
+        #         command(xAct, yAct, zAct, 0, 0, 0)
+        #     else:
+        #         rospy.loginfo("Waypoint Reached ")
+        #         command(0, 0, 0, 0, 0, 0)
+        #         actionState = 0
 
 
         # Look at the waypoint
-        elif actionState == SYS_DEFS.LOOK_AT_WAYPOINT_ACTION_STATE:
-            rospy.loginfo("Looking at the waypoint")
-            # Convert drone coordinates into drone frames
-            returnTargetInDrone(targetInMap)
-            # Adjust z rotation
-            zRotAct = targetInDrone.orientation.z * SYS_DEFS.POINT_GAIN
-            command(0, 0, 0, 0, 0, zRotAct)
+        # elif actionState == SYS_DEFS.LOOK_AT_WAYPOINT_ACTION_STATE:
+        #     rospy.loginfo("Looking at the waypoint")
+        #     # Convert drone coordinates into drone frames
+        #     returnTargetInDrone(targetInMap)
+        #     # Adjust z rotation
+        #     zRotAct = targetInDrone.orientation.z * SYS_DEFS.POINT_GAIN
+        #     command(0, 0, 0, 0, 0, zRotAct)
 
         # Look and Go to the waypoint
-        elif actionState == SYS_DEFS.LOOK_AND_GO_TO_WAYPOINT_ACTION_STATE:
-            # Convert drone coordinates into drone frames
-            returnTargetInDrone(targetInMap)
-            # Keep going if the waypoint is not reached
-            if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
-                # Check if the drone is facing the waypoint, fix orientation if not
-                if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
-                    # Adjust accelleration with angle gain and point gain
-                    zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
-                    xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
-                    yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
-                    zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
-                    rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
-                                  " Y: " + str(realPose.pose.position.y) +
-                                  " Z: " + str(realPose.pose.position.z))
-                    rospy.loginfo("Acceleration X: " + str(xAct) +
-                                  " Y: " + str(yAct) +
-                                  " Z: " + str(zAct))
-                    rospy.loginfo("Current DD X: " + str(currentDroneData.x) +
-                                  " Y: " + str(currentDroneData.y) +
-                                  " Z: " + str(currentDroneData.z))
-                    rospy.loginfo("Target DD X: " + str(targetInDrone.position.x) +
-                                  " Y: " + str(targetInDrone.position.y) +
-                                  " Z: " + str(targetInDrone.position.z))
-                    command(xAct, yAct, zAct, 0, 0, zRotAct)
+        # elif actionState == SYS_DEFS.LOOK_AND_GO_TO_WAYPOINT_ACTION_STATE:
+        #     # Convert drone coordinates into drone frames
+        #     returnTargetInDrone(targetInMap)
+        #     # Keep going if the waypoint is not reached
+        #     if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+        #         # Check if the drone is facing the waypoint, fix orientation if not
+        #         if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
+        #             # Adjust accelleration with angle gain and point gain
+        #             zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
+        #             xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
+        #             yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
+        #             zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
+        #             rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
+        #                           " Y: " + str(realPose.pose.position.y) +
+        #                           " Z: " + str(realPose.pose.position.z))
+        #             rospy.loginfo("Acceleration X: " + str(xAct) +
+        #                           " Y: " + str(yAct) +
+        #                           " Z: " + str(zAct))
+        #             rospy.loginfo("Current DD X: " + str(currentDroneData.x) +
+        #                           " Y: " + str(currentDroneData.y) +
+        #                           " Z: " + str(currentDroneData.z))
+        #             rospy.loginfo("Target DD X: " + str(targetInDrone.position.x) +
+        #                           " Y: " + str(targetInDrone.position.y) +
+        #                           " Z: " + str(targetInDrone.position.z))
+        #             command(xAct, yAct, zAct, 0, 0, zRotAct)
 
-                else:
-                    # Fix orientation if the drone is not facing the waypoint
-                    rospy.loginfo("Fixing orientation")
-                    zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
-                    command(0, 0, 0, 0, 0, zRotAct)
-            else:
-                # Waypoint is reached
-                rospy.loginfo("Waypoint reached ")
-                # Now hover
-                command(0, 0, 0, 0, 0, 0)
-                # Reset to state 0
-                actionState = 0
+        #         else:
+        #             # Fix orientation if the drone is not facing the waypoint
+        #             rospy.loginfo("Fixing orientation")
+        #             zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
+        #             command(0, 0, 0, 0, 0, zRotAct)
+        #     else:
+        #         # Waypoint is reached
+        #         rospy.loginfo("Waypoint reached ")
+        #         # Now hover
+        #         command(0, 0, 0, 0, 0, 0)
+        #         # Reset to state 0
+        #         actionState = 0
 
         # Follow Flightpath
-        elif actionState == SYS_DEFS.FOLLOW_FLIGHT_PATH_WAYPOINTS_ACTION_STATE:
-            # Get the global counter
-            global currentWaypointCounterForFlightPath
-            # Get a coordinate from the xml file and assign it to targetInMap
-            targetInMap = droneWaypointsFromXML.getWaypointsCoordinates()
-            # Check if the anchor is reached
-            if droneWaypointsFromXML.extractCoordinatesFromXML(currentWaypointCounterForFlightPath):
-                # Convert drone coordinates into drone frames
-                returnTargetInDrone(targetInMap)
-                # Keep going if the waypoint is not reached
-                if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
-                    # Check if the drone is facing the waypoint, fix orientation if not
-                    if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
-                        # Adjust accelleration with angle gain and point gain
-                        zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
-                        xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
-                        yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
-                        zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
-                        command(xAct, yAct, zAct, 0, 0, zRotAct)
+        # elif actionState == SYS_DEFS.FOLLOW_FLIGHT_PATH_WAYPOINTS_ACTION_STATE:
+        #     # Get the global counter
+        #     global currentWaypointCounterForFlightPath
+        #     # Get a coordinate from the xml file and assign it to targetInMap
+        #     targetInMap = droneWaypointsFromXML.getWaypointsCoordinates()
+        #     # Check if the anchor is reached
+        #     if droneWaypointsFromXML.extractCoordinatesFromXML(currentWaypointCounterForFlightPath):
+        #         # Convert drone coordinates into drone frames
+        #         returnTargetInDrone(targetInMap)
+        #         # Keep going if the waypoint is not reached
+        #         if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+        #             # Check if the drone is facing the waypoint, fix orientation if not
+        #             if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
+        #                 # Adjust accelleration with angle gain and point gain
+        #                 zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
+        #                 xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
+        #                 yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
+        #                 zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
+        #                 command(xAct, yAct, zAct, 0, 0, zRotAct)
 
-                    else:
-                        # Fix orientation if the drone is not facing the waypoint
-                        rospy.loginfo("Fixing orientation")
-                        zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
-                        command(0, 0, 0, 0, 0, zRotAct)
-                else:
-                    # Waypoint is reached, move to the next one
-                    rospy.loginfo("Target DD X: " + str(targetInMap.position.x) +
-                                  " Y: " + str(targetInMap.position.y) +
-                                  " Z: " + str(targetInMap.position.z))#
-                    # Increase counter, so we can move to the next waypoint
-                    currentWaypointCounterForFlightPath +=  1
-                    rospy.loginfo("Waypoint Reached " + str(currentWaypointCounterForFlightPath))
+        #             else:
+        #                 # Fix orientation if the drone is not facing the waypoint
+        #                 rospy.loginfo("Fixing orientation")
+        #                 zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
+        #                 command(0, 0, 0, 0, 0, zRotAct)
+        #         else:
+        #             # Waypoint is reached, move to the next one
+        #             rospy.loginfo("Target DD X: " + str(targetInMap.position.x) +
+        #                           " Y: " + str(targetInMap.position.y) +
+        #                           " Z: " + str(targetInMap.position.z))#
+        #             # Increase counter, so we can move to the next waypoint
+        #             currentWaypointCounterForFlightPath +=  1
+        #             rospy.loginfo("Waypoint Reached " + str(currentWaypointCounterForFlightPath))
 
-            else:
-                # There are no more waypoints to go through
-                rospy.loginfo("XML waypoints finished")
-                # Reset counter to 0
-                currentWaypointCounterForFlightPath = 0
-                # Now hover so user can see that there are no more anchors
-                command(0, 0, 0, 0, 0, 0)
-                # Reset to actionState 0
-                actionState = 0
+        #     else:
+        #         # There are no more waypoints to go through
+        #         rospy.loginfo("XML waypoints finished")
+        #         # Reset counter to 0
+        #         currentWaypointCounterForFlightPath = 0
+        #         # Now hover so user can see that there are no more anchors
+        #         command(0, 0, 0, 0, 0, 0)
+        #         # Reset to actionState 0
+        #         actionState = 0
 
 
         # Follow Flightpath for DWM1001
-        elif actionState == SYS_DEFS.FOLLOW_FLIGHT_PATH_DWM1001_ACTION_STATE:
-            # Get the global counter
-            global currentWaypointCounterForFlightPathDWM1001
-            # Get a coordinate from anchors and assign it to targetInMap
-            targetInMap = gazeboDwm1001.getAnchorCoordinates()
-            # Check if the anchor is reached
-            if gazeboDwm1001.anchorsReached(currentWaypointCounterForFlightPathDWM1001):
-                # Convert drone coordinates into drone frames
-                returnTargetInDrone(targetInMap)
-                # Keep going if the waypoint is not reached
-                if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
-                    # Check if the drone is facing the waypoint, fix orientation if not
-                    if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
-                        # Adjust accelleration with angle gain and point gain
-                        zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
-                        xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
-                        yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
-                        zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
-                        command(xAct, yAct, zAct, 0, 0, zRotAct)
+        # elif actionState == SYS_DEFS.FOLLOW_FLIGHT_PATH_DWM1001_ACTION_STATE:
+        #     # Get the global counter
+        #     global currentWaypointCounterForFlightPathDWM1001
+        #     # Get a coordinate from anchors and assign it to targetInMap
+        #     targetInMap = gazeboDwm1001.getAnchorCoordinates()
+        #     # Check if the anchor is reached
+        #     if gazeboDwm1001.anchorsReached(currentWaypointCounterForFlightPathDWM1001):
+        #         # Convert drone coordinates into drone frames
+        #         returnTargetInDrone(targetInMap)
+        #         # Keep going if the waypoint is not reached
+        #         if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+        #             # Check if the drone is facing the waypoint, fix orientation if not
+        #             if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
+        #                 # Adjust accelleration with angle gain and point gain
+        #                 zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
+        #                 xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
+        #                 yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
+        #                 zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
+        #                 command(xAct, yAct, zAct, 0, 0, zRotAct)
 
-                    else:
-                        # Fix orientation if the drone is not facing the waypoint
-                        rospy.loginfo("Fixing orientation")
-                        zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
-                        command(0, 0, 0, 0, 0, zRotAct)
-                else:
-                    # Anchor is reached, move to the second one
-                    rospy.loginfo("Target DD X: " + str(targetInMap.position.x) +
-                                  " Y: " + str(targetInMap.position.y) +
-                                  " Z: " + str(targetInMap.position.z))
-                    # Increase counter, so we can move to the next anchor
-                    currentWaypointCounterForFlightPathDWM1001 +=  1
-                    rospy.loginfo("Anchor Reached " + str(currentWaypointCounterForFlightPathDWM1001))
+        #             else:
+        #                 # Fix orientation if the drone is not facing the waypoint
+        #                 rospy.loginfo("Fixing orientation")
+        #                 zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
+        #                 command(0, 0, 0, 0, 0, zRotAct)
+        #         else:
+        #             # Anchor is reached, move to the second one
+        #             rospy.loginfo("Target DD X: " + str(targetInMap.position.x) +
+        #                           " Y: " + str(targetInMap.position.y) +
+        #                           " Z: " + str(targetInMap.position.z))
+        #             # Increase counter, so we can move to the next anchor
+        #             currentWaypointCounterForFlightPathDWM1001 +=  1
+        #             rospy.loginfo("Anchor Reached " + str(currentWaypointCounterForFlightPathDWM1001))
 
-            else:
-                # There are no more anchors to go through
-                rospy.loginfo("Anchors finished")
-                # Reset counter to 0
-                currentWaypointCounterForFlightPathDWM1001 = 0
-                # Now hover so user can see that there are no more anchors
-                command(0, 0, 0, 0, 0, 0)
-                # Reset to actionState 0
-                actionState = 0
+        #     else:
+        #         # There are no more anchors to go through
+        #         rospy.loginfo("Anchors finished")
+        #         # Reset counter to 0
+        #         currentWaypointCounterForFlightPathDWM1001 = 0
+        #         # Now hover so user can see that there are no more anchors
+        #         command(0, 0, 0, 0, 0, 0)
+        #         # Reset to actionState 0
+        #         actionState = 0
 
         # Publish message twist produced by action state
-        pub_cmd_vel.publish(messageTwist)
+        #pub_cmd_velocity.publish(messageTwistStamped)
         rate.sleep()
 
 def setUpTwist( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
@@ -384,15 +396,15 @@ def setUpTwist( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
 
     """
 
-    global messageTwist
+    global messageTwistStamped
 
-    messageTwist.linear.x = xLinear
-    messageTwist.linear.y = yLinear
-    messageTwist.linear.z = zLinear
-    messageTwist.angular.x = xAngular
-    messageTwist.angular.y = yAngular
-    messageTwist.angular.z = zAngular
-    return messageTwist
+    messageTwistStamped.twist.linear.x = xLinear
+    messageTwistStamped.twist.linear.y = yLinear
+    messageTwistStamped.twist.linear.z = zLinear
+    messageTwistStamped.twist.angular.x = xAngular
+    messageTwistStamped.twist.angular.y = yAngular
+    messageTwistStamped.twist.angular.z = zAngular
+    return messageTwistStamped
 
 def command( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
     """Form and assign message Twist.
@@ -406,8 +418,8 @@ def command( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
     zAngular -- Angular velocity z axis (default 0.0)
 
     """
-    global messageTwist
-    messageTwist = setUpTwist(xLinear, yLinear, zLinear, xAngular, yAngular, zAngular)
+    global messageTwistStamped
+    messageTwistStamped = setUpTwist(xLinear, yLinear, zLinear, xAngular, yAngular, zAngular)
 
 def realPoseCallBack(realPoseData):
     """Get real position from /ground_truth/state topic
@@ -599,30 +611,30 @@ def JoystickCallBack(data):
         rospy.loginfo("Take off Button Pressed: " + str(SYS_DEFS.BUTTON_TAKEOFF))
         actionState = 1
 
-    elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY] == 1:
-        rospy.loginfo("Loading waypoints from XML file: " + str(SYS_DEFS.BUTTON_EMERGENCY))
-        # load waypoints from xml
-        gazeboWaypoints = LoadWaypointsInGazebo()
-        gazeboWaypoints.addWaypointsFromXMLToGazebo()
+    # elif data.buttons[SYS_DEFS.BUTTON_EMERGENCY] == 1:
+    #     rospy.loginfo("Loading waypoints from XML file: " + str(SYS_DEFS.BUTTON_EMERGENCY))
+    #     # load waypoints from xml
+    #     gazeboWaypoints = LoadWaypointsInGazebo()
+    #     gazeboWaypoints.addWaypointsFromXMLToGazebo()
 
 
-    elif data.buttons[SYS_DEFS.BUTTON_LOAD_DWM1001] == 1:
-        rospy.loginfo("loading waypoint from dwm1001: " + str(SYS_DEFS.BUTTON_EMERGENCY_BACKUP))
-        # load dwm1001 anchors
-        gazeboDwm1001.execute()
+    # elif data.buttons[SYS_DEFS.BUTTON_LOAD_DWM1001] == 1:
+    #     rospy.loginfo("loading waypoint from dwm1001: " + str(SYS_DEFS.BUTTON_EMERGENCY_BACKUP))
+    #     # load dwm1001 anchors
+    #     gazeboDwm1001.execute()
 
     elif data.buttons[SYS_DEFS.BUTTON_HOVER] == 1:
         rospy.loginfo("Hover Button Pressed: " + str(SYS_DEFS.BUTTON_HOVER))
         actionState = 0
         command(0, 0, 0, 0, 0, 0)
 
-    elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_XML] == 1:
-        rospy.loginfo("Follow flight path pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_XML))
-        actionState = 8
+    # elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_XML] == 1:
+    #     rospy.loginfo("Follow flight path pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_XML))
+    #     actionState = 8
 
-    elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_DWM1001] == 1:
-        rospy.loginfo("Follow flight path  from dwm1001 pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_DWM1001))
-        actionState = 9
+    # elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_DWM1001] == 1:
+    #     rospy.loginfo("Follow flight path  from dwm1001 pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_DWM1001))
+    #     actionState = 9
 
     else:
         # controle axes, pitch, roll and yaw
@@ -638,6 +650,9 @@ def JoystickCallBack(data):
                       " yaw: " + str(data.axes[SYS_DEFS.AXIS_YAW] / SYS_DEFS.SCALE_YAW))
 
 
+    pub_cmd_velocity.publish(messageTwistStamped)
+
+
 def droneGUICallback( config, level):
     """Dynamic configuration to control waypoints 
 
@@ -647,6 +662,8 @@ def droneGUICallback( config, level):
 
     global actionState, targetInMap, gazeboDwm1001
 
+
+    twist = TwistStamped()
     if config["land"] == True:
         actionState = 2
         config["land"] = False
@@ -660,25 +677,26 @@ def droneGUICallback( config, level):
     elif config["forward"] == True:
         config["forward"] = False
         actionState = 0
-        command(1, 0, 0, 0, 0, 0)
+        #twist.twist.linear.x = 1
+        command(0, -1, 0, 0, 0, 0)
         rospy.loginfo("""Reconfigure Request Action code: {forward}""".format(**config))
 
     elif config["backward"] == True:
         config["backward"] = False
         actionState = 0
-        command(-1, 0, 0, 0, 0, 0)
+        command(0, 1, 0, 0, 0, 0)
         rospy.loginfo("""Reconfigure Request Action code: {backward}""".format(**config))
 
     elif config["left"] == True:
         config["left"] = False
         actionState = 0
-        command(0, 0.5, 0, 0, 0, 0)
+        command(0.5, 0, 0, 0, 0, 0)
         rospy.loginfo("""Reconfigure Request Action code: {left}""".format(**config))
 
     elif config["right"] == True:
         config["right"] = False
         actionState = 0
-        command(0, -0.5, 0, 0, 0, 0)
+        command(-0.5, 0, 0, 0, 0, 0)
         rospy.loginfo("""Reconfigure Request Action code: {right}""".format(**config))
 
     elif config["deleteWaypoints"] == True:
@@ -739,6 +757,8 @@ def droneGUICallback( config, level):
         actionState = 9
         rospy.loginfo("""Reconfigure Request Action code: {followFlightPathDwm1001}""".format(**config))
 
+    pub_cmd_velocity.publish(messageTwistStamped)
+    #rospy.loginfo("Twist message: "+ str(messageTwistStamped))
 
     return config
 
