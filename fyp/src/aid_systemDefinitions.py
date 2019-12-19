@@ -51,7 +51,7 @@ class SYS_DEFS:
 
     # define the default scaling to apply to the axis inputs. useful where an axis is inverted
     SCALE_ROLL                  = 1.0
-    SCALE_PITCH                 = 1.0
+    SCALE_PITCH                 = -1.0
     SCALE_YAW                   = 1.0
     SCALE_Z                     = 1.0
 
