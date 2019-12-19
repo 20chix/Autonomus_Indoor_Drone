@@ -187,18 +187,7 @@ def run():
             actionState = 0
         # Land
         elif actionState == SYS_DEFS.LAND_ACTION_STATE:
-            # Call service to land the drone
-            rospy.wait_for_service('/mavros/cmd/land')
-            try:
-                landService = rospy.ServiceProxy('/mavros/cmd/land', mavros_msgs.srv.CommandTOL)
-                #http://wiki.ros.org/mavros/CustomModes for custom modes
-                isLanding = landService(altitude = 0, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
-            except rospy.ServiceException, e:
-                print "service land call failed: %s. The vehicle cannot land "%e
-        # elif (actionState is not SYS_DEFS.LAND_ACTION_STATE) and (actionState is not SYS_DEFS.TAKE_OFF_ACTION_STATE):
-        #     rospy.loginfo("In here")
-        #     pub_cmd_velocity.publish(messageTwistStamped)
-
+            setLandMode()
 
         # Reset
         # elif actionState == SYS_DEFS.RESET_DRONE_ACTION_STATE:
@@ -638,8 +627,8 @@ def JoystickCallBack(data):
 
     else:
         # controle axes, pitch, roll and yaw
-        command(data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH,
-                data.axes[SYS_DEFS.AXIX_ROLL] / SYS_DEFS.SCALE_ROLL,
+        command(data.axes[SYS_DEFS.AXIX_ROLL] / SYS_DEFS.SCALE_ROLL,
+                data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH,
                 data.axes[SYS_DEFS.AXIS_Z] / SYS_DEFS.SCALE_Z ,
                 0,
                 0 ,
@@ -663,53 +652,53 @@ def droneGUICallback( config, level):
     global actionState, targetInMap, gazeboDwm1001
 
 
-    twist = TwistStamped()
     if config["land"] == True:
         actionState = 2
         config["land"] = False
-        rospy.loginfo("Reconfigure Request to LAND")
+        rospy.loginfo("Reconfigure request to LAND")
 
     elif config["take_off"] == True:
         actionState = 1
         config["take_off"] = False
-        rospy.loginfo("Reconfigure Request to TAKEOFF")
+        rospy.loginfo("Reconfigure request to TAKEOFF")
 
     elif config["forward"] == True:
         config["forward"] = False
         actionState = 0
-        #twist.twist.linear.x = 1
         command(0, -1, 0, 0, 0, 0)
-        rospy.loginfo("""Reconfigure Request Action code: {forward}""".format(**config))
+        rospy.loginfo("Reconfigure request to go forward")
 
     elif config["backward"] == True:
         config["backward"] = False
         actionState = 0
         command(0, 1, 0, 0, 0, 0)
-        rospy.loginfo("""Reconfigure Request Action code: {backward}""".format(**config))
+        rospy.loginfo("Reconfigure request to go backward")
 
     elif config["left"] == True:
         config["left"] = False
         actionState = 0
         command(0.5, 0, 0, 0, 0, 0)
-        rospy.loginfo("""Reconfigure Request Action code: {left}""".format(**config))
+        rospy.loginfo("Reconfigure request to go left")
 
     elif config["right"] == True:
         config["right"] = False
         actionState = 0
         command(-0.5, 0, 0, 0, 0, 0)
-        rospy.loginfo("""Reconfigure Request Action code: {right}""".format(**config))
-
-    elif config["deleteWaypoints"] == True:
-        config["deleteWaypoints"] = False
-        deleteAllWaypointsFromGazebo()
-        rospy.loginfo("""Reconfigure Request Action code: {deleteWaypoints}""".format(**config))
+        rospy.loginfo("Reconfigure request to go right")
 
     elif config["hover"] == True:
         config["hover"] = False
         actionState = 0
         command(0, 0, 0, 0, 0, 0)
-        rospy.loginfo("""Reconfigure Request Action code: {hover}""".format(**config))
+        rospy.loginfo("Reconfigure request to hover")
 
+        #TODO add implementation 
+    elif config["deleteWaypoints"] == True:
+        config["deleteWaypoints"] = False
+        deleteAllWaypointsFromGazebo()
+        rospy.loginfo("""Reconfigure Request Action code: {deleteWaypoints}""".format(**config))
+
+         #TODO add implementation 
     elif config["look_at_waypoint"] == True:
         config["look_at_waypoint"] = False
         targetInMap.position.x = config["targetInMapX"]
@@ -718,6 +707,7 @@ def droneGUICallback( config, level):
         actionState = 5
         rospy.loginfo("""Reconfigure Request Action code: {look_at_waypoint}""".format(**config))
 
+         #TODO add implementation 
     elif config["go_to_waypoint"] == True:
         config["go_to_waypoint"] = False
         targetInMap.position.x = config["targetInMapX"]
@@ -726,6 +716,7 @@ def droneGUICallback( config, level):
         actionState = 4
         rospy.loginfo("""Reconfigure Request Action code: {go_to_waypoint}""".format(**config))
 
+         #TODO add implementation 
     elif config["look_and_go"] == True:
         config["look_and_go"] = False
         targetInMap.position.x = config["targetInMapX"]
@@ -734,6 +725,7 @@ def droneGUICallback( config, level):
         actionState = 7
         rospy.loginfo("""Reconfigure Request Action code: {look_and_go}""".format(**config))
 
+         #TODO add implementation 
     elif config["load_waypoint_gazebo"] == True:
         config["load_waypoint_gazebo"] = False
         # load waypoints from xml
@@ -741,25 +733,27 @@ def droneGUICallback( config, level):
         gazeboWaypoints.addWaypointsFromXMLToGazebo()
         rospy.loginfo("""Reconfigure Request : {load_waypoint_gazebo}""".format(**config))
 
+         #TODO add implementation 
     elif config["load_waypoint_dwm1001"] == True:
         config["load_waypoint_dwm1001"] = False
         # load dwm1001 anchors
         gazeboDwm1001.execute()
         rospy.loginfo("""Reconfigure Request : {load_waypoint_dwm1001}""".format(**config))
 
+         #TODO add implementation 
     elif config["followFlightPathWaypoints"] == True:
         config["followFlightPathWaypoints"]= False
         actionState = 8
         rospy.loginfo("""Reconfigure Request Action code: {followFlightPathWaypoints}""".format(**config))
 
+         #TODO add implementation 
     elif config["followFlightPathDwm1001"] == True:
         config["followFlightPathDwm1001"]= False
         actionState = 9
         rospy.loginfo("""Reconfigure Request Action code: {followFlightPathDwm1001}""".format(**config))
 
+    # Publish command to the topic     
     pub_cmd_velocity.publish(messageTwistStamped)
-    #rospy.loginfo("Twist message: "+ str(messageTwistStamped))
-
     return config
 
 #Arm the drone
@@ -797,6 +791,16 @@ def setTakeoffMode(altitudePassed):
         takeoffService(altitude = altitudePassed, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
     except rospy.ServiceException, e:
         rospy.logerr("Service takeoff call failed: %s"%e)
+
+def setLandMode():
+    rospy.loginfo("Landing.... ")
+    rospy.wait_for_service('/mavros/cmd/land')
+    try:
+        landService = rospy.ServiceProxy('/mavros/cmd/land', mavros_msgs.srv.CommandTOL)
+        #http://wiki.ros.org/mavros/CustomModes for custom modes
+        isLanding = landService(altitude = 0, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
+    except rospy.ServiceException, e:
+        rospy.logerr("service land call failed: %s. The vehicle cannot land "%e)     
 
 if __name__ == '__main__':
 
