@@ -60,6 +60,7 @@ lastSavedWaypoint     = Pose()
 realPose              = PoseWithCovariance()
 droneWaypointsFromXML = DroneWaypoint()
 latched               = False
+flying                = False
 
 
 targetInMap.position.x                     = 0
@@ -156,14 +157,13 @@ def run():
     Based on the received command, land,takeoff, go to a waypoint, pivot and go to waypoint or go to origin
 
     """
-    global currentDroneData , actionState, targetInMap, latchStartTime, latched, wayHomePtr, pub_cmd_velocity, pub_takeoff, pub_land, pub_reset
+    global flying, currentDroneData , actionState, targetInMap, latchStartTime, latched, wayHomePtr, pub_cmd_velocity, pub_takeoff, pub_land, pub_reset
     latchTime = rospy.Duration(5.0)
 
     rospy.loginfo("Waiting for a command")
 
     # Loop until ros is shutdown
     while not rospy.is_shutdown():
-
         # # Keep publish waypoints to ros
         # publishWaypoints()
         # # Keep publish ardrone position to ros
@@ -187,7 +187,9 @@ def run():
             actionState = 0
         # Land
         elif actionState == SYS_DEFS.LAND_ACTION_STATE:
+            rospy.loginfo("Landing....")
             setLandMode()
+            actionState = 0
 
         # Reset
         # elif actionState == SYS_DEFS.RESET_DRONE_ACTION_STATE:
@@ -367,7 +369,9 @@ def run():
         #         actionState = 0
 
         # Publish message twist produced by action state
-        #pub_cmd_velocity.publish(messageTwistStamped)
+        if flying:
+            pub_cmd_velocity.publish(messageTwistStamped)
+
         rate.sleep()
 
 def setUpTwist( xLinear, yLinear, zLinear, xAngular, yAngular, zAngular):
@@ -639,7 +643,7 @@ def JoystickCallBack(data):
                       " yaw: " + str(data.axes[SYS_DEFS.AXIS_YAW] / SYS_DEFS.SCALE_YAW))
 
 
-    pub_cmd_velocity.publish(messageTwistStamped)
+    #pub_cmd_velocity.publish(messageTwistStamped)
 
 
 def droneGUICallback( config, level):
@@ -753,7 +757,7 @@ def droneGUICallback( config, level):
         rospy.loginfo("""Reconfigure Request Action code: {followFlightPathDwm1001}""".format(**config))
 
     # Publish command to the topic     
-    pub_cmd_velocity.publish(messageTwistStamped)
+    #pub_cmd_velocity.publish(messageTwistStamped)
     return config
 
 #Arm the drone
@@ -784,21 +788,26 @@ def setGuidedMode(droneMode):
 
 # Takeoff drone
 def setTakeoffMode(altitudePassed):
+    global flying 
     rospy.loginfo("Taking off.... ")
     rospy.wait_for_service('/mavros/cmd/takeoff')
     try:
         takeoffService = rospy.ServiceProxy('/mavros/cmd/takeoff', mavros_msgs.srv.CommandTOL) 
-        takeoffService(altitude = altitudePassed, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
+        isTakingOff = takeoffService(altitude = altitudePassed, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
+        time.sleep(4)
+        flying = True
     except rospy.ServiceException, e:
         rospy.logerr("Service takeoff call failed: %s"%e)
 
 def setLandMode():
-    rospy.loginfo("Landing.... ")
+    global flying 
+    
     rospy.wait_for_service('/mavros/cmd/land')
     try:
         landService = rospy.ServiceProxy('/mavros/cmd/land', mavros_msgs.srv.CommandTOL)
         #http://wiki.ros.org/mavros/CustomModes for custom modes
-        isLanding = landService(altitude = 0, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
+        landService(altitude = 0, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
+        flying = False
     except rospy.ServiceException, e:
         rospy.logerr("service land call failed: %s. The vehicle cannot land "%e)     
 
