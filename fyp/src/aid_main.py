@@ -57,7 +57,7 @@ messageTwistStamped   = TwistStamped()
 targetInDrone         = Pose()
 targetInMap           = Pose()
 lastSavedWaypoint     = Pose()
-realPose              = PoseWithCovariance()
+realPose              = PoseStamped()
 droneWaypointsFromXML = DroneWaypoint()
 latched               = False
 flying                = False
@@ -88,18 +88,18 @@ lastSavedWayHomePoint.position.x           = 0
 lastSavedWayHomePoint.position.y           = 0
 lastSavedWayHomePoint.position.z           = 0.1
 gazeboDwm1001                              = LoadDwm1001InGazebo()
+
 # Setup a node 
 rospy.init_node('fyp', anonymous=False)
 lastDataSampleTime                         = rospy.Time()
 rate                                       = rospy.Rate(10)
+
 # Define publishers and messages that will be used
 pub_cmd_vel                                = rospy.Publisher('/cmd_vel'             , Twist, queue_size=1)
 pub_takeoff                                = rospy.Publisher('/ardrone/takeoff'     , Empty, queue_size=1)
 pub_land                                   = rospy.Publisher('/ardrone/land'        , Empty, queue_size=1)
 pub_reset                                  = rospy.Publisher("ardrone/reset"        , Empty, queue_size=1)
-
-
-pub_cmd_velocity                      = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size = 10)
+pub_cmd_velocity                           = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size = 10)
 
 
 
@@ -124,8 +124,8 @@ def init():
     Server(droneGUIConfig, droneGUICallback)
 
     #Subscribe to these topics
-    #rospy.Subscriber('/ardrone/navdata', Navdata, navDataCallBack)
-    rospy.Subscriber('/ground_truth/state', Odometry, realPoseCallBack)
+    rospy.Subscriber('/mavros/global_position/local', Navdata, navDataCallBack)
+    rospy.Subscriber('/mavros/local_position/odom', Odometry, realPoseCallBack)
     rospy.Subscriber("joy", Joy, JoystickCallBack)
 
     run()
@@ -167,7 +167,7 @@ def run():
         # # Keep publish waypoints to ros
         # publishWaypoints()
         # # Keep publish ardrone position to ros
-        # publishArdronePos()
+        #publishArdronePos()
 
         # Reset the latch  time
         # if actionState == SYS_DEFS.RESET_LATCH_TIME_ACTION_STATE:
@@ -200,82 +200,83 @@ def run():
         #     actionState = 0
 
         # Go to the waypoint without looking
-        # elif actionState == SYS_DEFS.GO_TO_WAYPOINT_WITHOUT_LOOKING_ACTION_STATE:
-        #     # Convert drone coordinates into drone frames
-        #     returnTargetInDrone(targetInMap)
-        #     # Keep going if the waypoint is not reached
-        #     if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
-        #         xAct = (targetInDrone.position.x * SYS_DEFS.POINT_GAIN)
-        #         yAct = (targetInDrone.position.y * SYS_DEFS.POINT_GAIN)
-        #         zAct = (targetInDrone.position.z * SYS_DEFS.POINT_GAIN)
+        elif actionState == SYS_DEFS.GO_TO_WAYPOINT_WITHOUT_LOOKING_ACTION_STATE:
+            # Convert drone coordinates into drone frames
+            #returnTargetInDrone(targetInMap)
+            # Keep going if the waypoint is not reached
+            if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+                xAct = (targetInDrone.position.x * SYS_DEFS.POINT_GAIN)
+                yAct = (targetInDrone.position.y * SYS_DEFS.POINT_GAIN)
+                zAct = (targetInDrone.position.z * SYS_DEFS.POINT_GAIN)
 
-        #         rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
-        #                       " Y: " + str(realPose.pose.position.y) +
-        #                       " Z: " + str(realPose.pose.position.z))
-        #         rospy.loginfo("Acceleration X: " + str(xAct) +
-        #                       " Y: " + str(yAct) +
-        #                       " Z: " + str(zAct))
-        #         rospy.loginfo("Current DD X: " + str(currentDroneData.x) +
-        #                       " Y: " + str(currentDroneData.y) +
-        #                       " Z: " + str(currentDroneData.z))
-        #         rospy.loginfo("Target DD X: " + str(targetInDrone.position.x) +
-        #                       " Y: " + str(targetInDrone.position.y) +
-        #                       " Z: " + str(targetInDrone.position.z))
-        #         command(xAct, yAct, zAct, 0, 0, 0)
-        #     else:
-        #         rospy.loginfo("Waypoint Reached ")
-        #         command(0, 0, 0, 0, 0, 0)
-        #         actionState = 0
+                rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
+                              " Y: " + str(realPose.pose.position.y) +
+                              " Z: " + str(realPose.pose.position.z))
+                rospy.loginfo("Acceleration X: " + str(xAct) +
+                              " Y: " + str(yAct) +
+                              " Z: " + str(zAct))
+                rospy.loginfo("Current DD X: " + str(currentDroneData.x) +
+                              " Y: " + str(currentDroneData.y) +
+                              " Z: " + str(currentDroneData.z))
+                rospy.loginfo("Target DD X: " + str(targetInDrone.position.x) +
+                              " Y: " + str(targetInDrone.position.y) +
+                              " Z: " + str(targetInDrone.position.z))
+                command(xAct, yAct, zAct, 0, 0, 0)
+            else:
+                rospy.loginfo("Waypoint Reached ")
+                command(0, 0, 0, 0, 0, 0)
+                actionState = 0
 
 
         # Look at the waypoint
-        # elif actionState == SYS_DEFS.LOOK_AT_WAYPOINT_ACTION_STATE:
-        #     rospy.loginfo("Looking at the waypoint")
-        #     # Convert drone coordinates into drone frames
-        #     returnTargetInDrone(targetInMap)
-        #     # Adjust z rotation
-        #     zRotAct = targetInDrone.orientation.z * SYS_DEFS.POINT_GAIN
-        #     command(0, 0, 0, 0, 0, zRotAct)
+        elif actionState == SYS_DEFS.LOOK_AT_WAYPOINT_ACTION_STATE:
+            rospy.loginfo("Looking at the waypoint")
+            # Convert drone coordinates into drone frames
+            returnTargetInDrone(targetInMap)
+            # Adjust z rotation
+            zRotAct = targetInDrone.orientation.z * SYS_DEFS.POINT_GAIN
+            command(0, 0, 0, 0, 0, zRotAct)
+            actionState = 0
 
         # Look and Go to the waypoint
-        # elif actionState == SYS_DEFS.LOOK_AND_GO_TO_WAYPOINT_ACTION_STATE:
-        #     # Convert drone coordinates into drone frames
-        #     returnTargetInDrone(targetInMap)
-        #     # Keep going if the waypoint is not reached
-        #     if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
-        #         # Check if the drone is facing the waypoint, fix orientation if not
-        #         if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
-        #             # Adjust accelleration with angle gain and point gain
-        #             zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
-        #             xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
-        #             yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
-        #             zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
-        #             rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
-        #                           " Y: " + str(realPose.pose.position.y) +
-        #                           " Z: " + str(realPose.pose.position.z))
-        #             rospy.loginfo("Acceleration X: " + str(xAct) +
-        #                           " Y: " + str(yAct) +
-        #                           " Z: " + str(zAct))
-        #             rospy.loginfo("Current DD X: " + str(currentDroneData.x) +
-        #                           " Y: " + str(currentDroneData.y) +
-        #                           " Z: " + str(currentDroneData.z))
-        #             rospy.loginfo("Target DD X: " + str(targetInDrone.position.x) +
-        #                           " Y: " + str(targetInDrone.position.y) +
-        #                           " Z: " + str(targetInDrone.position.z))
-        #             command(xAct, yAct, zAct, 0, 0, zRotAct)
+        elif actionState == SYS_DEFS.LOOK_AND_GO_TO_WAYPOINT_ACTION_STATE:
+            # Convert drone coordinates into drone frames
+            returnTargetInDrone(targetInMap)
+            # Keep going if the waypoint is not reached
+            if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+                # Check if the drone is facing the waypoint, fix orientation if not
+                if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
+                    # Adjust accelleration with angle gain and point gain
+                    zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
+                    xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
+                    yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
+                    zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
+                    rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
+                                  " Y: " + str(realPose.pose.position.y) +
+                                  " Z: " + str(realPose.pose.position.z))
+                    rospy.loginfo("Acceleration X: " + str(xAct) +
+                                  " Y: " + str(yAct) +
+                                  " Z: " + str(zAct))
+                    rospy.loginfo("Current DD X: " + str(currentDroneData.x) +
+                                  " Y: " + str(currentDroneData.y) +
+                                  " Z: " + str(currentDroneData.z))
+                    rospy.loginfo("Target DD X: " + str(targetInDrone.position.x) +
+                                  " Y: " + str(targetInDrone.position.y) +
+                                  " Z: " + str(targetInDrone.position.z))
+                    command(xAct, yAct, zAct, 0, 0, zRotAct)
 
-        #         else:
-        #             # Fix orientation if the drone is not facing the waypoint
-        #             rospy.loginfo("Fixing orientation")
-        #             zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
-        #             command(0, 0, 0, 0, 0, zRotAct)
-        #     else:
-        #         # Waypoint is reached
-        #         rospy.loginfo("Waypoint reached ")
-        #         # Now hover
-        #         command(0, 0, 0, 0, 0, 0)
-        #         # Reset to state 0
-        #         actionState = 0
+                else:
+                    # Fix orientation if the drone is not facing the waypoint
+                    rospy.loginfo("Fixing orientation")
+                    zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
+                    command(0, 0, 0, 0, 0, zRotAct)
+            else:
+                # Waypoint is reached
+                rospy.loginfo("Waypoint reached ")
+                # Now hover
+                command(0, 0, 0, 0, 0, 0)
+                # Reset to state 0
+                actionState = 0
 
         # Follow Flightpath
         # elif actionState == SYS_DEFS.FOLLOW_FLIGHT_PATH_WAYPOINTS_ACTION_STATE:
@@ -484,22 +485,22 @@ def navDataCallBack(nav_msg):
     #  Get the time stamp of drone
     currentDroneData.timeStamp = nav_msg.header.stamp
 
-    droneState = nav_msg.state
+    #droneState = nav_msg.state
     # For future reference get the battery level of the drone
-    battery = nav_msg.batteryPercent
-    navDataRotZ = nav_msg.rotZ
+    #battery = nav_msg.batteryPercent
+    #navDataRotZ = nav_msg.rotZ
 
     # Check if Z rotation is below 0, if it is add 360 degrees to it
-    if nav_msg.rotZ < 0:
-        navDataRotZ360 = nav_msg.rotZ + 360
+    if nav_msg.pose.orientation.z < 0:
+        navDataRotZ360 = nav_msg.pose.orientation.z + 360
     else:
-        navDataRotZ360 = nav_msg.rotZ
+        navDataRotZ360 = nav_msg.pose.orientation.z
 
     # Linear Velocities
     # 1 km/s is 1000 metres per second which is 1000 [m / sec]
-    currentDroneData.xVel = nav_msg.vx /SYS_DEFS.LINEAR_VELOCITY_KPS
-    currentDroneData.yVel = nav_msg.vy /SYS_DEFS.LINEAR_VELOCITY_KPS
-    currentDroneData.zVel = nav_msg.vz /SYS_DEFS.LINEAR_VELOCITY_KPS
+    currentDroneData.xVel = nav_msg.twist.linear.x /SYS_DEFS.LINEAR_VELOCITY_KPS
+    currentDroneData.yVel = nav_msg.twist.linear.y /SYS_DEFS.LINEAR_VELOCITY_KPS
+    currentDroneData.zVel = nav_msg.twist.linear.z /SYS_DEFS.LINEAR_VELOCITY_KPS
 
     # Linear Accelerations
     # The metre per second squared is the unit of acceleration in the International System of Units (SI)
@@ -565,7 +566,7 @@ def publishArdronePos():
     global realPose
 
     dronePos = realPose.pose  # meters[m]
-    pub_ardrone_get_pose = rospy.Publisher('/aid/ardrone/get_pos/', Pose, queue_size=1)
+    pub_ardrone_get_pose = rospy.Publisher('/mavros/local_position/pose', PoseStamped, queue_size=1)
     pub_ardrone_get_pose.publish(dronePos)
 
 
