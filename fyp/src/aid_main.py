@@ -124,8 +124,8 @@ def init():
     Server(droneGUIConfig, droneGUICallback)
 
     #Subscribe to these topics
-    rospy.Subscriber('/mavros/global_position/local', Navdata, navDataCallBack)
-    rospy.Subscriber('/mavros/local_position/odom', Odometry, realPoseCallBack)
+    rospy.Subscriber('/mavros/local_position/pose', PoseStamped, realPoseCallBack)
+    rospy.Subscriber('/mavros/local_position/odom', Odometry, navDataCallBack)
     rospy.Subscriber("joy", Joy, JoystickCallBack)
 
     run()
@@ -209,9 +209,9 @@ def run():
                 yAct = (targetInDrone.position.y * SYS_DEFS.POINT_GAIN)
                 zAct = (targetInDrone.position.z * SYS_DEFS.POINT_GAIN)
 
-                rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
-                              " Y: " + str(realPose.pose.position.y) +
-                              " Z: " + str(realPose.pose.position.z))
+                rospy.loginfo("Real Pose X: " + str(realPose.position.x) +
+                              " Y: " + str(realPose.position.y) +
+                              " Z: " + str(realPose.position.z))
                 rospy.loginfo("Acceleration X: " + str(xAct) +
                               " Y: " + str(yAct) +
                               " Z: " + str(zAct))
@@ -236,7 +236,6 @@ def run():
             # Adjust z rotation
             zRotAct = targetInDrone.orientation.z * SYS_DEFS.POINT_GAIN
             command(0, 0, 0, 0, 0, zRotAct)
-            actionState = 0
 
         # Look and Go to the waypoint
         elif actionState == SYS_DEFS.LOOK_AND_GO_TO_WAYPOINT_ACTION_STATE:
@@ -251,9 +250,9 @@ def run():
                     xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
                     yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
                     zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
-                    rospy.loginfo("Real Pose X: " + str(realPose.pose.position.x) +
-                                  " Y: " + str(realPose.pose.position.y) +
-                                  " Z: " + str(realPose.pose.position.z))
+                    rospy.loginfo("Real Pose X: " + str(realPose.position.x) +
+                                  " Y: " + str(realPose.position.y) +
+                                  " Z: " + str(realPose.position.z))
                     rospy.loginfo("Acceleration X: " + str(xAct) +
                                   " Y: " + str(yAct) +
                                   " Z: " + str(zAct))
@@ -486,34 +485,35 @@ def navDataCallBack(nav_msg):
     currentDroneData.timeStamp = nav_msg.header.stamp
 
     #droneState = nav_msg.state
+    #
     # For future reference get the battery level of the drone
     #battery = nav_msg.batteryPercent
     #navDataRotZ = nav_msg.rotZ
 
     # Check if Z rotation is below 0, if it is add 360 degrees to it
-    if nav_msg.pose.orientation.z < 0:
-        navDataRotZ360 = nav_msg.pose.orientation.z + 360
+    if nav_msg.pose.pose.orientation.z < 0:
+        navDataRotZ360 = nav_msg.pose.pose.orientation.z + 360
     else:
-        navDataRotZ360 = nav_msg.pose.orientation.z
+        navDataRotZ360 = nav_msg.pose.pose.orientation.z
 
     # Linear Velocities
     # 1 km/s is 1000 metres per second which is 1000 [m / sec]
-    currentDroneData.xVel = nav_msg.twist.linear.x /SYS_DEFS.LINEAR_VELOCITY_KPS
-    currentDroneData.yVel = nav_msg.twist.linear.y /SYS_DEFS.LINEAR_VELOCITY_KPS
-    currentDroneData.zVel = nav_msg.twist.linear.z /SYS_DEFS.LINEAR_VELOCITY_KPS
+    currentDroneData.xVel = nav_msg.twist.twist.linear.x /SYS_DEFS.LINEAR_VELOCITY_KPS
+    currentDroneData.yVel = nav_msg.twist.twist.linear.y /SYS_DEFS.LINEAR_VELOCITY_KPS
+    currentDroneData.zVel = nav_msg.twist.twist.linear.z /SYS_DEFS.LINEAR_VELOCITY_KPS
 
     # Linear Accelerations
     # The metre per second squared is the unit of acceleration in the International System of Units (SI)
     # https://en.wikipedia.org/wiki/Metre_per_second_squared [m / s ^ 2]
     # 1 g0 	980.665 	32.1740 	9.80665 	1
-    currentDroneData.xAcc = nav_msg.ax * SYS_DEFS.LINEAR_ACCELLERATION_M_PER_SEC
-    currentDroneData.yAcc = nav_msg.ay * SYS_DEFS.LINEAR_ACCELLERATION_M_PER_SEC
-    currentDroneData.zAcc = nav_msg.az * SYS_DEFS.LINEAR_ACCELLERATION_M_PER_SEC
+    currentDroneData.xAcc = nav_msg.twist.twist.linear.x * SYS_DEFS.LINEAR_ACCELLERATION_M_PER_SEC
+    currentDroneData.yAcc = nav_msg.twist.twist.linear.y * SYS_DEFS.LINEAR_ACCELLERATION_M_PER_SEC
+    currentDroneData.zAcc = nav_msg.twist.twist.linear.z * SYS_DEFS.LINEAR_ACCELLERATION_M_PER_SEC
 
     # Angular Rotations in Degrees
-    currentDroneData.xRot = nav_msg.rotX
-    currentDroneData.yRot = nav_msg.rotY
-    currentDroneData.zRot = nav_msg.rotZ
+    currentDroneData.xRot = nav_msg.twist.twist.angular.x
+    currentDroneData.yRot = nav_msg.twist.twist.angular.y
+    currentDroneData.zRot = nav_msg.twist.twist.angular.z
 
     differenceTIme = (currentDroneData.timeStamp - lastDroneData.timeStamp).to_sec()
     # Add 0.02 incase the time is the same
@@ -524,9 +524,9 @@ def navDataCallBack(nav_msg):
     currentDroneData.zRotVel = (currentDroneData.zRot - lastDroneData.zRot)/differenceTIme  # Degrees / sec
 
     if poseEstimationMethod == 1:
-        currentDroneData.x = realPose.pose.position.x  # meters[m]
-        currentDroneData.y = realPose.pose.position.y  # meters[m]
-        currentDroneData.z = realPose.pose.position.z  # meters[m]
+        currentDroneData.x = realPose.position.x  # meters[m]
+        currentDroneData.y = realPose.position.y  # meters[m]
+        currentDroneData.z = realPose.position.z  # meters[m]
 
     # Assign the currentDroneData to lastDroneData
     lastDroneData = currentDroneData
@@ -565,13 +565,13 @@ def publishArdronePos():
     """
     global realPose
 
-    dronePos = realPose.pose  # meters[m]
+    dronePos = realPose  # meters[m]
     pub_ardrone_get_pose = rospy.Publisher('/mavros/local_position/pose', PoseStamped, queue_size=1)
     pub_ardrone_get_pose.publish(dronePos)
 
 
 def publishWaypoints():
-    """Publish waypoints from xml file 
+    """Publish waypoints from xml file 6.0
 
     """
 
@@ -632,8 +632,8 @@ def JoystickCallBack(data):
 
     else:
         # controle axes, pitch, roll and yaw
-        command(data.axes[SYS_DEFS.AXIX_ROLL] / SYS_DEFS.SCALE_ROLL,
-                data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH,
+        command(-data.axes[SYS_DEFS.AXIX_ROLL] / SYS_DEFS.SCALE_ROLL,
+                -data.axes[SYS_DEFS.AXIS_PITCH] / SYS_DEFS.SCALE_PITCH,
                 data.axes[SYS_DEFS.AXIS_Z] / SYS_DEFS.SCALE_Z ,
                 0,
                 0 ,
@@ -670,25 +670,25 @@ def droneGUICallback( config, level):
     elif config["forward"] == True:
         config["forward"] = False
         actionState = 0
-        command(0, -1, 0, 0, 0, 0)
+        command(0, 1, 0, 0, 0, 0)
         rospy.loginfo("Reconfigure request to go forward")
 
     elif config["backward"] == True:
         config["backward"] = False
         actionState = 0
-        command(0, 1, 0, 0, 0, 0)
+        command(0, -1, 0, 0, 0, 0)
         rospy.loginfo("Reconfigure request to go backward")
 
     elif config["left"] == True:
         config["left"] = False
         actionState = 0
-        command(0.5, 0, 0, 0, 0, 0)
+        command(-0.5, 0, 0, 0, 0, 0)
         rospy.loginfo("Reconfigure request to go left")
 
     elif config["right"] == True:
         config["right"] = False
         actionState = 0
-        command(-0.5, 0, 0, 0, 0, 0)
+        command(0.5, 0, 0, 0, 0, 0)
         rospy.loginfo("Reconfigure request to go right")
 
     elif config["hover"] == True:
