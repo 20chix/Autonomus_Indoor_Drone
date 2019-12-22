@@ -48,9 +48,86 @@ Delete the src folder when you created the workspace and rename Autonomus_Indoor
 Navigate to your workspace ``` ~/catkin_ws/```  and run:
 
 ```
+
 #!/bin/bash
 catkin_make
 ```
+
+### Download ardupilot_gazebo
+
+In my repo you can see ardupilot_gazebo, this is cloned from [here](https://github.com/khancyr/ardupilot_gazebo). Clone the repo and follow the installation instructions. If you installed everything correctly, run this command.
+
+```
+
+#!/bin/bash
+gazebo --verbose ~/catkin_ws/src/ardupilot_gazebo/worlds/iris_ardupilot.world
+```
+
+You will see gazebo with an IRIS drone in a runway.
+
+### Download MAVROS
+
+Follow [this link](https://ardupilot.org/dev/docs/ros-install.html#installing-mavros) to install MAVROS.
+
+### Download Ardupilot
+
+Clone Ardupilot from [this link](https://github.com/ArduPilot/ardupilot).
+Once installed run the following command in a separate terminal tab
+
+```
+
+#!/bin/bash
+<PATH_TO_YOUR_ARDUPILOT>/ardupilot/Tools/autotest/sim_vehicle.py --map --console  -v ArduCopter -f gazebo-iris
+```
+
+### Run MAVROS
+Now run ardupilotMavros launch file so we can link IRIS drone in gazebo to ROS. Run the following command to do so in a new terminal tab.
+
+```
+
+#!/bin/bash
+roslaunch ardupilotMavros apm.launch
+```
+
+*Remeber to source into your workspace
+
+### Run fyp for autonomus flight
+
+Now run fyp, this package have few features, most of them are for debugging purpose. The main one is follow waypoint from xml file and follow waypoint from DWM1001 waypoint(not simulated).
+
+To control the drone from this package run from a new terminal tab
+
+```
+
+#!/bin/bash
+rosrun fyp aid_main.py
+```
+
+A message should come up saying "Waiting for a command"
+
+*Remeber to source into your workspace
+
+
+### Run ROS dynamic reconfigure
+In order to manage the drone I linked most of the functionality to RQT reconfigure 
+```
+
+#!/bin/bash
+rosrun rqt_reconfigure rqt_reconfigure
+```
+
+You should see this:
+
+![alt text](https://github.com/20chix/Autonomus_Indoor_Drone/blob/master/resources/rqt.png)
+
+- Press takeoff to takeoff the IRIS drone
+- Press followFlightPathWaypoints in order to start an autonomus flight
+
+Other buttons works, but there is still some bugs in the code. Feel free to contribute however you want to.
+
+## Hardware
+
+Coming soon...
 
 ### DWM1001 network Rviz visualization
 
