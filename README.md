@@ -17,9 +17,6 @@ A GUI provided by dynamic reconfigure RQT (bottom left) is provided for debuggin
 
 ![alt text](https://github.com/20chix/Autonomus_Indoor_Drone/blob/master/resources/mavros_followFlightPath.gif)
 
-### Installation
-
-This project currently works for **Kinetic**.
 
 ### Install ROS Kinetic
 
