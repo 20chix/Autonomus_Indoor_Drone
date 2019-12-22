@@ -122,6 +122,7 @@ You should see this:
 
 - Press takeoff to takeoff the IRIS drone
 - Press followFlightPathWaypoints in order to start an autonomus flight
+- If you want to add more waypoints you'll need to edit [this XML file](https://github.com/20chix/Autonomus_Indoor_Drone/blob/master/fyp/src/waypoints/waypoints.xml).
 
 Other buttons works, but there is still some bugs in the code. Feel free to contribute however you want to.
 
