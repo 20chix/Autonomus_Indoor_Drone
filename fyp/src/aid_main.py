@@ -26,12 +26,14 @@ from std_srvs.srv                import Trigger, TriggerRequest
 from localizer_dwm1001.srv       import Anchor_0
 from gazebo_msgs.srv             import DeleteModel # For deleting models from the environment
 import mavros_msgs
+
 from geometry_msgs.msg import PoseStamped, TwistStamped
 
 
 import mavros_msgs
 from mavros_msgs import srv
 from mavros_msgs.msg import State
+from mavros_msgs.srv import WaypointPull, WaypointPush, WaypointClear, WaypointSetCurrent
 
 import math
 from geometry_msgs.msg import (
@@ -57,7 +59,7 @@ messageTwistStamped   = TwistStamped()
 targetInDrone         = Pose()
 targetInMap           = Pose()
 lastSavedWaypoint     = Pose()
-realPose              = PoseStamped()
+realPose              = PoseStamped() #TODO fix this error, only happens once, but still works. AttributeError: 'PoseStamped' object has no attribute 'position'
 droneWaypointsFromXML = DroneWaypoint()
 latched               = False
 flying                = False
@@ -202,7 +204,7 @@ def run():
         # Go to the waypoint without looking
         elif actionState == SYS_DEFS.GO_TO_WAYPOINT_WITHOUT_LOOKING_ACTION_STATE:
             # Convert drone coordinates into drone frames
-            #returnTargetInDrone(targetInMap)
+            returnTargetInDrone(targetInMap)
             # Keep going if the waypoint is not reached
             if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
                 xAct = (targetInDrone.position.x * SYS_DEFS.POINT_GAIN)
@@ -227,15 +229,15 @@ def run():
                 command(0, 0, 0, 0, 0, 0)
                 actionState = 0
 
-
-        # Look at the waypoint
-        elif actionState == SYS_DEFS.LOOK_AT_WAYPOINT_ACTION_STATE:
-            rospy.loginfo("Looking at the waypoint")
-            # Convert drone coordinates into drone frames
-            returnTargetInDrone(targetInMap)
-            # Adjust z rotation
-            zRotAct = targetInDrone.orientation.z * SYS_DEFS.POINT_GAIN
-            command(0, 0, 0, 0, 0, zRotAct)
+        # TODO delete this don't need
+        # # Look at the waypoint
+        # elif actionState == SYS_DEFS.LOOK_AT_WAYPOINT_ACTION_STATE:
+        #     rospy.loginfo("Looking at the waypoint")
+        #     # Convert drone coordinates into drone frames
+        #     returnTargetInDrone(targetInMap)
+        #     # Adjust z rotation
+        #     zRotAct = targetInDrone.orientation.z * SYS_DEFS.POINT_GAIN
+        #     command(0, 0, 0, 0, 0, zRotAct)
 
         # Look and Go to the waypoint
         elif actionState == SYS_DEFS.LOOK_AND_GO_TO_WAYPOINT_ACTION_STATE:
@@ -278,49 +280,49 @@ def run():
                 actionState = 0
 
         # Follow Flightpath
-        # elif actionState == SYS_DEFS.FOLLOW_FLIGHT_PATH_WAYPOINTS_ACTION_STATE:
-        #     # Get the global counter
-        #     global currentWaypointCounterForFlightPath
-        #     # Get a coordinate from the xml file and assign it to targetInMap
-        #     targetInMap = droneWaypointsFromXML.getWaypointsCoordinates()
-        #     # Check if the anchor is reached
-        #     if droneWaypointsFromXML.extractCoordinatesFromXML(currentWaypointCounterForFlightPath):
-        #         # Convert drone coordinates into drone frames
-        #         returnTargetInDrone(targetInMap)
-        #         # Keep going if the waypoint is not reached
-        #         if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
-        #             # Check if the drone is facing the waypoint, fix orientation if not
-        #             if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
-        #                 # Adjust accelleration with angle gain and point gain
-        #                 zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
-        #                 xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
-        #                 yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
-        #                 zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
-        #                 command(xAct, yAct, zAct, 0, 0, zRotAct)
+        elif actionState == SYS_DEFS.FOLLOW_FLIGHT_PATH_WAYPOINTS_ACTION_STATE:
+            # Get the global counter
+            global currentWaypointCounterForFlightPath
+            # Get a coordinate from the xml file and assign it to targetInMap
+            targetInMap = droneWaypointsFromXML.getWaypointsCoordinates()
+            # Check if the anchor is reached
+            if droneWaypointsFromXML.extractCoordinatesFromXML(currentWaypointCounterForFlightPath):
+                # Convert drone coordinates into drone frames
+                returnTargetInDrone(targetInMap)
+                # Keep going if the waypoint is not reached
+                if not wayPointReached(SYS_DEFS.WAYPOINT_ACCURACY):
+                    # Check if the drone is facing the waypoint, fix orientation if not
+                    if wayPointFaced(SYS_DEFS.ANGLE_ACCURACY):
+                        # Adjust accelleration with angle gain and point gain
+                        zRotAct = (targetInDrone.orientation.z  * SYS_DEFS.ANGLE_GAIN)
+                        xAct    = (targetInDrone.position.x     * SYS_DEFS.POINT_GAIN)
+                        yAct    = (targetInDrone.position.y     * SYS_DEFS.POINT_GAIN)
+                        zAct    = (targetInDrone.position.z     * SYS_DEFS.POINT_GAIN)
+                        command(xAct, yAct, zAct, 0, 0, zRotAct)
 
-        #             else:
-        #                 # Fix orientation if the drone is not facing the waypoint
-        #                 rospy.loginfo("Fixing orientation")
-        #                 zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
-        #                 command(0, 0, 0, 0, 0, zRotAct)
-        #         else:
-        #             # Waypoint is reached, move to the next one
-        #             rospy.loginfo("Target DD X: " + str(targetInMap.position.x) +
-        #                           " Y: " + str(targetInMap.position.y) +
-        #                           " Z: " + str(targetInMap.position.z))#
-        #             # Increase counter, so we can move to the next waypoint
-        #             currentWaypointCounterForFlightPath +=  1
-        #             rospy.loginfo("Waypoint Reached " + str(currentWaypointCounterForFlightPath))
+                    else:
+                        # Fix orientation if the drone is not facing the waypoint
+                        rospy.loginfo("Fixing orientation")
+                        zRotAct = targetInDrone.orientation.z * SYS_DEFS.ANGLE_GAIN
+                        command(0, 0, 0, 0, 0, zRotAct)
+                else:
+                    # Waypoint is reached, move to the next one
+                    rospy.loginfo("Target DD X: " + str(targetInMap.position.x) +
+                                  " Y: " + str(targetInMap.position.y) +
+                                  " Z: " + str(targetInMap.position.z))#
+                    # Increase counter, so we can move to the next waypoint
+                    currentWaypointCounterForFlightPath +=  1
+                    rospy.loginfo("Waypoint Reached " + str(currentWaypointCounterForFlightPath))
 
-        #     else:
-        #         # There are no more waypoints to go through
-        #         rospy.loginfo("XML waypoints finished")
-        #         # Reset counter to 0
-        #         currentWaypointCounterForFlightPath = 0
-        #         # Now hover so user can see that there are no more anchors
-        #         command(0, 0, 0, 0, 0, 0)
-        #         # Reset to actionState 0
-        #         actionState = 0
+            else:
+                # There are no more waypoints to go through
+                rospy.loginfo("XML waypoints finished")
+                # Reset counter to 0
+                currentWaypointCounterForFlightPath = 0
+                # Now hover so user can see that there are no more anchors
+                command(0, 0, 0, 0, 0, 0)
+                # Reset to actionState 0
+                actionState = 0
 
 
         # Follow Flightpath for DWM1001
@@ -484,12 +486,6 @@ def navDataCallBack(nav_msg):
     #  Get the time stamp of drone
     currentDroneData.timeStamp = nav_msg.header.stamp
 
-    #droneState = nav_msg.state
-    #
-    # For future reference get the battery level of the drone
-    #battery = nav_msg.batteryPercent
-    #navDataRotZ = nav_msg.rotZ
-
     # Check if Z rotation is below 0, if it is add 360 degrees to it
     if nav_msg.pose.pose.orientation.z < 0:
         navDataRotZ360 = nav_msg.pose.pose.orientation.z + 360
@@ -622,9 +618,9 @@ def JoystickCallBack(data):
         actionState = 0
         command(0, 0, 0, 0, 0, 0)
 
-    # elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_XML] == 1:
-    #     rospy.loginfo("Follow flight path pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_XML))
-    #     actionState = 8
+    elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_XML] == 1:
+        rospy.loginfo("Follow flight path pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_XML))
+        actionState = 8
 
     # elif data.buttons[SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_DWM1001] == 1:
     #     rospy.loginfo("Follow flight path  from dwm1001 pressed: " + str(SYS_DEFS.BUTTON_FOLLOW_FLIGHT_PATH_DWM1001))
@@ -703,14 +699,17 @@ def droneGUICallback( config, level):
         deleteAllWaypointsFromGazebo()
         rospy.loginfo("""Reconfigure Request Action code: {deleteWaypoints}""".format(**config))
 
-         #TODO add implementation 
-    elif config["look_at_waypoint"] == True:
-        config["look_at_waypoint"] = False
-        targetInMap.position.x = config["targetInMapX"]
-        targetInMap.position.y = config["targetInMapY"]
-        targetInMap.position.z = config["targetInMapZ"]
-        actionState = 5
-        rospy.loginfo("""Reconfigure Request Action code: {look_at_waypoint}""".format(**config))
+         #clearing the WP get's rid of the bug of re-requesting wp from mavros
+    elif config["clear_WP"] == True:
+        config["clear_WP"] = False
+        try:
+            rospy.ServiceProxy('mavros/mission/clear', WaypointClear)
+            
+        except rospy.ServiceException, e:
+            print "Service call failed: %s" % e
+            return False
+
+        rospy.loginfo("Reconfigure request to clear mission")
 
          #TODO add implementation 
     elif config["go_to_waypoint"] == True:

@@ -1,17 +1,12 @@
 #!/usr/bin/env python
 
-__author__     = "Hadi Elmekawi"
-__version__    = "1.0"
-__maintainer__ = "Hadi Elmekawi"
-__email__      = "w1530819@my.westminster.ac.uk"
-__status__     = "Development"
 
 
 class SYS_DEFS:
 
-    AUTHOR          = "Hadi Elmekawi"
+    AUTHOR          = "Hadi"
     VERSION         = "1.0"
-    MAINTAINER      = "Hadi Elmekawi"
+    MAINTAINER      = "Hadi"
     EMAIL           = "w1530819@my.westminster.ac.uk"
     STATUS          = "Development"
 
